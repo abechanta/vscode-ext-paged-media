@@ -3,16 +3,16 @@ import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('catCoding.start', () => {
-			CatCodingPanel.createOrShow(context.extensionPath);
+		vscode.commands.registerCommand('pagedMedia.open', () => {
+			ViewerPanel.createOrShow(context.extensionPath);
 		})
 	);
 }
 
-class CatCodingPanel {
-	public static currentPanel: CatCodingPanel | undefined;
+class ViewerPanel {
+	public static currentPanel: ViewerPanel | undefined;
 
-	public static readonly viewType = 'catCoding';
+	public static readonly viewType = 'pagedMedia';
 
 	private readonly _panel: vscode.WebviewPanel;
 	private readonly _extensionPath: string;
@@ -24,26 +24,24 @@ class CatCodingPanel {
 			: undefined;
 
 		// If we already have a panel, show it.
-		if (CatCodingPanel.currentPanel) {
-			CatCodingPanel.currentPanel._panel.reveal(column);
+		if (ViewerPanel.currentPanel) {
+			ViewerPanel.currentPanel._panel.reveal(column);
 			return;
 		}
 
 		// Otherwise, create a new panel.
 		const panel = vscode.window.createWebviewPanel(
-			CatCodingPanel.viewType,
-			'Cat Coding',
-			column || vscode.ViewColumn.One,
+			ViewerPanel.viewType,
+			'Paged Media',
+			column || vscode.ViewColumn.Beside,
 			{
-				// Enable javascript in the webview
 				enableScripts: true,
-
-				// And restrict the webview to only loading content from our extension's `media` directory.
+				retainContextWhenHidden: true,
 				localResourceRoots: [vscode.Uri.file(path.join(extensionPath, 'media'))]
 			}
 		);
 
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
+		ViewerPanel.currentPanel = new ViewerPanel(panel, extensionPath);
 	}
 
 	private constructor(panel: vscode.WebviewPanel, extensionPath: string) {
@@ -70,7 +68,7 @@ class CatCodingPanel {
 	}
 
 	public dispose() {
-		CatCodingPanel.currentPanel = undefined;
+		ViewerPanel.currentPanel = undefined;
 
 		// Clean up our resources
 		this._panel.dispose();
@@ -92,20 +90,18 @@ class CatCodingPanel {
 		const nonce = getNonce();
 
 		this._panel.webview.html = `<!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';">
-
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Cat Coding</title>
-            </head>
-            <body>
-                <h1>Hello World.</h1>
-                <p>Hello World.</p>
-                <script nonce="${nonce}" src="${scriptUri}"></script>
-            </body>
-            </html>`;
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource:; script-src 'nonce-${nonce}';">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<h1>Hello World.</h1>
+		<p>Hello World.</p>
+		<script nonce="${nonce}" src="${scriptUri}"></script>
+	</body>
+</html>`;
 	}
 }
 
