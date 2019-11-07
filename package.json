@@ -1,8 +1,8 @@
 {
-	"name": "cat-coding",
-	"description": "Cat Coding - A Webview API Sample",
+	"name": "vscode-ext-paged-media",
+	"description": "W3C Paged Media Viewer",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
+	"publisher": "abechanta",
 	"engines": {
 		"vscode": "^1.32.0"
 	},
@@ -10,16 +10,16 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:catCoding.start",
-		"onWebviewPanel:catCoding"
+		"onCommand:pagedMedia.open",
+		"onWebviewPanel:pagedMedia"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "catCoding.start",
-				"title": "Start cat coding session",
-				"category": "Cat Coding"
+				"command": "pagedMedia.open",
+				"title": "Open Paged Media Viewer",
+				"category": "Paged Media"
 			}
 		]
 	},
