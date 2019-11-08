@@ -85,7 +85,11 @@ class ViewerPanel {
 		const scriptUri = vscode.Uri.file(
 			path.join(this._extensionPath, 'media', 'main.js')
 		).with({ scheme: 'vscode-resource' });
-		const pagedjsUri = "https://unpkg.com/pagedjs/dist/paged.polyfill.js";
+		// TODO
+		// File "/media/paged.polyfill.js" is copied from node_modules folder by hand. This should be done by build scripts.
+		const pagedjsUri = vscode.Uri.file(
+			path.join(this._extensionPath, 'media', 'paged.polyfill.js')
+		).with({ scheme: 'vscode-resource' });
 
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
@@ -103,11 +107,11 @@ class ViewerPanel {
 		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: data:; script-src 'nonce-${nonce}' 'unsafe-eval'; style-src 'unsafe-inline';">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script nonce="${nonce}" src="${pagedjsUri}"></script>
+		<script nonce="${nonce}" src="${scriptUri}"></script>
 	</head>
 	<body>
 		<h1>Hello World.</h1>
 		<p>Hello World.</p>
-		<script nonce="${nonce}" src="${scriptUri}"></script>
 	</body>
 </html>`;
 	}
