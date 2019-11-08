@@ -94,9 +94,6 @@ class ViewerPanel {
 			path.join(this._extensionPath, 'media', 'a4.css')
 		).with({ scheme: 'vscode-resource' });
 
-		// Use a nonce to whitelist which scripts can be run
-		const nonce = getNonce();
-
 		// Get content from activeEditor
 		const bodyContent = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "<h1>Hello World.</h1>";
 
@@ -112,10 +109,10 @@ class ViewerPanel {
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src vscode-resource:; img-src vscode-resource: data:; script-src 'nonce-${nonce}' 'unsafe-eval'; style-src 'unsafe-inline' vscode-resource:;">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src vscode-resource:; img-src vscode-resource: data:; script-src vscode-resource: 'unsafe-eval'; style-src vscode-resource: 'unsafe-inline';">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<script nonce="${nonce}" src="${pagedjsUri}"></script>
-		<script nonce="${nonce}" src="${scriptUri}"></script>
+		<script src="${pagedjsUri}"></script>
+		<script src="${scriptUri}"></script>
 		<link rel="stylesheet" href="${styleUri}" />
 	</head>
 	<body>
@@ -123,13 +120,4 @@ ${bodyContent}
 	</body>
 </html>`;
 	}
-}
-
-function getNonce() {
-	let text = '';
-	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	for (let i = 0; i < 32; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
 }
