@@ -19,9 +19,7 @@ class ViewerPanel {
 	private _disposables: vscode.Disposable[] = [];
 
 	public static createOrShow(extensionPath: string) {
-		const column = vscode.window.activeTextEditor
-			? vscode.window.activeTextEditor.viewColumn
-			: undefined;
+		const column = vscode.ViewColumn.Beside;
 
 		// If we already have a panel, show it.
 		if (ViewerPanel.currentPanel) {
@@ -33,7 +31,7 @@ class ViewerPanel {
 		const panel = vscode.window.createWebviewPanel(
 			ViewerPanel.viewType,
 			'Paged Media',
-			column || vscode.ViewColumn.Beside,
+			column,
 			{
 				enableScripts: true,
 				retainContextWhenHidden: true,
@@ -94,6 +92,9 @@ class ViewerPanel {
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
 
+		// Get content from activeEditor
+		const bodyContent = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText() : "<h1>Hello World.</h1>";
+
 		// To surpress error message below, we'll grant 'unsafe-eval' for script.
 		// ---> Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'nonce-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'".
 		// To surpress error message below, we'll grant 'unsafe-inline' for style-src.
@@ -110,8 +111,7 @@ class ViewerPanel {
 		<script nonce="${nonce}" src="${scriptUri}"></script>
 	</head>
 	<body>
-		<h1>Hello World.</h1>
-		<p>Hello World.</p>
+${bodyContent}
 	</body>
 </html>`;
 	}
