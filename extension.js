@@ -1,6 +1,14 @@
 'use strict'
+const path = require("path");
+const vscode = require("vscode");
 
 function activate(context) {
+    // TODO
+    // File "media/paged.polyfill.js" should be copied automatically from node_modules folder.
+    const scriptUri = vscode.Uri.file(
+        path.join(context.extensionPath, "media", "paged.polyfill.js")
+    ).with({ scheme: 'vscode-resource' });
+
     return {
         extendMarkdownIt(md) {
             // md.use(require('markdown-it-'));
@@ -8,7 +16,12 @@ function activate(context) {
             const render = md.renderer.render;
             md.renderer.render = (tokens, options, env) => {
                 try {
-                    return render.call(md.renderer, tokens, options, env);
+                    const html = render.call(md.renderer, tokens, options, env);
+					// FIXME
+					// loading pagedjs polyfill here causes "net::ERR_ACCESS_DENIED" caused by csp violation supposedly,
+					// markdown previewer restricts to "script-src 'nonce-xxxxxxxxxxxxxxxx'", loading.bundle.js has "vscode-resource:".
+                    const scriptLink = `<script src="${scriptUri}"></script>`;
+                    return [ scriptLink, html, ].join("\n");
                 } catch (err) {
                     throw err;
                 }
