@@ -12,6 +12,9 @@
   ],
   "activationEvents": [],
   "contributes": {
+    "markdown.previewStyles": [
+      "./media/a4.css"
+    ],
     "markdown.previewScripts": [
       "./out/loading.bundle.js"
     ],

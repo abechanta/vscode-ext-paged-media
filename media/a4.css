@@ -1,0 +1,38 @@
+@page {
+	size: 210mm 297mm;
+	@top-left {
+		content: element(running-title1);
+	}
+	@bottom-center {
+		content: "- " counter(page) " -";
+	}
+}
+@media screen {
+	body {
+		background-color: rgba(0, 0, 0, 0.1);
+	}
+	.pagedjs_page {
+		background: white;
+		box-shadow: 0 .5mm 2mm rgba(0, 0, 0, 0.5);
+	}
+}
+h1 {
+	counter-increment: chapter-no 1;
+	counter-reset: section-no 0;
+}
+h2 {
+	counter-increment: section-no 1;
+}
+div.running-title {
+	position: running(running-title1);
+	counter-increment: chapter-no 0;
+}
+h1:before,
+div.running-title:before {
+	content: open-quote counter(chapter-no) close-quote;
+	quotes: "Chapter " ": ";
+}
+h2:before {
+	content: open-quote counter(section-no) close-quote;
+	quotes: "Section " ": ";
+}
