@@ -85,21 +85,33 @@ class ViewerPanel {
 		const scriptUri = vscode.Uri.file(
 			path.join(this._extensionPath, 'media', 'main.js')
 		).with({ scheme: 'vscode-resource' });
+		// TODO
+		// File "/media/paged.polyfill.js" is copied from node_modules folder by hand. This should be done by build scripts.
+		const pagedjsUri = vscode.Uri.file(
+			path.join(this._extensionPath, 'media', 'paged.polyfill.js')
+		).with({ scheme: 'vscode-resource' });
 
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
 
+		// To surpress error message below, we'll grant 'unsafe-eval' for script.
+		// ---> Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'nonce-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'".
+		// To surpress error message below, we'll grant 'unsafe-inline' for style-src.
+		// ---> paged.polyfill.js:24272 Refused to apply inline style because it violates the following Content Security Policy directive: "default-src 'none'". Either the 'unsafe-inline' keyword, a hash ('sha256-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'), or a nonce ('nonce-...') is required to enable inline execution. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback.
+		// To surpress error message below, we'll grant 'data:' for img-src.
+		// ---> Refused to load the image '<URL>' because it violates the following Content Security Policy directive: "img-src vscode-resource:".
 		this._panel.webview.html = `<!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource:; script-src 'nonce-${nonce}';">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: data:; script-src 'nonce-${nonce}' 'unsafe-eval'; style-src 'unsafe-inline';">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script nonce="${nonce}" src="${pagedjsUri}"></script>
+		<script nonce="${nonce}" src="${scriptUri}"></script>
 	</head>
 	<body>
 		<h1>Hello World.</h1>
 		<p>Hello World.</p>
-		<script nonce="${nonce}" src="${scriptUri}"></script>
 	</body>
 </html>`;
 	}
