@@ -1,37 +1,37 @@
 {
-  "name": "vscode-ext-paged-media",
-  "description": "W3C Paged Media Viewer",
-  "version": "0.0.1",
-  "publisher": "abechanta",
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.15.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "contributes": {
-    "markdown.previewStyles": [
-      "./media/a4.css"
-    ],
-    "markdown.previewScripts": [
-      "./out/loading.bundle.js"
-    ],
-    "markdown.markdownItPlugins": true
-  },
-  "main": "./extension.js",
-  "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@types/vscode": "^1.33.0",
-    "babel-loader": "^8.0.6",
-    "pagedjs": "^0.1.34",
-    "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.0"
-  },
-  "dependencies": {},
-  "scripts": {
-    "prepublish": "npm run build",
-    "build": "webpack-cli --mode=production"
-  }
+	"name": "vscode-ext-paged-media",
+	"description": "W3C Paged Media Viewer",
+	"version": "0.0.1",
+	"publisher": "abechanta",
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.15.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"contributes": {
+		"markdown.previewStyles": [
+			"./media/a4.css"
+		],
+		"markdown.previewScripts": [
+			"./out/loading.bundle.js"
+		],
+		"markdown.markdownItPlugins": true
+	},
+	"main": "./extension.js",
+	"devDependencies": {
+		"@babel/core": "^7.7.2",
+		"@types/vscode": "^1.33.0",
+		"babel-loader": "^8.0.6",
+		"pagedjs": "^0.1.34",
+		"webpack": "^4.30.0",
+		"webpack-cli": "^3.3.0"
+	},
+	"dependencies": {},
+	"scripts": {
+		"prepublish": "npm run build",
+		"build": "webpack-cli --mode=production"
+	}
 }
