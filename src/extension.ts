@@ -122,6 +122,9 @@ class ViewerPanel {
 	}
 
 	private _getHtmlContent(placeholder: any) {
+		// Use a nonce to whitelist which scripts can be run
+		const nonce = getNonce();
+
 		// To surpress error message below, we'll grant 'unsafe-eval' for script.
 		// ---> Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'nonce-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'".
 		// To surpress error message below, we'll grant 'unsafe-inline' for style-src.
@@ -134,10 +137,10 @@ class ViewerPanel {
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src vscode-resource:; img-src vscode-resource: data:; script-src vscode-resource: 'unsafe-eval'; style-src vscode-resource: 'unsafe-inline';">
+		<meta http-equiv="Content-Security-Policy" content="default-src 'none'; connect-src vscode-resource:; img-src vscode-resource: data:; script-src 'nonce-${nonce}' 'unsafe-eval'; style-src 'unsafe-inline' vscode-resource:;">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<script src="${placeholder.pagedjsUri}"></script>
-		<script src="${placeholder.scriptUri}"></script>
+		<script nonce="${nonce}" src="${placeholder.pagedjsUri}"></script>
+		<script nonce="${nonce}" src="${placeholder.scriptUri}"></script>
 		<link rel="stylesheet" href="${placeholder.styleUri}" />
 	</head>
 	<body>
@@ -145,4 +148,13 @@ ${placeholder.bodyContent}
 	</body>
 </html>`;
 	}
+}
+
+function getNonce() {
+	let text = '';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (let i = 0; i < 32; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
 }
