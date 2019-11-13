@@ -1,5 +1,11 @@
 'use strict'
 
+// FIXME
+// loading "loading.js" from "markdown.previewScripts" causes csp violation,
+// markdown previewer restricts to "script-src 'nonce-xxxxxxxxxxxxxxxx'", loading.bundle.js has "unsafe-eval".
+// so user must set "Markdown: Change Preview Security Settings" from "Strict" to "Disable" for each user document.
+// refs: https://github.com/webpack/webpack/issues/6461
+
 function activate(context) {
 	return {
 		extendMarkdownIt(md) {
