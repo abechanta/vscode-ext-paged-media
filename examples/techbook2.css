@@ -1,0 +1,89 @@
+@page {
+	size: 210mm 297mm;
+}
+@page :right {
+	margin: 12mm 15mm 18mm 30mm;
+	@top-right {
+		content: var(--title) " - " string(running-title);
+		color: gray;
+	}
+	@bottom-right {
+		content: "- " counter(page) " -";
+		color: gray;
+	}
+}
+@page :left {
+	margin: 12mm 30mm 18mm 15mm;
+	@top-left {
+		content: var(--title) " - " string(running-title);
+		color: gray;
+	}
+	@bottom-left {
+		content: "- " counter(page) " -";
+		color: gray;
+	}
+}
+@media screen {
+	body {
+		background-color: var(--background);
+	}
+	.pagedjs_pages {
+		display: flex;
+		width: calc(var(--width) * 2);
+		margin: 0 auto;
+		flex: 0;
+		flex-wrap: wrap;
+	}
+	.pagedjs_page {
+		background: var(--paper-color);
+		box-shadow: 0 .5mm 2mm var(--shadow-color);
+		margin: 0;
+		margin-top: 10mm;
+		flex-shrink: 0;
+		flex-grow: 0;
+	}
+	.pagedjs_first_page {
+		margin-left: var(--width);
+	}
+	[class*="pagedjs_margin-top"],
+	[class*="pagedjs_margin-left"],
+	[class*="pagedjs_margin-right"],
+	[class*="pagedjs_margin-bottom"] {
+		box-shadow: 0 0 0 var(--margin-box-size) inset var(--margin-box-color);
+	}
+}
+:root {
+	--title: "この本のタイトル";
+	--background: rgba(0, 0, 0, 0.1);
+	--shadow-color: rgba(0, 0, 0, 0.5);
+	--paper-color: white;
+	--margin-box-color: rgba(0, 255, 255, 0.1);
+	--margin-box-size: 1px;
+}
+/* .running-title {
+	position: running(titleRun);
+} */
+body {
+	padding: 0;
+}
+h1::before {
+	content: "Section " counter(section1) ": ";
+}
+h1 {
+	string-set: running-title content();
+	counter-increment: section1;
+	counter-reset: section2 section3;
+}
+h2::before {
+	content: counter(section1) "." counter(section2) ": ";
+}
+h2 {
+	counter-increment: section2;
+	counter-reset: section3;
+}
+h3::before {
+	content: counter(section1) "." counter(section2)  "." counter(section3) ": ";
+}
+h3 {
+	counter-increment: section3;
+}

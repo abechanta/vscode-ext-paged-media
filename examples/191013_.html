@@ -1,0 +1,896 @@
+<html><head>
+			<meta charset="utf-8">
+			<!-- <_meta http-equiv="Content-Security-Policy" content="default-src 'nonce-iquF96NgkQpjmz6MOrKIir0KmKGwDH3d' file:; img-src file: data:; script-src file: 'unsafe-eval'; style-src file: 'unsafe-inline';"> -->
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+            <script _src="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/vscode-command-viewer/media/main.js"></script>
+			<script src="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/vscode-command-viewer/media/paged.polyfill.js"></script>
+            <link rel="stylesheet" type="text/css" href="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/vscode-command-viewer/media/techbook.css">
+		</head><body><div class="pageonly">
+<p id="title" data-line="1" class="code-line">＜この本のタイトル＞<br>Vol.1</p>
+<p id="author" data-line="3" class="code-line">＜この<ruby>本<rt>ブック</rt></ruby>の<ruby>著者<rt>オーサー</rt></ruby>＞</p>
+<p id="issue" data-line="5" class="code-line">＜この本の版数＞ 版　　＜この本の製作者＞ 発行</p>
+<p class="notoc code-line" id="toc" data-line="7">目次</p>
+<nav class="table-of-contents"><ol><li><a href="#%E3%82%BB%E3%83%AB">セル</a></li><li><a href="#%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E6%8F%8F%E7%94%BB%E3%82%AF%E3%83%A9%E3%82%B9">スプライト描画クラス</a><ol><li><a href="#%E3%81%BE%E3%81%9A%E3%81%AF%E9%9B%9B%E5%BD%A2%E3%81%8B%E3%82%89">まずは雛形から</a></li><li><a href="#%E3%83%A1%E3%83%B3%E3%83%90%E5%A4%89%E6%95%B0">メンバ変数</a></li><li><a href="#%E3%83%A1%E3%83%B3%E3%83%90%E9%96%A2%E6%95%B0">メンバ関数</a></li><li><a href="#renderinginfo%E6%A7%8B%E9%80%A0%E4%BD%93">RenderingInfo構造体</a></li></ol></li><li><a href="#main-cpp%E3%81%8B%E3%82%89pso%E3%81%AE%E4%BD%9C%E6%88%90%E3%82%92%E5%88%86%E9%9B%A2%E3%81%99%E3%82%8B">Main.cppからPSOの作成を分離する</a><ol><li><a href="#%E3%83%98%E3%83%83%E3%83%80%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">ヘッダファイル</a></li><li><a href="#%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">ソースファイル</a></li></ol></li><li><a href="#spriterenderer%E3%81%AE%E5%AE%9F%E8%A3%85">SpriteRendererの実装</a><ol><li><a href="#%E9%A0%82%E7%82%B9%E3%83%87%E3%83%BC%E3%82%BF%E5%9E%8B">頂点データ型</a></li><li><a href="#%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E9%A0%82%E7%82%B9%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B">スプライトを頂点データに変換する</a></li><li><a href="#%E3%82%B3%E3%83%B3%E3%82%B9%E3%83%88%E3%83%A9%E3%82%AF%E3%82%BF">コンストラクタ</a></li><li><a href="#%E5%88%9D%E6%9C%9F%E5%8C%96%E9%96%A2%E6%95%B0">初期化関数</a></li><li><a href="#%E6%8F%8F%E7%94%BB%E9%96%A2%E6%95%B0">描画関数</a></li><li><a href="#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AA%E3%82%B9%E3%83%88%E3%81%AE%E5%8F%96%E5%BE%97">コマンドリストの取得</a></li></ol></li><li><a href="#%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%90%E3%83%AA%E3%82%A2%E3%81%AE%E4%BD%8D%E7%BD%AE">リソースバリアの位置</a></li><li><a href="#%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E4%BD%BF%E3%81%86">スプライトを使う</a><ol><li><a href="#%E5%A4%89%E6%95%B0%E5%AE%9A%E7%BE%A9">変数定義</a></li><li><a href="#%E3%82%BB%E3%83%AB%E3%81%AE%E5%AE%9A%E7%BE%A9">セルの定義</a></li><li><a href="#spriterenderer%E3%81%AE%E5%88%9D%E6%9C%9F%E5%8C%96">SpriteRendererの初期化</a></li><li><a href="#%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E6%8F%8F%E7%94%BB">スプライトを描画</a></li></ol></li><li><a href="#%E3%82%AD%E3%83%BC%E5%85%A5%E5%8A%9B">キー入力</a><ol><li><a href="#%E5%85%A5%E5%8A%9B%E3%82%92%E5%87%A6%E7%90%86%E3%81%99%E3%82%8B">入力を処理する</a></li><li><a href="#%E7%8A%B6%E6%85%8B%E6%9B%B4%E6%96%B0%E9%96%A2%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B">状態更新関数を追加する</a></li></ol></li><li><a href="#%E3%82%84%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86">やってみよう</a><ol><li><a href="#%E7%B7%B4%E7%BF%92%E5%95%8F%E9%A1%8C">練習問題</a></li></ol></li></ol></nav><p data-line="11" class="code-line">TODO:</p>
+<ul>
+<li data-line="12" class="code-line">テキスト図表に対応する</li>
+<li data-line="13" class="code-line">include 構文を導入する
+%include<a href="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/doc/SAMPLE-TITLE.md">_</a>
+%include<a href="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/doc/SAMPLE-1.md">_</a></li>
+<li data-line="16" class="code-line">upstream #140: counter-reset/counter-increment を複数指定に対応する／content(before) に対応する／柱にチャプター番号を埋め込む／図表参照に図表番号を埋め込む</li>
+<li data-line="17" class="code-line">upstream #139: break-after: avoid を機能させる</li>
+<li data-line="18" class="code-line">page-break-inside: avoid を機能させる</li>
+<li data-line="19" class="code-line">注釈を各ページに埋め込む</li>
+<li data-line="20" class="code-line">overflow を修正する</li>
+</ul>
+</div>
+<h1 id="%E3%82%BB%E3%83%AB" data-chapter-number="1" data-line="24" class="code-line">セル</h1>
+<h2 class="notoc code-line" id="__blank__" data-line="25"></h2>
+<p data-line="27" class="code-line">この様子を <a href="#fig1" class="ref"></a> に示します。</p>
+<p class="figures code-line" data-line="29"><img src="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/vscode-command-viewer/media/bierner.markdown-mermaid.svg" alt="link7" title="（左） 何かの図７のキャプション１" style="height: 40px;" class="loading" id="image-hash-6209cba2c7738e887d3c2d30020a554b9398411f448c303a628f71ef514f3b01">
+<img src="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/vscode-command-viewer/media/bierner.markdown-mermaid.svg" alt="link7" title="（右） 何かの図７のキャプション２" class="loading" id="image-hash-6209cba2c7738e887d3c2d30020a554b9398411f448c303a628f71ef514f3b01"></p>
+<p class="caption code-line" id="fig1" style=" open-quote='***';" data-line="33">左：何かの図７のキャプション１／右：何かの図７のキャプション２２２２２２２２２</p>
+<p data-line="35" class="code-line">インライン画像は <img src="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/vscode-command-viewer/media/bierner.markdown-mermaid.svg" alt="" class="loading" id="image-hash-6209cba2c7738e887d3c2d30020a554b9398411f448c303a628f71ef514f3b01"> こんな感じになります。</p>
+<p data-line="37" class="code-line">この様子を <a href="#fig8" class="ref"></a> に示します。</p>
+<p class="figures code-line" data-line="39"><img src="file:/c:/Users/abech/Documents/dev/vscode-techbook-viewer/vscode-command-viewer/media/bierner.markdown-mermaid.svg" alt="fig8" class="loading" id="image-hash-6209cba2c7738e887d3c2d30020a554b9398411f448c303a628f71ef514f3b01"></p>
+<p class="caption code-line" id="fig8" data-line="42">なにかを説明する図</p>
+<p data-line="44" class="code-line">詳しくは<a href="#%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E6%8F%8F%E7%94%BB%E3%82%AF%E3%83%A9%E3%82%B9" title="スプライト描画クラス">後述</a>します。
+<a href="#%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E6%8F%8F%E7%94%BB%E3%82%AF%E3%83%A9%E3%82%B9" title="スプライト描画クラス" class="ref"></a> 参照。</p>
+<p data-line="47" class="code-line"><ruby>スプライト<rt>すぷらいと</rt></ruby>として2D画像を表示する場合、表示したい画像をそれぞれ別のテクスチャとして持つこともできますが、テクスチャの切り替えには時間がかかるため、通常はできるだけ少ない枚数のテクスチャにまとめてしまいます。
+そうすると、元の画像の範囲が分かるようなデータが必要になってきます。
+このデータは「セル(Cell)」とか「チップ(Chip)」とか呼ばれます。今回はセルと呼ぶことにします<span class="fn">これは Paged Media Level 3 に基づく注釈です。</span>。</p>
+<p data-line="51" class="code-line">まずは、<code>Src</code>フォルダに<code>Sprite.h</code>ファイルを追加してください。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+<p data-line="55" class="code-line">そして、以下の<code>Cell</code>構造体のコードを追加します。</p>
+<p class="lcaption code-line" data-line="57">Hello1.cpp</p>
+<pre><code data-line="59" class="code-line language-cpp"><div><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;DirectXMath.h&gt;</span></span>
+
+ <span class="hljs-comment">/*
+ \* スプライトとして表示する画像の範囲.
+ */</span>
+ <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">Cell</span> {</span>
+   DirectX::XMFLOAT2 uv; <span class="hljs-comment">///&lt; テクスチャ上の左上座標.</span>
+   DirectX::XMFLOAT2 tsize; <span class="hljs-comment">///&lt; テクスチャ上の縦横サイズ.</span>
+   DirectX::XMFLOAT2 ssize; <span class="hljs-comment">///&lt; スクリーン座標上の縦横サイズ</span>
+ };
+</div></code></pre>
+<p data-line="72" class="code-line">セルの構造は比較的単純です。</p>
+<p data-line="74" class="code-line">変数<code>uv</code>および<code>tsize</code>によって、テクスチャ上のどの範囲を画像とするかを指定しています。
+変数<code>ssize</code>は、その画像をどれくらいの大きさで画面に表示するかを指定します。このパラメータがあるのは、テクスチャのサイズが一定とは限らないためです。</p>
+<p data-line="77" class="code-line">続けて、スプライト構造体を追加します。</p>
+<p class="lcaption code-line" data-line="79">Hello2.cpp</p>
+<pre><code data-line="81" class="code-line"><code><div>/**
+ \* スプライト.
+ */
+ struct Sprite
+ {
+   const Cell* cell; ///&lt; 表示するCellデータ.
+   DirectX::XMFLOAT3 pos; ///&lt; スクリーン座標上のスプライトの位置.
+   float rotation; ///&lt; 画像の回転角(ラジアン).
+   DirectX::XMFLOAT2 scale; ///&lt; 画像の拡大率.
+   DirectX::XMFLOAT4 color; ///&lt; 画像の色.
+ };
+</div></code></code></pre>
+<p data-line="95" class="code-line">各メンバ変数の説明はコメントにあるとおりです。</p>
+<p data-line="97" class="code-line">そして <kbd>Ctrl</kbd> + <kbd>A</kbd> を押してください。
+そして <kbd>Ctrl</kbd> + <kbd>A</kbd> を押してください。
+そして <kbd>Ctrl</kbd> + <kbd>A</kbd> を押してください。
+そして <kbd>Ctrl</kbd> + <kbd>A</kbd> を押してください。
+そして <kbd>Ctrl</kbd> + <kbd>A</kbd> を押してください。
+そして <kbd>Ctrl</kbd> + <kbd>A</kbd> を押してください。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:center" colspan="2">Grouping</th>
+</tr>
+<tr>
+<th>First Header</th>
+<th style="text-align:center">Second Header</th>
+<th style="text-align:right">Third Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content</td>
+<td style="text-align:center" colspan="2"><em>Long Cell</em></td>
+</tr>
+<tr>
+<td>Content</td>
+<td style="text-align:center"><strong>Cell</strong></td>
+<td style="text-align:right">Cell</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td>New section</td>
+<td style="text-align:center">More</td>
+<td style="text-align:right">Data</td>
+</tr>
+<tr>
+<td>And more</td>
+<td style="text-align:center" colspan="2">With an escaped '\|'</td>
+</tr>
+</tbody>
+<caption id="">何かの図１の説明</caption>
+</table>
+<table>
+<thead>
+<tr>
+<th>First header</th>
+<th>Second header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<p data-line="0" class="code-line">List:</p>
+<ul>
+<li data-line="1" class="code-line">over</li>
+<li data-line="2" class="code-line">several</li>
+<li data-line="3" class="code-line">lines</li>
+</ul>
+</td>
+<td>
+<p data-line="0" class="code-line">More
+data</p>
+</td>
+</tr>
+</tbody>
+<caption id="">何かの図２の説明</caption>
+</table>
+<table>
+<thead>
+<tr>
+<th>First header</th>
+<th>Second header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td rowspan="3">Merged</td>
+<td>Cell 1</td>
+</tr>
+<tr>
+<td>Cell 2</td>
+</tr>
+<tr>
+<td>Cell 3</td>
+</tr>
+</tbody>
+<caption id="">何かの図３の説明</caption>
+</table>
+<pre><code data-line="129" class="code-line language-plantuml"><code><div>Bob -&gt; Alice : hello
+</div></code></code></pre>
+<p class="caption code-line" data-line="133">何かの図４の説明</p>
+<pre><code data-line="135" class="code-line language-dot"><code><div>digraph example1 {
+    1 -&gt; 2 -&gt; { 4, 5 };
+    1 -&gt; 3 -&gt; { 6, 7 };
+}
+</div></code></code></pre>
+<p class="caption code-line" data-line="142">何かの図５の説明</p>
+<pre><code data-line="144" class="code-line language-ditaa"><code><div>+--------+   +-------+    +-------+
+|        +---+ ditaa +--&gt; |       |
+|  Text  |   +-------+    |diagram|
+|Document|   |!magic!|    |       |
+|     {d}|   |       |    |       |
++---+----+   +-------+    +-------+
+    :                         ^
+    |       Lots of work      |
+    +-------------------------+
+</div></code></code></pre>
+<p class="caption code-line" data-line="156">何かの図６の説明</p>
+<h1 data-alias="chapter-sprite" id="%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E6%8F%8F%E7%94%BB%E3%82%AF%E3%83%A9%E3%82%B9" data-chapter-number="2" data-line="158" class="code-line">スプライト描画クラス</h1>
+<h2 id="%E3%81%BE%E3%81%9A%E3%81%AF%E9%9B%9B%E5%BD%A2%E3%81%8B%E3%82%89" data-chapter-number="2.1" data-line="160" class="code-line">まずは雛形から</h2>
+<p data-line="162" class="code-line">DirectX 12において、描画はそれなりに複雑な作業です。こういった場合、複雑な作業をカプセル化して、簡単に扱えるようにしておきたいものです。そこで、スプライトの描画はクラスとして実装することにします。
+<code>Sprite</code>構造体定義の下に、次のコードを追加してください。</p>
+<pre><code data-line="165" class="code-line"><code><div>/**
+ \* スプライト描画クラス.
+ */
+ class SpriteRenderer
+ {
+ public:
+   SpriteRenderer();
+   ~SpriteRenderer() = default;
+ private:
+ };
+</div></code></code></pre>
+<h2 id="%E3%83%A1%E3%83%B3%E3%83%90%E5%A4%89%E6%95%B0" data-chapter-number="2.2" data-line="180" class="code-line">メンバ変数</h2>
+<p data-line="182" class="code-line">このクラスにはどんなメンバ変数が必要でしょうか。まずはコマンドリストに関連する変数が必要ですね。</p>
+<p data-line="184" class="code-line">また、スプライトは長方形なので、一枚ごとに4つの頂点データが必要になります。一枚一枚が3Dゲームのように大量の頂点を持つわけではないため、事前に頂点データを準備して再利用する、というのはあまり効率的ではないように思えます。そこで、毎フレーム、全てのスプライトの頂点データを頂点バッファに詰め込んでいくことにします。描画中の頂点バッファを書き換えるのはまずいので、頂点バッファもフレームバッファと同じ数だけ用意することにします。
+頂点データが変化しても、インデックスは常に0から順番に振られます。そのため、インデックスバッファは最初に作ったものを使いまわすことができます。</p>
+<p data-line="187" class="code-line">これらを踏まえて<code>private</code>メンバに追加するメンバ変数は以下のとおりです。</p>
+<pre><code data-line="189" class="code-line"><code><div>struct FrameResource
+ {
+   Microsoft::WRL::ComPtr&lt;ID3D12CommandAllocator&gt; commandAllocator;
+   Microsoft::WRL::ComPtr&lt;ID3D12Resource&gt; vertexBuffer;
+   D3D12_VERTEX_BUFFER_VIEW vertexBufferView;
+   void* vertexBufferGPUAddress;
+ };
+ std::vector&lt;FrameResource&gt; frameResourceList;
+ Microsoft::WRL::ComPtr&lt;ID3D12GraphicsCommandList&gt; commandList;
+ Microsoft::WRL::ComPtr&lt;ID3D12Resource&gt; indexBuffer;
+ D3D12_INDEX_BUFFER_VIEW indexBufferView;
+ size_t maxSpriteCount;
+</div></code></code></pre>
+<p data-line="204" class="code-line">今回は<code>FrameResource</code>という構造体を作り、フレームバッファごとに必要な変数を格納することにしました。
+さらに、変数宣言に必要なヘッダファイルのインクルードも追加しましょう。</p>
+<p data-line="207" class="code-line"><code>DirectXMath.h</code>のインクルード文の下に、次のコードを追加してくだだい。</p>
+<pre><code data-line="209" class="code-line"><code><div>#include &lt;d3d12.h&gt;
+#include &lt;wrl/client.h&gt;
+#include &lt;vector&gt;
+</div></code></code></pre>
+<h2 id="%E3%83%A1%E3%83%B3%E3%83%90%E9%96%A2%E6%95%B0" data-chapter-number="2.3" data-line="215" class="code-line">メンバ関数</h2>
+<p data-line="217" class="code-line">次はパブリックメンバ関数について考えていきます。</p>
+<p data-line="219" class="code-line">まずは、コマンドリストや頂点バッファといったデータを初期化する機能が必要です。初期化関数はD3Dデバイスインターフェイス、フレームバッファの数、最大スプライト数(頂点バッファのサイズを決定するため)を受け取ることになるでしょう。そうすると、初期化関数宣言は次のようになります。</p>
+<pre><code data-line="221" class="code-line"><code><div>bool Init(
+   Microsoft::WRL::ComPtr&lt;ID3D12Device&gt; device,
+   int numFrameBuffer,
+   int maxSprite);
+</div></code></code></pre>
+<p data-line="228" class="code-line">このクラスはスプライトを描画するものなので、少なくとも描画関数が必要です。描画関数は、スプライトのリストを受け取り、それを頂点データに変換して頂点バッファに格納します。そして、コマンドリストに描画コマンドを追加します。ということは、描画コマンドのための様々なパラメータも引数で受け取ることになります。
+これらを考慮した描画関数宣言が次のコードです。</p>
+<pre><code data-line="231" class="code-line"><code><div>bool Draw(
+   const std::vector&lt;Sprite&gt;&amp; spriteList,
+   const PSO&amp; pso,
+   const Texture&amp; texture,
+   int frameIndex,
+   RenderingInfo&amp; info);
+</div></code></code></pre>
+<p data-line="240" class="code-line">スプライトを描画するには、スプライト用の<code>PSO</code>とコマンドリストにグラフィックスパイプラインの状態を設定してあげる必要があります。設定項目が多いので、<code>RenderingInfo</code>という型にまとめることにしましょう。また、この関数は<code>PSO</code>と<code>Texutre</code>の参照を使っているので、これらの先行宣言も加えておきましょう。
+<code>wrl/client.h</code>のインクルード文のあとに次のコードを追加します。</p>
+<pre><code data-line="243" class="code-line"><code><div>struct Texture;
+struct PSO;
+</div></code></code></pre>
+<p data-line="248" class="code-line">さて、<code>Draw</code>関数でコマンドリストしたら、それを取り出してコマンドキューに渡すことができなければなりません。
+これは特に引数を取る必要はないので、次のような関数宣言になります。</p>
+<pre><code data-line="251" class="code-line"><code><div>ID3D12GraphicsCommandList* GetCommandList();
+</div></code></code></pre>
+<p data-line="255" class="code-line">値を取得するだけの関数の場合、<code>const</code>を付与することが一般的です。しかし、コマンドリストを渡す先である<code>ID3D12CommandQueue:: ExecuteCommandLists</code>関数が非<code>const</code>なポインタを要求しているため、この関数宣言にも<code>const</code>を付与していません。</p>
+<h2 id="renderinginfo%E6%A7%8B%E9%80%A0%E4%BD%93" data-chapter-number="2.4" data-line="257" class="code-line">RenderingInfo構造体</h2>
+<p data-line="259" class="code-line"><code>Draw</code>関数で使う描画情報をまとめた構造体を定義します。
+<code>Sprite</code>構造体定義の下に、次のコードを追加してください。</p>
+<pre><code data-line="262" class="code-line"><code><div>/**
+ \* スプライト描画情報.
+ */
+struct RenderingInfo
+{
+    D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle; ///&lt; スプライト描画先レンダーターゲット.
+    D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle; ///&lt; スプライト描画先深度バッファ.
+    D3D12_VIEWPORT viewport; ///&lt; 描画用ビューポート.
+    D3D12_RECT scissorRect; ///&lt; 描画用シザリング矩形.
+    ID3D12DescriptorHeap* texDescHeap; ///&lt; テクスチャ用のデスクリプタヒープ.
+    DirectX::XMFLOAT4X4 matViewProjection; ///&lt; 描画に使用する座標変換行列.
+};
+</div></code></code></pre>
+<p data-line="277" class="code-line"><code>Draw</code>関数の全ての引数をこの構造体に入れてもいいのですが、例えば複数の<code>SpriteRenderer</code>を使い、それぞれに異なる<code>PSO</code>やテクスチャを割り当てたいと考えるのはありうることです。そこで、そのようなパラメータは単独で引数としておき、その他の変更されにくいパラメータだけを含めることにしました。</p>
+<h1 id="main-cpp%E3%81%8B%E3%82%89pso%E3%81%AE%E4%BD%9C%E6%88%90%E3%82%92%E5%88%86%E9%9B%A2%E3%81%99%E3%82%8B" data-chapter-number="3" data-line="282" class="code-line">Main.cppからPSOの作成を分離する</h1>
+<p data-line="284" class="code-line">Draw関数は<code>PSO</code>を引数にしていますが、現在、<code>PSO</code>に関するコードは全て<code>Main.cpp</code>にあり、スプライト用のソースからは参照できません。そこで、<code>Src</code>フォルダに<code>PSO.h</code>と<code>PSO.cpp</code>を作成し、そこに<code>PSO</code>構造体の定義と作成に関するコードを移動させます。
+その際、スプライト用の<code>PSO</code>タイプ定義と、作成した<code>PSO</code>を取得する関数も追加しておきます。</p>
+<h2 id="%E3%83%98%E3%83%83%E3%83%80%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" data-chapter-number="3.1" data-line="287" class="code-line">ヘッダファイル</h2>
+<p data-line="289" class="code-line"><code>PSO.h</code>は次のようになります。</p>
+<pre><code data-line="291" class="code-line"><code><div>#pragma once
+#include &lt;d3d12.h&gt;
+#include &lt;wrl/client.h&gt;
+
+/**
+- ルートシグネチャとPSOをまとめた構造体.
+*/
+struct PSO
+{
+&nbsp; Microsoft::WRL::ComPtr&lt;ID3D12RootSignature&gt; rootSignature;
+&nbsp; Microsoft::WRL::ComPtr&lt;ID3D12PipelineState&gt; pso;
+};
+
+/**
+- PSOの種類.
+*/
+enum PSOType {
+&nbsp; PSOType_Simple,
+&nbsp; PSOType_CircleTexture,
+&nbsp; PSOType_Sprite,　// ←この値を追加.
+&nbsp; countof_PSOType
+};
+//&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ↓この部分に引数を追加.
+bool CreatePSOList(Microsoft::WRL::ComPtr&lt;ID3D12Device&gt; device, bool warp);
+const PSO&amp; GetPSO(PSOType);
+</div></code></code></pre>
+<p data-line="319" class="code-line">ヘッダファイルに移動したことにより<code>using</code>宣言がされなくなるため、<code>ComPtr</code>を名前空間で修飾しています。
+また、ファイルを分けたことで<code>Main.cpp</code>で定義されている変数にはアクセスできなくなるため、<code>CreatePSOList</code>関数に引数を追加しています。</p>
+<h2 id="%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" data-chapter-number="3.2" data-line="322" class="code-line">ソースファイル</h2>
+<p data-line="324" class="code-line">ヘッダができたら、次は<code>PSO.cpp</code>です。変数<code>psoList</code>と<code>vertexLayout</code>、関数<code>LoadShader</code>、<code>CreatePSO</code>、<code>CreatePSOList</code>を移動してください。これらは既に定義済みなのでコードを再掲することはしませんが、変更点についていくつか説明しておきます。</p>
+<ul>
+<li data-line="326" class="code-line">ヘッダと同様に<code>CreatePSOList</code>関数に引数を設定します。
+同様に、<code>CretePSO</code>関数にも<code>device</code>と<code>warp</code>引数を追加しなければなりません。</li>
+<li data-line="328" class="code-line"><code>PSOType_Sprite</code>用の<code>PSO</code>作成コードを追加します。
+当面は<code>PSOType_Simple</code>と同じシェーダを指定しておけばよいでしょう。</li>
+<li data-line="330" class="code-line"><code>GetPSO</code>関数を追加します。これは次のようなコードになるでしょう。</li>
+</ul>
+<pre><code data-line="332" class="code-line"><code><div>/**
+- PSOを取得する.
+- @param type 取得するPSOの種類.
+- @return typeに対応するPSO.
+*/
+const PSO&amp; GetPSO(PSOType type)
+{
+&nbsp;&nbsp;return psoList[type];
+}
+</div></code></code></pre>
+<p data-line="344" class="code-line"><code>PSO</code>の作成コードの移動が完了したら、<code>Main.cpp</code>に<code>PSO.h</code>をインクルードして、変更した関数の呼び出しを修正しましょう。</p>
+<h1 id="spriterenderer%E3%81%AE%E5%AE%9F%E8%A3%85" data-chapter-number="4" data-line="349" class="code-line">SpriteRendererの実装</h1>
+<h2 id="%E9%A0%82%E7%82%B9%E3%83%87%E3%83%BC%E3%82%BF%E5%9E%8B" data-chapter-number="4.1" data-line="351" class="code-line">頂点データ型</h2>
+<p data-line="353" class="code-line">それでは、スプライトの実装に戻りましょう。
+<code>Src</code>フォルダに<code>Sprite.cpp</code>を追加し、次のコードを追加してください。</p>
+<pre><code data-line="356" class="code-line"><code><div>#include "Sprite.h"
+#include "Texture.h"
+#include "PSO.h"
+#include "d3dx12.h"
+
+using Microsoft::WRL::ComPtr;
+using namespace DirectX;
+
+/**
+- スプライト描画用頂点データ型.
+*/
+struct SpriteVertex {
+&nbsp; XMFLOAT3 position;
+&nbsp;&nbsp;XMFLOAT4 color;
+&nbsp;&nbsp;XMFLOAT2 texcoord;
+};
+</div></code></code></pre>
+<p data-line="375" class="code-line">最初に、必要となるヘッダファイルをインクルードしています。
+その次には、<code>ComPtr</code>の<code>using</code>宣言とDirectX名前空間の<code>using</code>ディレクティブがあります。
+ここまではおなじみですね。
+<code>SpriteVertex</code>構造体の内容は<code>Main.cpp</code>の<code>Vertex</code>構造体と同じですが、あとで個別に変更できるように、スプライト専用の構造体を定義しています。</p>
+<h2 id="%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E9%A0%82%E7%82%B9%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%99%E3%82%8B" data-chapter-number="4.2" data-line="383" class="code-line">スプライトを頂点データに変換する</h2>
+<p data-line="385" class="code-line">最初に実装する関数は、スプライトデータを頂点データに変換する関数です。
+<code>SpriteVertex</code>構造体定義の下に、次のコードを追加してください。</p>
+<pre><code data-line="388" class="code-line"><code><div>/**
+- ひとつのスプライトデータを頂点バッファに設定.
+- @param sprite スプライトデータ.
+- @param v&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 頂点データを描き込むアドレス.
+- @param offset スクリーン左上座標.
+*/
+
+void
+AddVertex(const Sprite&amp; s, SpriteVertex* v, XMFLOAT2 offset)
+{
+&nbsp;&nbsp;const XMFLOAT2 center(offset.x + sprite.pos.x, offset.y - sprite.pos.y);
+&nbsp;&nbsp;const XMFLOAT2 halfSize(
+&nbsp;&nbsp;&nbsp;&nbsp;sprite.cell-&gt;ssize.x * 0.5f * sprite.scale.x,
+&nbsp;&nbsp;&nbsp;&nbsp;sprite.cell-&gt;ssize.y * 0.5f * sprite.scale.y);
+
+&nbsp;&nbsp;for (int i = 0; i &lt; 4; ++i) {
+&nbsp;&nbsp;&nbsp;&nbsp;v[i].color = sprite.color;
+&nbsp;&nbsp;&nbsp;&nbsp;v[i].position.z = sprite.pos.z;
+&nbsp;&nbsp;}
+
+&nbsp;&nbsp;v[0].position.x = center.x - halfSize.x;
+&nbsp;&nbsp;v[0].position.y = center.y + halfSize.y;
+&nbsp;&nbsp;v[0].texcoord.x = sprite.cell-&gt;uv.x;
+&nbsp;&nbsp;v[0].texcoord.y = sprite.cell-&gt;uv.y;
+
+&nbsp;&nbsp;v[1].position.x = center.x + halfSize.x;
+&nbsp;&nbsp;v[1].position.y = center.y + halfSize.y;
+&nbsp;&nbsp;v[1].texcoord.x = sprite.cell-&gt;uv.x + sprite.cell-&gt;tsize.x;
+&nbsp;&nbsp;v[1].texcoord.y = sprite.cell-&gt;uv.y;
+
+&nbsp;&nbsp;v[2].position.x = center.x + halfSize.x;
+&nbsp;&nbsp;v[2].position.y = center.y - halfSize.y;
+&nbsp;&nbsp;v[2].texcoord.x = sprite.cell-&gt;uv.x + sprite.cell-&gt;tsize.x;
+&nbsp;&nbsp;v[2].texcoord.y = sprite.cell-&gt;uv.y + sprite.cell-&gt;tsize.y;
+
+&nbsp;&nbsp;v[3].position.x = center.x - halfSize.x;
+&nbsp;&nbsp;v[3].position.y = center.y - halfSize.y;
+&nbsp;&nbsp;v[3].texcoord.x = sprite.cell-&gt;uv.x;
+&nbsp;&nbsp;v[3].texcoord.y = sprite.cell-&gt;uv.y + sprite.cell-&gt;tsize.y;
+}
+</div></code></code></pre>
+<p data-line="431" class="code-line">この関数は、スプライトの座標を画像の中心点として、左上から時計回りに4つの頂点データを作成し、頂点データに格納します。</p>
+<h2 id="%E3%82%B3%E3%83%B3%E3%82%B9%E3%83%88%E3%83%A9%E3%82%AF%E3%82%BF" data-chapter-number="4.3" data-line="436" class="code-line">コンストラクタ</h2>
+<p data-line="438" class="code-line">ここからは<code>SpriteRenderer</code>クラスを実装していきます。最初はコンストラクタです。
+<code>AddVertex</code>関数の下に、次のコードを追加してください。</p>
+<pre><code data-line="441" class="code-line"><code><div>/**
+ \* コンストラクタ
+ */
+ SpriteRenderer::SpriteRenderer() :
+   maxSpriteCount(0)
+ {
+ }
+</div></code></code></pre>
+<p data-line="451" class="code-line">コンストラクタでは、<code>maxSpriteCount</code>を0に初期化しているだけです。</p>
+<h2 id="%E5%88%9D%E6%9C%9F%E5%8C%96%E9%96%A2%E6%95%B0" data-chapter-number="4.4" data-line="453" class="code-line">初期化関数</h2>
+<p data-line="455" class="code-line">次は<code>Init</code>関数です。
+コンストラクタ定義の下に、次のコードを追加してください。</p>
+<pre><code data-line="458" class="code-line"><code><div>/**
+- Rendererを初期化する.
+*
+- @param device&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D3Dデバイス.
+- @param frameBufferCount フレームバッファの数.
+- @param maxSprite&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 描画できる最大スプライト数.
+*
+- @retval true&nbsp; 初期化成功.
+- @retval false 初期化失敗.
+*/
+
+bool SpriteRenderer::Init(
+&nbsp;&nbsp;ComPtr&lt;ID3D12Device&gt; device, int frameBufferCount, int maxSprite)
+{
+&nbsp;&nbsp;return true;
+}
+</div></code></code></pre>
+<p data-line="477" class="code-line">最初は、フレームバッファ毎の変数を初期化します。以下のコードをInit関数の先頭に追加してください。</p>
+<pre><code data-line="479" class="code-line"><code><div>frameResourceList.resize(frameBufferCount);
+ for (int i = 0; i &lt; frameBufferCount; ++i) {
+   if (FAILED(device-&gt;CreateCommandAllocator(
+     D3D12_COMMAND_LIST_TYPE_DIRECT,
+     IID_PPV_ARGS(&amp;frameResourceList[i].commandAllocator)))) {
+     return false;
+   }
+   if (FAILED(device-&gt;CreateCommittedResource(
+     &amp;CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+     D3D12_HEAP_FLAG_NONE,
+     &amp;CD3DX12_RESOURCE_DESC::Buffer(maxSprite * sizeof(SpriteVertex)),
+     D3D12_RESOURCE_STATE_GENERIC_READ,
+     nullptr,
+     IID_PPV_ARGS(&amp;frameResourceList[i].vertexBuffer)))) {
+     return false;
+   }
+   frameResourceList[i].vertexBuffer-&gt;SetName(L"Sprite Vertex Buffer");
+   CD3DX12_RANGE range(0, 0);
+   if (FAILED(frameResourceList[i].vertexBuffer-&gt;Map(
+     0,
+     &amp;range,
+     &amp;frameResourceList[i].vertexBufferGPUAddress))) {
+     return false;
+   }
+   frameResourceList[i].vertexBufferView.BufferLocation =
+     frameResourceList[i].vertexBuffer-&gt;GetGPUVirtualAddress();
+   frameResourceList[i].vertexBufferView.StrideInBytes = sizeof(SpriteVertex);
+   frameResourceList[i].vertexBufferView.SizeInBytes =
+     static_cast&lt;UINT&gt;(maxSprite * sizeof(SpriteVertex));
+ }
+</div></code></code></pre>
+<p data-line="512" class="code-line">どのコードも既に実装してきたものなので、難しくはないと思います。
+興味深い点としては、<code>ID3D12Resource::Map</code>関数を呼び出しだけで、<code>Unmap</code>関数がないことが挙げられます。
+こうすることで、頂点データ書き込み用のポインタをずっと有効にしておくことができます。</p>
+<p data-line="516" class="code-line">続いて、コマンドリストを作成します。
+フレームリソース作成コードの下に、以下のコードを追加してください。</p>
+<pre><code data-line="519" class="code-line"><code><div>if (FAILED(device-&gt;CreateCommandList(
+   0,
+   D3D12_COMMAND_LIST_TYPE_DIRECT,
+   frameResourceList[0].commandAllocator.Get(),
+   nullptr,
+   IID_PPV_ARGS(&amp;commandList)))) {
+   return false;
+ }
+ if (FAILED(commandList-&gt;Close())) {
+   return false;
+ }
+</div></code></code></pre>
+<p data-line="533" class="code-line">このコードも、<code>InitializeD3D</code>関数で実装したものとほとんど同じです。</p>
+<p data-line="535" class="code-line">最後に、インデックスバッファを作成します。
+コマンドリスト作成コードに続けて、次のコードを追加してください。</p>
+<pre><code data-line="538" class="code-line"><code><div>if (FAILED(device-&gt;CreateCommittedResource(
+   &amp;CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+   D3D12_HEAP_FLAG_NONE,
+   &amp;CD3DX12_RESOURCE_DESC::Buffer(maxSprite * 6 * sizeof(DWORD)),
+   D3D12_RESOURCE_STATE_GENERIC_READ,
+   nullptr,
+   IID_PPV_ARGS(&amp;indexBuffer)))) {
+   return false;
+ }
+ indexBuffer-&gt;SetName(L"Sprite Index Buffer");
+ CD3DX12_RANGE range(0, 0);
+ void* tmpIndexBufferAddress;
+ if (FAILED(indexBuffer-&gt;Map(0, &amp;range, &amp;tmpIndexBufferAddress))) {
+   return false;
+ }
+ DWORD* pIndexBuffer = static_cast&lt;DWORD*&gt;(tmpIndexBufferAddress);
+ for (size_t i = 0; i &lt; maxSprite; ++i) {
+   pIndexBuffer[i * 6 + 0] = i * 4 + 0;
+   pIndexBuffer[i * 6 + 1] = i * 4 + 1;
+   pIndexBuffer[i * 6 + 2] = i * 4 + 2;
+   pIndexBuffer[i * 6 + 3] = i * 4 + 2;
+   pIndexBuffer[i * 6 + 4] = i * 4 + 3;
+   pIndexBuffer[i * 6 + 5] = i * 4 + 0;
+ }
+ indexBuffer-&gt;Unmap(0, nullptr);
+ indexBufferView.BufferLocation = indexBuffer-&gt;GetGPUVirtualAddress();
+ indexBufferView.SizeInBytes = maxSprite * 6 * sizeof(DWORD);
+ indexBufferView.Format = DXGI_FORMAT_R32_UINT;
+
+
+</div></code></code></pre>
+<p data-line="571" class="code-line">インデックスバッファの作成も、<code>InitializeD3D</code>関数で実装したものと大きな違いはありません。
+インデックス配列を自動的に生成しているくらいですね。
+頂点バッファと違い、インデックスバッファは作成したらもう書き換えることはないので<code>Unmap</code>を呼んでいます。</p>
+<h2 id="%E6%8F%8F%E7%94%BB%E9%96%A2%E6%95%B0" data-chapter-number="4.5" data-line="575" class="code-line">描画関数</h2>
+<p data-line="577" class="code-line"><code>Init</code>関数の次は<code>Draw</code>関数を実装します。
+<code>Init</code>関数の下に、次のコードを追加してください。</p>
+<pre><code data-line="580" class="code-line"><code><div>/**
+- スプライトを描画する.
+*
+- @param spriteList 描画するスプライトのリスト.
+- @param pso&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;描画に使用するPSO.
+- @param texture&nbsp;&nbsp;&nbsp; 描画に使用するテクスチャ.
+- @param frameIndex 現在のフレームバッファのインデックス.
+- @param info&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 描画情報.
+*
+- @retval true&nbsp; コマンドリスト作成成功.
+- @retval false コマンドリスト作成失敗.
+*/
+bool SpriteRenderer::Draw(
+&nbsp; const std::vector&lt;Sprite&gt;&amp; spriteList,
+&nbsp; const PSO&amp; pso,
+&nbsp; const Resource::Texture&amp; texture,
+&nbsp; int frameIndex,
+&nbsp; RenderingInfo&amp; info)
+{
+&nbsp; return true;
+}
+</div></code></code></pre>
+<p data-line="604" class="code-line">まず最初に、コマンドリストをリセットします。
+<code>Draw</code>関数の先頭に、次のコードを追加してください。</p>
+<pre><code data-line="607" class="code-line"><code><div>FrameResource&amp; fr = frameResourceList[frameIndex];
+ if (FAILED(fr.commandAllocator-&gt;Reset())) {
+   return false;
+ }
+ if (FAILED(commandList-&gt;Reset(fr.commandAllocator.Get(), nullptr))) {
+   return false;
+ }
+ if (spriteList.empty()) {
+   return SUCCEEDED(commandList-&gt;Close());
+ }
+</div></code></code></pre>
+<p data-line="620" class="code-line">最初の行では、描画で使用するフレームリソースを選択しています。そして、コマンドアロケータとコマンドリストをリセットしています。また、スプライトリストが空だった場合、描画する必要がないので、即座にコマンドリストをクローズして関数を終了しています。</p>
+<p data-line="622" class="code-line">次に行うのは、グラフィックスパイプラインの設定です。
+上記のコードに続けて、次のコードを追加してください。</p>
+<pre><code data-line="625" class="code-line"><code><div>commandList-&gt;SetGraphicsRootSignature(pso.rootSignature.Get());
+ commandList-&gt;SetPipelineState(pso.pso.Get());
+ ID3D12DescriptorHeap* heapList[] = { info.texDescHeap };
+ commandList-&gt;SetDescriptorHeaps(_countof(heapList), heapList);
+ commandList-&gt;SetGraphicsRootDescriptorTable(0, texture.handle);
+ commandList-&gt;SetGraphicsRoot32BitConstants(1, 16, &amp;info.matViewProjection, 0);
+ commandList-&gt;IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+ commandList-&gt;IASetVertexBuffers(0, 1, &amp;fr.vertexBufferView);
+ commandList-&gt;IASetIndexBuffer(&amp;indexBufferView);
+ commandList-&gt;OMSetRenderTargets(1, &amp;info.rtvHandle, FALSE, &amp;info.dsvHandle);
+ commandList-&gt;RSSetViewports(1, &amp;info.viewport);
+ commandList-&gt;RSSetScissorRects(1, &amp;info.scissorRect);
+</div></code></code></pre>
+<p data-line="640" class="code-line">個々のコードは<code>Render</code>関数の実装過程で説明済みなので、ここでは繰り返しません。</p>
+<p data-line="642" class="code-line">グラフィックスパイプラインの設定が終わったら、頂点データを作成します。
+グラフィックスパイプライン設定コードの下に、次のコードを追加してください。</p>
+<pre><code data-line="645" class="code-line"><code><div>const XMFLOAT2 offset(-(info.viewport.Width * 0.5f), info.viewport.Height * 0.5f);
+ const int maxSprite =
+   fr.vertexBufferView.SizeInBytes / fr.vertexBufferView.StrideInBytes / 4;
+ int numSprite = 0;
+ SpriteVertex* v = static_cast&lt;SpriteVertex*&gt;(fr.vertexBufferGPUAddress);
+ for (const Sprite&amp; sprite : spriteList) {
+   AddVertex(sprite, v, offset);
+   ++numSprite;
+   if (numSprite &gt;= maxSprite) {
+     break;
+   }
+   v += 4;
+ }
+ commandList-&gt;DrawIndexedInstanced(numSprite * 6, 1, 0, 0, 0);
+ if (FAILED(commandList-&gt;Close())) {
+   return false;
+ }
+</div></code></code></pre>
+<p data-line="667" class="code-line">変数<code>offset</code>には、描画範囲の左上を示す座標が格納されます。スクリーン座標系では右上がプラス方向、左下がマイナス方向であることを思い出してください。</p>
+<p data-line="669" class="code-line">変数<code>maxSprite</code>には、描画可能な最大スプライト数が格納されます。このコードでは、頂点バッファビューのパラメータから、<code>Init</code>関数で渡された値を計算で復元しています。</p>
+<p data-line="671" class="code-line">変数<code>numSprite</code>は描画したスプライトの数が格納されます。最初は0です。</p>
+<p data-line="673" class="code-line">変数<code>v</code>は頂点データを設定する位置を示すポインタです。最初は頂点バッファの先頭を指しています。</p>
+<p data-line="675" class="code-line"><code>for</code>ループの中では、<code>AddVertex</code>関数によってスプライトリストの各スプライトを頂点データに変換し、頂点バッファに格納しています。
+頂点データを作成し終えたら、<code>ID3D12GraphicsCommandList::DrawIndexedInstanced</code>関数で、作成した頂点データを描画しています。
+そして最後に、コマンドリストをクローズして描画関数は終了です。</p>
+<h2 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AA%E3%82%B9%E3%83%88%E3%81%AE%E5%8F%96%E5%BE%97" data-chapter-number="4.6" data-line="679" class="code-line">コマンドリストの取得</h2>
+<p data-line="681" class="code-line"><code>SpriteRenderer</code>クラスの最後は、コマンドリストの取得関数の実装です。
+<code>Draw</code>関数の下に、次のコードを追加してください。</p>
+<pre><code data-line="684" class="code-line"><code><div>/**
+ \* コマンドリストを取得する.
+ *
+ \* @return ID3D12GraphicsCommandListインターフェイスへのポインタ.
+ */
+ ID3D12GraphicsCommandList* SpriteRenderer::GetCommandList()
+ {
+   return commandList.Get();
+ }
+</div></code></code></pre>
+<p data-line="696" class="code-line">見てのとおり、コマンドリストのポインタを返しているだけの単純な関数です。</p>
+<p data-line="698" class="code-line">これで<code>SpriteRenderer</code>の実装は完了です。</p>
+<h1 id="%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%83%90%E3%83%AA%E3%82%A2%E3%81%AE%E4%BD%8D%E7%BD%AE" data-chapter-number="5" data-line="703" class="code-line">リソースバリアの位置</h1>
+<h2 class="notoc code-line" id="__blank__-2" data-line="704"></h2>
+<p data-line="706" class="code-line">現在、コマンドリストの先頭と最後には、フレームバッファの状態が変化するのを待つためのリソースバリア命令が追加されていると思います。複数のコマンドリストを実行する場合、2つのリソースバリア命令が、それぞれ最初のコマンドリストと最後のコマンドリストに追加された状態になっている必要があります。
+コマンドリストを追加するたびに、これらの命令の追加位置を変更することはできます。しかし、コマンドリストを追加・削除したりの、順序を変更するたびにそんなことをするのは面倒です。</p>
+<p data-line="709" class="code-line">そこで、必ず最初と最後に実行されるコマンドリストを作成し、そこにリソースバリア命令を追加することにしましょう。こうすることで、他のコマンドリストの数や順序がいくら変わっても、リソースバリア命令の位置を気にする必要はなくなります。</p>
+<p data-line="711" class="code-line"><code>Main.cpp</code>を開き、<code>commandList</code>変数定義の下に次のコードを追加してください。</p>
+<pre><code data-line="713" class="code-line"><code><div>ComPtr&lt;ID3D12GraphicsCommandList&gt; prologueCommandList; // 最初に実行されるコマンドリスト.
+ ComPtr&lt;ID3D12GraphicsCommandList&gt; epilogueCommandList; // 最後に実行されるコマンドリスト.
+</div></code></code></pre>
+<p data-line="718" class="code-line">次は初期化です。
+<code>InitializeD3D</code>関数へ移動し、<code>commandList</code>作成コードの下に、次のコードを追加してください。</p>
+<pre><code data-line="721" class="code-line"><code><div>if (FAILED(device-&gt;CreateCommandList(
+   0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator[currentFrameIndex].Get(), nullptr, 
+   IID_PPV_ARGS(&amp;prologueCommandList)))) {
+   return false;
+ }
+ if (FAILED(prologueCommandList-&gt;Close())) {
+   return false;
+ }
+ if (FAILED(device-&gt;CreateCommandList(
+   0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator[currentFrameIndex].Get(), nullptr, 
+   IID_PPV_ARGS(&amp;epilogueCommandList)))) {
+   return false;
+ }
+ if (FAILED(epilogueCommandList-&gt;Close())) {
+   return false;
+ }
+
+
+</div></code></code></pre>
+<p data-line="742" class="code-line">ここでは直にコマンドリストを作成していますが、作成コードを関数化するほうがいいと思います。</p>
+<p data-line="744" class="code-line">新しいコマンドリストが作成できたので、これを使うコードを実装しましょう。
+<code>Render</code>関数に移動し、コマンドアロケータをリセットするコードの下に、次のコードを追加してください。</p>
+<pre><code data-line="747" class="code-line"><code><div>if (FAILED(prologueCommandList-&gt;Reset(
+   commandAllocator[currentFrameIndex].Get(), nullptr))) {
+   return false;
+ }
+ prologueCommandList-&gt;ResourceBarrier(1,　&amp;CD3DX12_RESOURCE_BARRIER::Transition(
+   renderTargetList[currentFrameIndex].Get(),
+   D3D12_RESOURCE_STATE_PRESENT,
+   D3D12_RESOURCE_STATE_RENDER_TARGET));
+ if (FAILED(prologueCommandList-&gt;Close())) {
+   return false;
+ }
+
+ if (FAILED(epilogueCommandList-&gt;Reset(
+   commandAllocator[currentFrameIndex].Get(), nullptr))) {
+   return false;
+ }
+ epilogueCommandList-&gt;ResourceBarrier(1, &amp;CD3DX12_RESOURCE_BARRIER::Transition(
+   renderTargetList[currentFrameIndex].Get(),
+   D3D12_RESOURCE_STATE_RENDER_TARGET,
+   D3D12_RESOURCE_STATE_PRESENT));
+ if (FAILED(epilogueCommandList-&gt;Close())) {
+   return false;
+ }
+</div></code></code></pre>
+<p data-line="773" class="code-line">さらに、既存のコマンドリストからリソースバリア命令を取り除いてください。
+削除するひとつめのリソースバリア命令は、次のコードでコメントアウトされている部分です。</p>
+<pre><code data-line="776" class="code-line"><code><div>if (FAILED(commandList-&gt;Reset(commandAllocator[currentFrameIndex].Get(), nullptr))) {
+   return false;
+ }
+
+ // ↓この関数呼び出しを削除.
+ // commandList-&gt;ResourceBarrier(1, &amp;CD3DX12_RESOURCE_BARRIER::Transition(
+ //   renderTargetList[currentFrameIndex].Get(),
+ //   D3D12_RESOURCE_STATE_PRESENT,
+ //   D3D12_RESOURCE_STATE_RENDER_TARGET));
+ D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle =
+   dsvDescriptorHeap-&gt;GetCPUDescriptorHandleForHeapStart();
+ D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle =
+   rtvDescriptorHeap-&gt;GetCPUDescriptorHandleForHeapStart();
+</div></code></code></pre>
+<p data-line="792" class="code-line">削除するふたつめのリソースバリア命令は、次のコードでコメントアウトされている部分です。</p>
+<pre><code data-line="794" class="code-line"><code><div>DrawTriangle();
+ DrawRectangles();
+
+ // ↓この関数呼び出しを削除.
+ // commandList-&gt;ResourceBarrier(1, &amp;CD3DX12_RESOURCE_BARRIER::Transition(
+ //   renderTargetList[currentFrameIndex].Get(),
+ //   D3D12_RESOURCE_STATE_RENDER_TARGET,
+ //   D3D12_RESOURCE_STATE_PRESENT));
+
+ if (FAILED(commandList-&gt;Close())) {
+   return false;
+ }
+</div></code></code></pre>
+<p data-line="809" class="code-line">最後に、コマンドキューに渡すコマンドリストの配列に、今回作成したコマンドリストを追加します。
+次のコードを、</p>
+<pre><code data-line="812" class="code-line"><code><div>ID3D12CommandList* ppCommandLists[] = { commandList.Get() };
+</div></code></code></pre>
+<p data-line="816" class="code-line">以下のように書き換えてください。</p>
+<pre><code data-line="818" class="code-line"><code><div>ID3D12CommandList* ppCommandLists[] = {
+   prologueCommandList.Get(),
+   commandList.Get(),
+   epilogueCommandList.Get() };
+</div></code></code></pre>
+<h1 id="%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E4%BD%BF%E3%81%86" data-chapter-number="6" data-line="827" class="code-line">スプライトを使う</h1>
+<h2 id="%E5%A4%89%E6%95%B0%E5%AE%9A%E7%BE%A9" data-chapter-number="6.1" data-line="829" class="code-line">変数定義</h2>
+<p data-line="831" class="code-line">それでは、実際にスプライトを描画してみます。
+最初に、スプライトのリストとスプライト描画オブジェクトを定義します。
+<code>Main.cpp</code>を開き、<code>Texture</code>の変数宣言の下に、次の変数宣言を追加してください。</p>
+<pre><code data-line="835" class="code-line"><code><div>std::vector&lt;Sprite&gt; spriteList;
+ SpriteRenderer spriteRenderer;
+</div></code></code></pre>
+<h2 id="%E3%82%BB%E3%83%AB%E3%81%AE%E5%AE%9A%E7%BE%A9" data-chapter-number="6.2" data-line="842" class="code-line">セルの定義</h2>
+<p data-line="844" class="code-line">次に、セルデータを準備します。
+<code>triangleVertexCount</code>変数宣言の下に、次のコードを追加してください。</p>
+<pre><code data-line="847" class="code-line"><code><div>const Cell cellList[] = {
+   { XMFLOAT2(0, 0), XMFLOAT2(1, 1), XMFLOAT2(80, 60) },
+ };
+</div></code></code></pre>
+<h2 id="spriterenderer%E3%81%AE%E5%88%9D%E6%9C%9F%E5%8C%96" data-chapter-number="6.3" data-line="855" class="code-line">SpriteRendererの初期化</h2>
+<p data-line="857" class="code-line"><code>InitializeD3D</code>関数に移動し、<code>LoadTexture</code>関数呼び出しの下に、次のコードを追加してください。</p>
+<pre><code data-line="859" class="code-line language-cpp"><div><span class="hljs-keyword">if</span> (!spriteRenderer.Init(device, frameBufferCount, <span class="hljs-number">10000</span>)) {
+   <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+ }
+ spriteList.push_back(
+   { &amp;cellList[<span class="hljs-number">0</span>], XMFLOAT3(<span class="hljs-number">100</span>, <span class="hljs-number">100</span>, <span class="hljs-number">0.1f</span>), <span class="hljs-number">0</span>, XMFLOAT2(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>), XMFLOAT4(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>) });
+</div></code></pre>
+<p data-line="867" class="code-line">ここではスプライトの最大数を10000としています(数値は適当です)。
+また、スプライトリストに設定しているパラメータも適当です。</p>
+<h2 id="%E3%82%B9%E3%83%97%E3%83%A9%E3%82%A4%E3%83%88%E3%82%92%E6%8F%8F%E7%94%BB" data-chapter-number="6.4" data-line="870" class="code-line">スプライトを描画</h2>
+<p data-line="872" class="code-line"><code>Render</code>関数にスプライトの描画コードを追加します。
+<code>DrawRectangles</code>関数呼び出しの下に、次のコードを追加してください。</p>
+<pre><code data-line="875" class="code-line language-cpp"><div>RenderingInfo spriteRenderingInfo;
+ spriteRenderingInfo.rtvHandle = rtvHandle;
+ spriteRenderingInfo.dsvHandle = dsvHandle;
+ spriteRenderingInfo.viewport = viewport;
+ spriteRenderingInfo.scissorRect = scissorRect;
+ spriteRenderingInfo.texDescHeap = csuDescriptorHeap.Get();
+ spriteRenderingInfo.matViewProjection = matViewProjection;
+ spriteRenderer.Draw(
+   spriteList,
+   GetPSO(PSOType_Sprite),
+   texImage,
+   currentFrameIndex,
+   spriteRenderingInfo);
+</div></code></pre>
+<p data-line="891" class="code-line">また、コマンドキューにスプライト用コマンドリストを渡す必要もあります。
+以下のように、コマンドリストの配列にスプライト用コマンドリストを追加してください。</p>
+<pre><code data-line="894" class="code-line language-cpp"><div>ID3D12CommandList* ppCommandLists[] = {
+   prologueCommandList.Get(),
+   commandList.Get(),
+   spriteRenderer.GetCommandList(), <span class="hljs-comment">// ←この行を追加.</span>
+   epilogueCommandList.Get() };
+</div></code></pre>
+<p data-line="902" class="code-line">これでスプライトを表示できるようになりました。</p>
+<p data-line="904" class="code-line">プロジェクトをビルドして実行してみてください。</p>
+<h1 id="%E3%82%AD%E3%83%BC%E5%85%A5%E5%8A%9B" data-chapter-number="7" data-line="908" class="code-line">キー入力</h1>
+<h2 id="%E5%85%A5%E5%8A%9B%E3%82%92%E5%87%A6%E7%90%86%E3%81%99%E3%82%8B" data-chapter-number="7.1" data-line="910" class="code-line">入力を処理する</h2>
+<p data-line="912" class="code-line">スプライトを表示するだけでは面白くないので、キーボードの入力で操作できるようにしてみましょう。
+まずは<code>spriteRenderer</code>変数定義の下に、次のコードを追加してください。</p>
+<pre><code data-line="915" class="code-line"><code><div>/**
+ \* ゲームパッド入力を表す構造体.
+ */
+ struct GamePad
+ {
+   enum {
+     DPAD_UP = 0x0001,
+     DPAD_DOWN = 0x0002,
+     DPAD_LEFT = 0x0004,
+     DPAD_RIGHT = 0x0008,
+     START = 0x0010,
+     A = 0x0020,
+     B = 0x0040,
+     X = 0x0080,
+     Y = 0x0100,
+     L = 0x0200,
+     R = 0x0400,
+   };
+   uint32_t buttons;
+ };
+ GamePad gamepad;
+</div></code></code></pre>
+<p data-line="939" class="code-line"><code>GaePad</code>はXInputに似た構造体です。キー入力があったときに<code>buttons</code>メンバ変数の対応するビットを立て、入力がなくなったらビットを降ろします。ビットの操作は、ウィンドウプロシージャで行います。ウィンドウプロシージャを以下のように変更してください。</p>
+<pre><code data-line="941" class="code-line"><code><div>HRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+ {
+   switch (msg) {
+   case WM_KEYDOWN:
+     if (wparam == VK_ESCAPE) {
+       DestroyWindow(hwnd);
+       return 0;
+     }
+ 　　　　// ↓このswitch文を追加.
+     switch (wparam) {
+     case 'W': gamepad.buttons |= GamePad::DPAD_UP; break;
+     case 'A': gamepad.buttons |= GamePad::DPAD_LEFT; break;
+     case 'S': gamepad.buttons |= GamePad::DPAD_DOWN; break;
+     case 'D': gamepad.buttons |= GamePad::DPAD_RIGHT; break;
+     case VK_SPACE: gamepad.buttons |= GamePad::A; break;
+     }
+     break;
+   // ↓このcaseを追加.
+   case WM_KEYUP:
+     switch (wparam) {
+     case 'W': gamepad.buttons &amp;= ~GamePad::DPAD_UP; break;
+     case 'A': gamepad.buttons &amp;= ~GamePad::DPAD_LEFT; break;
+     case 'S': gamepad.buttons &amp;= ~GamePad::DPAD_DOWN; break;
+     case 'D': gamepad.buttons &amp;= ~GamePad::DPAD_RIGHT; break;
+     case VK_SPACE: gamepad.buttons |= GamePad::A; break;
+     }
+     break;
+   case WM_DESTROY:
+     PostQuitMessage(0);
+     return 0;
+ 　　}
+ 　　return DefWindowProc(hwnd, msg, wparam, lparam);
+ }
+
+
+</div></code></code></pre>
+<p data-line="979" class="code-line">キー入力は一般的なFPSと同じくWASDに割り振ってみました。
+以前説明したように、<code>WM_KEYDOWN</code>メッセージでは<code>wparam</code>に押されたキーの種類が渡されてきます。
+そこで、<code>wparam</code>の値を見て、対応する<code>gamepad.buttons</code>のビットを立てています。
+<code>WM_KEYUP</code>はキーが離されたときに送られてくるウィンドウメッセージです。このメッセージも<code>wparam</code>に離されたキーの種類が渡されてくるので、<code>WM_KEYDOWN</code>と同様の方法で対応するビットを降ろしています。</p>
+<h2 id="%E7%8A%B6%E6%85%8B%E6%9B%B4%E6%96%B0%E9%96%A2%E6%95%B0%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B" data-chapter-number="7.2" data-line="984" class="code-line">状態更新関数を追加する</h2>
+<p data-line="986" class="code-line">キー入力を判定して状態を更新する処理は、専用の関数で行うことにします。
+まずは関数宣言です。
+<code>WaitForGpu</code>関数宣言の下に次のコードを追加してください。</p>
+<pre><code data-line="990" class="code-line"><code><div>void Update();
+</div></code></code></pre>
+<p data-line="994" class="code-line">この関数は、メッセージループ内で呼び出します。
+メッセージループの<code>Render</code>関数呼び出しの直前に、次のコードを追加してください。</p>
+<pre><code data-line="997" class="code-line"><code><div>Update();
+</div></code></code></pre>
+<p data-line="1001" class="code-line">最後に関数定義です。
+<code>WaitForGpu</code>関数定義の下に、次のコードを追加してください。</p>
+<pre><code data-line="1004" class="code-line"><code><div>/**
+ \* アプリケーションの状態を更新する.
+ */
+ void Update()
+ {
+   if (gamepad.buttons &amp; GamePad::DPAD_LEFT) {
+     spriteList[0].pos.x -= 5.0f;
+   }　else if (gamepad.buttons &amp; GamePad::DPAD_RIGHT) {
+     spriteList[0].pos.x += 5.0f;
+   }
+   if (gamepad.buttons &amp; GamePad::DPAD_UP) {
+     spriteList[0].pos.y -= 5.0f;
+   }　else if (gamepad.buttons &amp; GamePad::DPAD_DOWN) {
+     spriteList[0].pos.y += 5.0f;
+   }
+ }
+</div></code></code></pre>
+<p data-line="1023" class="code-line">このコードでは、キー入力に応じて、前章までに定義したスプライトの座標を変更しています。
+画面端のチェック等は行っていませんが、キー入力の雰囲気はつかめると思います。</p>
+<p data-line="1026" class="code-line">これでキー入力の実装は完了です。
+ビルドして実行してみてください。</p>
+<h1 id="%E3%82%84%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86" data-chapter-number="8" data-line="1032" class="code-line">やってみよう</h1>
+<h2 class="notoc code-line" id="__blank__-3" data-line="1033"></h2>
+<ul>
+<li data-line="1035" class="code-line">セルデータやスプライトを追加してみましょう。</li>
+<li data-line="1036" class="code-line">スプライトの回転や拡大縮小パラメータは未使用です。これらを使ってスプライトの回転拡大縮小を実装してみましょう。</li>
+<li data-line="1037" class="code-line"><code>GamePad</code>の未使用ビットを適当なキーに割り当ててみましょう。また、割り当てたキーを使ってスプライトを操作してみましょう。</li>
+<li data-line="1038" class="code-line">2プレイヤー用の<code>GamePad</code>を実装してみましょう。</li>
+</ul>
+<div class="note warning">
+<p data-line="1041" class="code-line">ここに注意すべき点を記述します。</p>
+</div>
+<div class="note">
+<h3 id="%E7%B7%B4%E7%BF%92%E5%95%8F%E9%A1%8C" data-line="1045" class="code-line">練習問題</h3>
+<hr>
+<p data-line="1048" class="code-line">ああああああああああああああああああああああああああああああああああああああああ</p>
+<p data-line="1050" class="code-line">ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ
+ああああああああああああああああああああああああああああああああああああああああ</p>
+</div>
+<div class="footnotes">
+<hr class="footnotes-sep">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p data-line="53" class="code-line">これは markdown-it-footnote-conventional に基づく注釈です。 <a href="#fnref1" class="footnote-backref">↩</a></p>
+</li>
+</ol>
+</div>
+</body></html>

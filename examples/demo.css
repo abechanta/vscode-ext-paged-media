@@ -1,0 +1,120 @@
+section.part {
+    page: part;
+    color: darkblue !important;
+}
+
+.title-example {
+    position: running(runningTitle);
+    font-family: serif;
+}
+
+@page {
+    size: 17cm 24cm;
+    margin: 30mm 25mm;
+    @bottom-left {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @top-left-corner {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @top-left {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @top-center {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @top-right {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @top-right-corner {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @right-top {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @right-middle {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @right-bottom {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @bottom-right-corner {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @bottom-left {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @bottom-center {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @bottom-right {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @bottom-left-corner {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @left-top {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @left-middle {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+    @left-bottom {
+      box-shadow: 0 0 0 1px inset lightgrey;
+    }
+}
+
+@page :right {
+    @top-right-corner {
+        content: counter(page);
+        box-shadow: 0 0 0 1px inset lightgrey;
+        padding: 0.8em;
+        font-size: 16px;
+        align-items: center;
+    }
+    @top-right {
+       font-size: 16px;
+        content: element(runningTitle);
+        color: red;
+        padding: 0.2em;
+    }
+}
+
+@page :left {
+    @top-left-corner {
+        content: counter(page);
+        box-shadow: 0 0 0 1px inset lightgrey;
+        padding: 0.8em;
+        align-items: center;
+        font-size: 16px;
+
+    }
+    @top-left {
+        content: element(runningTitle);
+        color: red;
+        padding: 0.2em;
+        font-size: 16px;
+    }
+}
+
+
+@page part {
+  background-color: lightcyan;
+  margin: 120mm 25mm 30mm;
+  @top-left {
+    content: none;
+    color: transparent;
+  }
+  @top-right {
+    content: none;
+    color: transparent;
+  }
+  @top-left-corner {
+    content: none;
+    color: transparent;
+  }
+  @top-right-corner {
+    content: none;
+    color: transparent;
+  }
+}

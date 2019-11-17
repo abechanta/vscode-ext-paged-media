@@ -1,0 +1,12 @@
+{
+	"settings": {
+		"style": {
+			"uri": "techbook.css"
+		}
+	},
+	"folders": [
+		{
+			"path": "."
+		}
+	]
+}

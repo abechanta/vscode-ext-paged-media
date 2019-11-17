@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<!-- <link rel="stylesheet" type="text/css" href="techbook.css"> -->
+		<style>
+@page {
+	size: 148mm 210mm;
+	marks: crop cross;
+	bleed: 3mm;
+	@top-left {
+		content: element(running-title1);
+		/* content: string(running-title1); */
+		color: gray;
+	}
+	@top-right {
+		content: string(running-title2);
+		color: gray;
+	}
+	@bottom-center {
+		content: "- " counter(page) " -";
+		color: gray;
+	}
+	@footnote {
+		float: bottom;
+	}
+}
+@page:right {
+	margin: 12mm 15mm 18mm 20mm;
+}
+@page:left {
+	margin: 12mm 20mm 18mm 15mm;
+}
+@page:first {
+	@top-left {
+		content: none;
+	}
+	@top-right {
+		content: none;
+	}
+	@bottom-center {
+		content: none;
+	}
+}
+@page header-layout {
+	@top-left {
+		content: none;
+	}
+	@top-right {
+		content: none;
+	}
+	@bottom-center {
+		content: "- " counter(page) " -";
+		color: gray;
+	}
+}
+<!--span.footnote {
+	float: footnote;
+}-->
+@media screen {
+	body {
+		background-color: var(--background);
+	}
+	.pagedjs_pages {
+		display: flex;
+		width: calc(var(--width) * 2);
+		margin: 0 auto;
+		flex: 0;
+		flex-wrap: wrap;
+	}
+	.pagedjs_page {
+		background: var(--paper-color);
+		box-shadow: 0 .5mm 2mm var(--shadow-color);
+		margin: 0;
+		margin-top: 10mm;
+		margin-right: 10mm;
+		flex-shrink: 0;
+		flex-grow: 0;
+	}
+	.pagedjs_first_page {
+		margin-left: var(--width);
+	}
+	[class*="pagedjs_margin-top"],
+	[class*="pagedjs_margin-left"],
+	[class*="pagedjs_margin-right"],
+	[class*="pagedjs_margin-bottom"] {
+		box-shadow: 0 0 0 var(--margin-box-size) inset var(--margin-box-color);
+	}
+}
+:root {
+	--title: "この本のタイトル";
+	--width: calc(var(--pagedjs-width) + 10mm);
+	--background: rgba(0, 0, 0, 0.1);
+	--shadow-color: rgba(0, 0, 0, 0.5);
+	--paper-color: white;
+	--margin-box-color: rgba(0, 255, 255, 0.1);
+	--margin-box-size: 1px;
+	--section-color: rgba(0, 0, 0, 1.0);
+}
+body {
+	padding: 0;
+	font-size: 8.25pt;
+	line-height: 1.6;
+	widows: 2;
+	orphans: 2;
+}
+nav {
+	page: header-layout;
+}
+nav li {
+	list-style: none;
+}
+nav li>a::before {
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	border-bottom: 1px dotted;
+	content: "";
+	flex: auto;
+	order: 1;
+}
+nav li>a {
+	display: inline-flex;
+	width: 100%;
+	color: currentColor;
+	align-items: center;
+}
+nav li>a::after {
+	text-align: right;
+	align-self: flex-end;
+	content: target-counter(attr(href), page);
+	flex: none;
+	order: 2;
+}
+header>h1 {
+	break-before: right;
+	page: header-layout;
+	background: gray;
+	color: white;
+	margin: 0 -100mm;
+	padding: 1vh 100mm 1vh 1vw;
+	position: absolute;
+	right: 0%;
+	bottom: 50%;
+}
+section div.running-title {
+	position: running(running-title1);
+	counter-increment: section1 0;
+}
+section div.running-title:before {
+	content: open-quote counter(section1) close-quote;
+	quotes: "第 " " 章 ";
+}
+section div.dummy:before {
+	content: none;
+}
+section h1:before {
+	font-size: 0.9em;
+	content: open-quote counter(section1) close-quote;
+	quotes: "第 " " 章 ";
+}
+section h1 {
+	break-before: right;
+	display: grid;
+	/* string-set: running-title1 content(); */
+	counter-increment: section1 1;
+	counter-reset: section2;
+}
+h1 {
+	font-size: 2.5em;
+}
+section h2:before {
+	content: open-quote counter(section1) close-quote;
+	quotes: "" ".";
+}
+section h2>div:before {
+	content: open-quote counter(section2) close-quote;
+	quotes: "" " ";
+	margin-right: 3mm;
+}
+section h2>div {
+	display: inline;
+	counter-increment: section2 1;
+}
+section h2 {
+	break-after: avoid;
+	string-set: running-title2 content();
+	counter-increment: section1 0;
+	padding-left: 3mm;
+	border-top: 2mm solid #fff;
+    border-right: 0mm solid #fff;
+	border-bottom: 1px solid #000;
+    border-left: 2mm solid #000;
+}
+h2 {
+	font-size: 1.5em;
+}
+		</style>
+		<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+		<!-- <script src="paged.polyfill.js"></script> -->
+		<!-- <script src="https://unpkg.com/pagedjs/dist/paged.legacy.polyfill.js"></script> -->
+		<!-- <script src="paged.legacy.polyfill.js"></script> -->
+	</head>
+	<body>
+		<nav>
+			<h2>目次</h2>
+			<ul>
+				<li><a href="#section1">最初のセクション</a></li>
+				<li><a href="#section2">次のセクション</a></li>
+				<li><a href="#section3">次の次のセクション</a></li>
+				<li><a href="#section4">最後のセクション</a></li>
+			</ul>
+		</nav>
+		<header>
+			<h1>イントロダクション</h1>
+			<h2>&nbsp;</h2>
+		</header>
+		<section>
+			<h1 id="section1">最初のセクション</h1>
+			<div class="running-title">最初のセクション</div>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクション１</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクション２</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+		</section>
+		<section>
+			<h1 id="section2">次のセクション</h1>
+			<div class="running-title">次のセクション</div>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクションその２の１</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+		</section>
+		<section>
+			<h1 id="section3">次の次のセクション</h1>
+			<div class="running-title">次の次のセクション</div>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクションその３の１</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクションその３の２</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクションその３の３</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクションその３の４</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクションその３の５</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+		</section>
+		<header>
+			<h1>セットアップ</h1>
+			<h2>&nbsp;</h2>
+		</header>
+		<section>
+			<h1 id="section4">最後のセクション</h1>
+			<div class="running-title">最後のセクション</div>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクション１</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクション２</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+		</section>
+	</body>
+</html>

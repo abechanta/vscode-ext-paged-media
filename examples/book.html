@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<!-- <link rel="stylesheet" type="text/css" href="techbook.css"> -->
+		<style>
+@page {
+	size: 210mm 297mm;
+	@top-left {
+		content: element(running-title1);
+		/* content: string(running-title1); */
+		color: gray;
+	}
+	@top-right {
+		content: string(running-title2);
+		color: gray;
+	}
+	@bottom-center {
+		content: "- " counter(page) " -";
+		color: gray;
+	}
+}
+@page:right {
+	margin: 12mm 15mm 18mm 30mm;
+}
+@page:left {
+	margin: 12mm 30mm 18mm 15mm;
+}
+@media screen {
+	body {
+		background-color: var(--background);
+	}
+	.pagedjs_pages {
+		display: flex;
+		width: calc(var(--width) * 2);
+		margin: 0 auto;
+		flex: 0;
+		flex-wrap: wrap;
+	}
+	.pagedjs_page {
+		background: var(--paper-color);
+		box-shadow: 0 .5mm 2mm var(--shadow-color);
+		margin: 0;
+		margin-top: 10mm;
+		flex-shrink: 0;
+		flex-grow: 0;
+	}
+	.pagedjs_first_page {
+		margin-left: var(--width);
+	}
+	[class*="pagedjs_margin-top"],
+	[class*="pagedjs_margin-left"],
+	[class*="pagedjs_margin-right"],
+	[class*="pagedjs_margin-bottom"] {
+		box-shadow: 0 0 0 var(--margin-box-size) inset var(--margin-box-color);
+	}
+}
+:root {
+	--title: "この本のタイトル";
+	--background: rgba(0, 0, 0, 0.1);
+	--shadow-color: rgba(0, 0, 0, 0.5);
+	--paper-color: white;
+	--margin-box-color: rgba(0, 255, 255, 0.1);
+	--margin-box-size: 1px;
+}
+body {
+	padding: 0;
+}
+div.running-title {
+	position: running(running-title1);
+	counter-increment: section1 0;
+}
+h1:before,
+div.running-title:before {
+	content: open-quote counter(section1) close-quote;
+	quotes: "第 " " 章 ";
+}
+h1 {
+	/* string-set: running-title1 content(); */
+	counter-increment: section1 1;
+	counter-reset: section2;
+}
+h2:before {
+	content: open-quote counter(section1) close-quote;
+	quotes: "" ".";
+}
+h2>div:before {
+	content: open-quote counter(section2) close-quote;
+	quotes: "" " ";
+}
+h2>div {
+	display: inline;
+	counter-increment: section2 1;
+}
+h2 {
+	string-set: running-title2 content();
+	counter-increment: section1 0;
+}
+		</style>
+		<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+		<!-- <script src="paged.polyfill.js"></script> -->
+		<!-- <script src="https://unpkg.com/pagedjs/dist/paged.legacy.polyfill.js"></script> -->
+		<!-- <script src="paged.legacy.polyfill.js"></script> -->
+	</head>
+	<body>
+		<section>
+			<h1 class="running-title">最初のセクション</h1>
+			<div class="running-title">最初のセクション</div>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクション１</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクション２</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+		</section>
+		<section>
+			<h1 class="running-title">次のセクション</h1>
+			<div class="running-title">次のセクション</div>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+			<h2><div />セクションその１</h2>
+			<p>
+				ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。ここに長い長い本文を書きます。
+			</p>
+		</section>
+	</body>
+</html>
