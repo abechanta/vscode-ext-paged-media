@@ -16,7 +16,9 @@
   },
   "main": "./extension.js",
   "devDependencies": {
-    "@types/vscode": "^1.33.0"
+    "@types/vscode": "^1.33.0",
+    "jsdom": "^15.2.1",
+    "pagedjs": "^0.1.34"
   },
   "dependencies": {}
 }
