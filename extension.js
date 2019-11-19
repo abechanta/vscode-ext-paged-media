@@ -9,7 +9,7 @@
 function activate(context) {
 	return {
 		extendMarkdownIt(md) {
-			// md.use(require('markdown-it-'));
+			md.use(require("markdown-it-attrs"));
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
