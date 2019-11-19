@@ -11,6 +11,7 @@ function activate(context) {
 		extendMarkdownIt(md) {
 			md.use(require("markdown-it-attrs"));
 			md.use(require("markdown-it-kbd"));
+			md.use(require("markdown-it-ruby"));
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
