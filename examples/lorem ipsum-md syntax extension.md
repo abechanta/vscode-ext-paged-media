@@ -3,6 +3,11 @@
 	this demonstrates following.
 
 	- markdown-it-attrs for explicit attributes
+	- markdown-it-kbd 
+	- markdown-it-ruby
+	- markdown-it-div for fenced region
+	- markdown-it-multimd-table
+	- markdown-it-footnote-conventional for footnote
 -->
 
 # First Chapter
