@@ -10,6 +10,8 @@
 	- markdown-it-footnote-conventional for footnote
 -->
 
+[toc]
+
 # First Chapter
 <div class="running-title">First Chapter</div>
 

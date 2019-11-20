@@ -23,7 +23,8 @@ function activate(context) {
 
 			// syntax for toc.
 			md.use(require("markdown-it-anchor"), { slugify: slugify, });
-			
+			md.use(require("markdown-it-toc-done-right"), { slugify: slugify, level: [1, 2, 3], });
+
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
 				try {
