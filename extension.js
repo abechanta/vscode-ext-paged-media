@@ -12,6 +12,8 @@ function activate(context) {
 			md.use(require("markdown-it-attrs"));
 			md.use(require("markdown-it-kbd"));
 			md.use(require("markdown-it-ruby"));
+			md.use(require("markdown-it-div"));
+			md.use(require("markdown-it-multimd-table"), { enableMultilineRows: true, enableRowspan: true, });
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
