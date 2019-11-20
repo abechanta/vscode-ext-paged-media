@@ -9,7 +9,12 @@
 function activate(context) {
 	return {
 		extendMarkdownIt(md) {
-			// md.use(require('markdown-it-'));
+			md.use(require("markdown-it-attrs"));
+			md.use(require("markdown-it-kbd"));
+			md.use(require("markdown-it-ruby"));
+			md.use(require("markdown-it-div"));
+			md.use(require("markdown-it-multimd-table"), { enableMultilineRows: true, enableRowspan: true, });
+			md.use(require("markdown-it-footnote-conventional"));
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
