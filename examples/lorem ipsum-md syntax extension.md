@@ -8,6 +8,7 @@
 	- markdown-it-div for fenced region
 	- markdown-it-multimd-table
 	- markdown-it-footnote-conventional for footnote
+	- markdown-it-anchor, markdown-it-toc-done-right for auto toc generation
 -->
 
 [toc]

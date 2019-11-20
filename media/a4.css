@@ -36,3 +36,32 @@ h2:before {
 	content: open-quote counter(section-no) close-quote;
 	quotes: "Section " ": ";
 }
+nav.table-of-contents ol {
+	display: flex;
+	flex-direction: column;
+}
+nav.table-of-contents ol li {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+}
+nav.table-of-contents ol a {
+	display: inline-flex;
+	flex-direction: row;
+	color: currentColor;
+	content: target-text(attr(href), content(text));
+}
+nav.table-of-contents ol a::before {
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	border-bottom: 1px dotted;
+	content: "";
+	flex: 1;
+	order: 3;
+}
+nav.table-of-contents ol a::after {
+	content: target-counter(attr(href), page);
+	align-self: flex-end;
+	flex: 0;
+	order: 4;
+}
