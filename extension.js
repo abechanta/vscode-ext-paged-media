@@ -7,6 +7,10 @@
 // refs: https://github.com/webpack/webpack/issues/6461
 
 function activate(context) {
+	const hasClass = function (token, classname) {
+		return token.attrGet("class") && token.attrGet("class").split(" ").includes(classname);
+	};
+
 	const slugify = function (str) {
 		str = str || "__blank__";
 		return encodeURIComponent(String(str).trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-'));
@@ -27,6 +31,7 @@ function activate(context) {
 			const level = parseInt(re.exec(token.tag)[1]);
 			if (
 				!isSelected(opts_.selection)(level) ||
+				hasClass(token, "unnumbered") ||
 				(opts.title === "")
 			) {
 				return;
@@ -51,6 +56,14 @@ function activate(context) {
 		};
 	};
 
+	const deleteUnnumberedHeadingsFromTocAst = function (md) {
+		const idx = md.core.ruler.__find__("generateTocAst");
+		const generateTocAst = md.core.ruler.getRules("")[idx];
+		md.core.ruler.getRules("")[idx] = function (state) {
+			generateTocAst({ tokens: state.tokens.filter((token) => !hasClass(token, "unnumbered")), });
+		};
+	};
+
 	return {
 		extendMarkdownIt(md) {
 			md.use(require("markdown-it-attrs"));
@@ -63,6 +76,7 @@ function activate(context) {
 			// syntax for toc.
 			md.use(require("markdown-it-anchor"), { slugify: slugify, callback: numbering({ selection: [1, 2, 3], }), });
 			md.use(require("markdown-it-toc-done-right"), { slugify: slugify, level: [1, 2, 3], });
+			deleteUnnumberedHeadingsFromTocAst(md);
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
