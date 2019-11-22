@@ -34,6 +34,11 @@ table {
 th, td {
 	border: 2px solid !important;
 }
+h1:before,
+h2:before,
+h3:before {
+	content: open-quote attr(data-chapter-number) close-quote;
+}
 ```
 
 [[CTRL]] + [[A]] means "Select All".
