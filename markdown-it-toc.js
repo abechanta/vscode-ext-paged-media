@@ -80,11 +80,12 @@ function aliasing(options) {
 }
 
 function deleteUnnumberedHeadingsFromTocAst(md, options) {
-	const idx = md.core.ruler.__find__("generateTocAst");
+	const ruleName = "generateTocAst";
+	const idx = md.core.ruler.__find__(ruleName);
 	const rule = md.core.ruler.getRules("")[idx];
-	md.core.ruler.getRules("")[idx] = state => {
+	md.core.ruler.at(ruleName, state => {
 		rule({ tokens: state.tokens.filter(token => !hasClass(token, options.excludeClassname)), });
-	};
+	});
 }
 
 module.exports = function include_plugin(md, options) {
