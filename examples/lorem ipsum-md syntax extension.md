@@ -8,14 +8,17 @@
 	- markdown-it-div for fenced region
 	- markdown-it-multimd-table
 	- markdown-it-footnote-conventional for footnote
+	- markdown-it-anchor, markdown-it-toc-done-right for auto toc generation
 -->
+
+[toc]
 
 # First Chapter
 <div class="running-title">First Chapter</div>
 
 :::{style="color:lightgreen"}
 
-## First Section at First Chapter
+## Unnumbered Section at First Chapter {.unnumbered}
 
 ```style
 kbd {
@@ -30,6 +33,16 @@ table {
 }
 th, td {
 	border: 2px solid !important;
+}
+h1:before,
+h2:before,
+h3:before {
+	content: open-quote attr(data-chapter-number) close-quote;
+}
+h1.unnumbered:before,
+h2.unnumbered:before,
+h3.unnumbered:before {
+	content: "";
 }
 ```
 
@@ -63,6 +76,7 @@ Here is a footnote reference,[^1] and another.[^longnote]
     Subsequent paragraphs are indented to show that they
 belong to the previous footnote.
 
+## First Section at First Chapter
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

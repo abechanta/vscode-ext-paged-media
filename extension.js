@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // FIXME
 // loading "loading.js" from "markdown.previewScripts" causes csp violation,
@@ -7,6 +7,11 @@
 // refs: https://github.com/webpack/webpack/issues/6461
 
 function activate(context) {
+	const slugify = function (str) {
+		str = str || "__blank__";
+		return encodeURIComponent(String(str).trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-'));
+	};
+
 	return {
 		extendMarkdownIt(md) {
 			md.use(require("markdown-it-attrs"));
@@ -15,6 +20,7 @@ function activate(context) {
 			md.use(require("markdown-it-div"));
 			md.use(require("markdown-it-multimd-table"), { enableMultilineRows: true, enableRowspan: true, });
 			md.use(require("markdown-it-footnote-conventional"));
+			md.use(require("./markdown-it-toc"), { slugify: slugify, selection: [1, 2, 3], });
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
