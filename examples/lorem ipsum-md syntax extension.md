@@ -76,8 +76,9 @@ Here is a footnote reference,[^1] and another.[^longnote]
     Subsequent paragraphs are indented to show that they
 belong to the previous footnote.
 
-- [Goto Previous Chapter][chapter1]
+- [Goto Previous Chapter][chapter1]{.ref-page}
 - [Goto Next Chapter][chapter2]
+- [][chapter2]
 
 ## First Section at First Chapter
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

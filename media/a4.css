@@ -65,3 +65,11 @@ nav.table-of-contents ol a::after {
 	flex: 0;
 	order: 4;
 }
+a.ref::before {
+	content: target-text(attr(href), content);
+}
+a.ref::after,
+a.ref-page::after {
+	content: open-quote target-counter(attr(href), page) close-quote;
+	quotes: " (p." ")";
+}
