@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // FIXME
 // loading "loading.js" from "markdown.previewScripts" causes csp violation,
@@ -7,61 +7,9 @@
 // refs: https://github.com/webpack/webpack/issues/6461
 
 function activate(context) {
-	const hasClass = function (token, classname) {
-		return token.attrGet("class") && token.attrGet("class").split(" ").includes(classname);
-	};
-
 	const slugify = function (str) {
 		str = str || "__blank__";
 		return encodeURIComponent(String(str).trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-'));
-	};
-
-	const numbering = function (opts) {
-		const opts_ = Object.assign({}, {
-			selection: [1, 2, 3, 4, 5, 6],
-		}, opts);
-		const isSelectedNumber = selection => level => level >= selection;
-		const isSelectedArray = selection => level => selection.includes(level);
-		const isSelected = selection => Array.isArray(selection) ? isSelectedArray(selection) : isSelectedNumber(selection);
-		var chapters = [];
-		var lineNumber = 0;
-
-		return (token, opts) => {
-			const re = /^h([1-6])$/i;
-			const level = parseInt(re.exec(token.tag)[1]);
-			if (
-				!isSelected(opts_.selection)(level) ||
-				hasClass(token, "unnumbered") ||
-				(opts.title === "")
-			) {
-				return;
-			}
-
-			if (lineNumber >= token.map[0]) {
-				// beginning of document detected.
-				chapters = [];
-			}
-			lineNumber = token.map[0];
-
-			if (chapters.length >= level) {
-				chapters = chapters.splice(0, level);
-				chapters[level - 1]++;
-			} else {
-				while (chapters.length < level) {
-					chapters.push(1);
-				}
-			}
-
-			token.attrSet("data-chapter-number", chapters.join("."));
-		};
-	};
-
-	const deleteUnnumberedHeadingsFromTocAst = function (md) {
-		const idx = md.core.ruler.__find__("generateTocAst");
-		const generateTocAst = md.core.ruler.getRules("")[idx];
-		md.core.ruler.getRules("")[idx] = function (state) {
-			generateTocAst({ tokens: state.tokens.filter((token) => !hasClass(token, "unnumbered")), });
-		};
 	};
 
 	return {
@@ -72,11 +20,7 @@ function activate(context) {
 			md.use(require("markdown-it-div"));
 			md.use(require("markdown-it-multimd-table"), { enableMultilineRows: true, enableRowspan: true, });
 			md.use(require("markdown-it-footnote-conventional"));
-
-			// syntax for toc.
-			md.use(require("markdown-it-anchor"), { slugify: slugify, callback: numbering({ selection: [1, 2, 3], }), });
-			md.use(require("markdown-it-toc-done-right"), { slugify: slugify, level: [1, 2, 3], });
-			deleteUnnumberedHeadingsFromTocAst(md);
+			md.use(require("./markdown-it-toc"), { slugify: slugify, selection: [1, 2, 3], });
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
