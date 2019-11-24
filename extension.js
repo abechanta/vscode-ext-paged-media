@@ -1,4 +1,6 @@
 'use strict';
+const path = require('path');
+const vscode = require('vscode');
 
 // FIXME
 // loading "loading.js" from "markdown.previewScripts" causes csp violation,
@@ -22,6 +24,7 @@ function activate(context) {
 			md.use(require("markdown-it-footnote-conventional"));
 			md.use(require("./markdown-it-toc"), { slugify: slugify, selection: [1, 2, 3], });
 			md.use(require("./markdown-it-link-completing"));
+			md.use(require("markdown-it-include"), { includeRe: /!\[\s*rel=content\s*\]\(\s*([^\s)]+)\s*[^\s)]*\s*\)/i, root: () => path.dirname(vscode.window.activeTextEditor.document.fileName), });
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
