@@ -21,6 +21,7 @@ function activate(context) {
 			md.use(require("markdown-it-multimd-table"), { enableMultilineRows: true, enableRowspan: true, });
 			md.use(require("markdown-it-footnote-conventional"));
 			md.use(require("./markdown-it-toc"), { slugify: slugify, selection: [1, 2, 3], });
+			md.use(require("./markdown-it-link-completing"));
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {

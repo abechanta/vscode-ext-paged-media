@@ -10,57 +10,90 @@ function isSelected(selection) {
 	return selection => Array.isArray(selection) ? isSelectedArray(selection) : isSelectedNumber(selection);
 }
 
-module.exports = function include_plugin(md, options) {
-	const exception = "unnumbered";
+function numbering(options) {
+	const options_ = Object.assign({}, {
+		selection: [1, 2, 3, 4, 5, 6],
+	}, options);
+	var chapters = [];
+	var lineNumber = 0;
 
-	function numbering(opts) {
-		const opts_ = Object.assign({}, {
-			selection: [1, 2, 3, 4, 5, 6],
-		}, opts);
-		var chapters = [];
-		var lineNumber = 0;
+	return (token, opts) => {
+		const re = /^h([1-6])$/i;
+		const level = parseInt(re.exec(token.tag)[1]);
+		if (
+			!isSelected(options_.selection)(level) ||
+			hasClass(token, options_.excludeClassname) ||
+			(opts.title === "")
+		) {
+			return;
+		}
 
-		return (token, opts) => {
-			const re = /^h([1-6])$/i;
-			const level = parseInt(re.exec(token.tag)[1]);
-			if (
-				!isSelected(opts_.selection)(level) ||
-				hasClass(token, exception) ||
-				(opts.title === "")
-			) {
-				return;
+		if (lineNumber >= token.map[0]) {
+			// beginning of document detected.
+			chapters = [];
+		}
+		lineNumber = token.map[0];
+
+		if (chapters.length >= level) {
+			chapters = chapters.splice(0, level);
+			chapters[level - 1]++;
+		} else {
+			while (chapters.length < level) {
+				chapters.push(1);
 			}
+		}
 
-			if (lineNumber >= token.map[0]) {
-				// beginning of document detected.
-				chapters = [];
-			}
-			lineNumber = token.map[0];
+		token.attrSet("data-chapter-number", chapters.join("."));
+	};
+}
 
-			if (chapters.length >= level) {
-				chapters = chapters.splice(0, level);
-				chapters[level - 1]++;
-			} else {
-				while (chapters.length < level) {
-					chapters.push(1);
+function aliasing(options) {
+	const re = /\{[^}]*(data-alias=[^ ]+)[^}]*\}/i;
+
+	return state => {
+		state.tokens
+			.map((token, idx, tokens) => {
+				if (
+					(token.type !== "heading_open") ||
+					(tokens[idx + 1].type !== "inline") ||
+					!re.test(tokens[idx + 1].content)
+				) {
+					return;
 				}
-			}
+				return tokens[idx + 1];
+			})
+			.filter(token => token)
+			.forEach(token => {
+				state.env = state.env || {};
+				state.env.references = state.env.references || {};
+				const alias = re.exec(token.content)[1].split("=")[1].toUpperCase();
+				const title = token.content.replace(re, "").trim();
+				const entry = {
+					title: title || "",
+					href: "#" + options.slugify(title),
+				};
+				state.env.references[alias] = entry;
+			})
+		;
+		return false;
+	};
+}
 
-			token.attrSet("data-chapter-number", chapters.join("."));
-		};
-	}
+function deleteUnnumberedHeadingsFromTocAst(md, options) {
+	const idx = md.core.ruler.__find__("generateTocAst");
+	const rule = md.core.ruler.getRules("")[idx];
+	md.core.ruler.getRules("")[idx] = state => {
+		rule({ tokens: state.tokens.filter(token => !hasClass(token, options.excludeClassname)), });
+	};
+}
 
-	function deleteUnnumberedHeadingsFromTocAst(md) {
-		const idx = md.core.ruler.__find__("generateTocAst");
-		const rule = md.core.ruler.getRules("")[idx];
-		md.core.ruler.getRules("")[idx] = state => {
-			rule({ tokens: state.tokens.filter(token => !hasClass(token, exception)), });
-		};
-	}
+module.exports = function include_plugin(md, options) {
+	const excludeClassname = "unnumbered";
 
-	md.use(require("markdown-it-anchor"), { slugify: options.slugify, callback: numbering({ selection: options.selection, }), });
+	md.use(require("markdown-it-anchor"), { slugify: options.slugify, callback: numbering({ selection: options.selection, excludeClassname: excludeClassname, }), });
 	md.use(require("markdown-it-toc-done-right"), { slugify: options.slugify, level: options.selection, });
-	deleteUnnumberedHeadingsFromTocAst(md);
+	md.core.ruler.after("block", "heading_alias", aliasing({ slugify: options.slugify, }));
+	deleteUnnumberedHeadingsFromTocAst(md, { excludeClassname: excludeClassname, });
 
 	return md;
 };
