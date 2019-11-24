@@ -1,0 +1,52 @@
+'use strict';
+
+var path = require('path'),
+	fs = require('fs');
+
+var INCLUDE_RE = /\!{3}\s*include\s*\(\s*(.+?)\s*\)\s*\!{3}/i;
+
+module.exports = function include_plugin(md, options) {
+	var root = '.',
+		includeRe = INCLUDE_RE;
+
+	if (options) {
+		if (typeof options === 'string') {
+			root = options;
+		} else {
+			root = options.root || root;
+			includeRe = options.includeRe || includeRe;
+		}
+	}
+
+	function _replaceIncludeByContent(src, rootdir, parentFilePath, filesProcessed) {
+		filesProcessed = filesProcessed ? filesProcessed.slice() : []; // making a copy
+		var cap, filePath, mdSrc, indexOfCircularRef;
+
+		// store parent file path to check circular references
+		if (parentFilePath) {
+			filesProcessed.push(parentFilePath);
+		}
+		while ((cap = includeRe.exec(src))) {
+			filePath = path.resolve(rootdir, cap[1].trim());
+
+			// check if circular reference
+			indexOfCircularRef = filesProcessed.indexOf(filePath);
+			if (indexOfCircularRef !== -1) {
+				throw new Error('Circular reference between ' + filePath + ' and ' + filesProcessed[indexOfCircularRef]);
+			}
+
+			// replace include by file content
+			mdSrc = fs.readFileSync(filePath, 'utf8');
+			mdSrc = _replaceIncludeByContent(mdSrc, path.dirname(filePath), filePath, filesProcessed);
+			src = src.slice(0, cap.index) + mdSrc + src.slice(cap.index + cap[0].length, src.length);
+		}
+		return src;
+	}
+
+	function _includeFileParts(state) {
+		const rootdir = typeof root === "function" ? root() : root;
+		state.src = _replaceIncludeByContent(state.src, rootdir);
+	}
+
+	md.core.ruler.before('normalize', 'include', _includeFileParts);
+};
