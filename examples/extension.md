@@ -1,9 +1,5 @@
 ## Unnumbered Section at First Chapter {.unnumbered}
 
-```style
-![rel=content](extension.css)
-```
-
 [[CTRL]] + [[A]] means "Select All".
 
 Hello {A.S.A.P.|as soon as possible}

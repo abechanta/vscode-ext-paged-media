@@ -21,14 +21,14 @@ body {
 	margin: 0 !important;
 	color: var(--mvc-font-color) !important;
 	background-color: var(--mvc-cutoff-background) !important;
-	font-size: 11.75pt !important;
+	font-size: 9.00pt !important;
 	font-weight: 100 !important;
 	line-height: 1.6 !important;
 	/* widows: 2 !important; */
 	/* orphans: 2 !important; */
 }
 @page {
-	size: A4;
+	size: A5;
 	marks: crop cross;
 	bleed: 3mm;
 	@top-left {
