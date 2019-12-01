@@ -1,5 +1,37 @@
+:root {
+	/* user settings */
+	--mvc-spread-view: 0;
+
+	/* extension default settings */
+	--mvc-page-margin: 5mm;
+	--mvc-page-width: calc(var(--pagedjs-width) + 2 * var(--mvc-page-margin));
+	--mvc-screen-width: calc(var(--mvc-page-width) * (1 + var(--mvc-spread-view)));
+	--mvc-cutoff-background: gray;
+	--mvc-font-color: black;
+	--mvc-shadow-color: rgba(0, 0, 0, 0.5);
+	--mvc-paper-color: white;
+	--mvc-margin-box-color: rgba(0, 255, 255, 0.1);
+	--mvc-margin-box-size: 1px;
+	--mvc-heading-deco-color: black;
+
+	padding: 0;
+}
+body {
+	padding: 0 !important;
+	margin: 0 !important;
+	color: var(--mvc-font-color) !important;
+	background-color: var(--mvc-cutoff-background) !important;
+	font-family: "MyricaM M" !important;
+	font-size: 11.75pt !important;
+	font-weight: 100 !important;
+	line-height: 1.6 !important;
+	/* widows: 2 !important; */
+	/* orphans: 2 !important; */
+}
 @page {
-	size: 210mm 297mm;
+	size: A4;
+	marks: crop cross;
+	bleed: 3mm;
 	@top-left {
 		content: element(running-title1);
 	}
@@ -7,32 +39,70 @@
 		content: "- " counter(page) " -";
 	}
 }
-@media screen {
-	body {
-		background-color: rgba(0, 0, 0, 0.1);
-	}
-	.pagedjs_page {
-		background: white;
-		box-shadow: 0 .5mm 2mm rgba(0, 0, 0, 0.5);
+@page:right {
+	margin: 10mm 15mm 15mm 20mm;
+	@left-bottom {
+		text-align: left;
+		margin: 1mm;
+		content: counter(page);
 	}
 }
-h1 {
+@page:left {
+	margin: 10mm 20mm 15mm 15mm;
+	@right-bottom {
+		text-align: right;
+		margin: 1mm;
+		content: counter(page);
+	}
+}
+.pagedjs_margin-top {
+	border-bottom: .5mm solid black;
+}
+.pagedjs_area {
+	padding: 5mm 0mm;
+}
+@media screen {
+	.pagedjs_pages {
+		display: flex;
+		width: var(--mvc-screen-width);
+		margin: 0 auto;
+		flex: 0;
+		flex-wrap: wrap;
+	}
+	.pagedjs_page {
+		background: var(--mvc-paper-color);
+		box-shadow: 0 .5mm 2mm var(--mvc-shadow-color);
+		margin: var(--mvc-page-margin);
+		flex-shrink: 0;
+		flex-grow: 0;
+	}
+	.pagedjs_first_page {
+		margin-left: calc(var(--mvc-screen-width) - var(--mvc-page-width) + var(--mvc-page-margin))
+	}
+	[class*="pagedjs_margin-top"],
+	[class*="pagedjs_margin-left"],
+	[class*="pagedjs_margin-right"],
+	[class*="pagedjs_margin-bottom"] {
+		box-shadow: 0 0 0 var(--mvc-margin-box-size) inset var(--mvc-margin-box-color);
+	}
+}
+h1:not(.unnumbered) {
 	counter-increment: chapter-no 1;
 	counter-reset: section-no 0;
 }
-h2 {
+h2:not(.unnumbered) {
 	counter-increment: section-no 1;
 }
 div.running-title {
 	position: running(running-title1);
 	counter-increment: chapter-no 0;
 }
-h1:before,
+h1:not(.unnumbered):before,
 div.running-title:before {
 	content: open-quote counter(chapter-no) close-quote;
 	quotes: "Chapter " ": ";
 }
-h2:before {
+h2:not(.unnumbered):before {
 	content: open-quote counter(section-no) close-quote;
 	quotes: "Section " ": ";
 }
@@ -57,13 +127,13 @@ nav.table-of-contents ol a::before {
 	border-bottom: 1px dotted;
 	content: "";
 	flex: 1;
-	order: 3;
+	order: 1;
 }
 nav.table-of-contents ol a::after {
 	content: target-counter(attr(href), page);
 	align-self: flex-end;
 	flex: 0;
-	order: 4;
+	order: 2;
 }
 a.ref::before {
 	content: target-text(attr(href), content);
