@@ -21,7 +21,6 @@ body {
 	margin: 0 !important;
 	color: var(--mvc-font-color) !important;
 	background-color: var(--mvc-cutoff-background) !important;
-	font-family: "MyricaM M" !important;
 	font-size: 11.75pt !important;
 	font-weight: 100 !important;
 	line-height: 1.6 !important;
@@ -85,61 +84,4 @@ body {
 	[class*="pagedjs_margin-bottom"] {
 		box-shadow: 0 0 0 var(--mvc-margin-box-size) inset var(--mvc-margin-box-color);
 	}
-}
-h1:not(.unnumbered) {
-	counter-increment: chapter-no 1;
-	counter-reset: section-no 0;
-}
-h2:not(.unnumbered) {
-	counter-increment: section-no 1;
-}
-div.running-title {
-	position: running(running-title1);
-	counter-increment: chapter-no 0;
-}
-h1:not(.unnumbered):before,
-div.running-title:before {
-	content: open-quote counter(chapter-no) close-quote;
-	quotes: "Chapter " ": ";
-}
-h2:not(.unnumbered):before {
-	content: open-quote counter(section-no) close-quote;
-	quotes: "Section " ": ";
-}
-nav.table-of-contents ol {
-	display: flex;
-	flex-direction: column;
-}
-nav.table-of-contents ol li {
-	list-style: none;
-	display: flex;
-	flex-direction: column;
-}
-nav.table-of-contents ol a {
-	display: inline-flex;
-	flex-direction: row;
-	color: currentColor;
-	content: target-text(attr(href), content(text));
-}
-nav.table-of-contents ol a::before {
-	margin-left: 0.5em;
-	margin-right: 0.5em;
-	border-bottom: 1px dotted;
-	content: "";
-	flex: 1;
-	order: 1;
-}
-nav.table-of-contents ol a::after {
-	content: target-counter(attr(href), page);
-	align-self: flex-end;
-	flex: 0;
-	order: 2;
-}
-a.ref::before {
-	content: target-text(attr(href), content);
-}
-a.ref::after,
-a.ref-page::after {
-	content: open-quote target-counter(attr(href), page) close-quote;
-	quotes: " (p." ")";
 }

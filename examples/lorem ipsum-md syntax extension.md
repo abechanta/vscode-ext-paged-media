@@ -11,6 +11,7 @@
 	- markdown-it-anchor, markdown-it-toc-done-right for auto toc generation
 -->
 <link rel="stylesheet" href="./a4.css" />
+<link rel="stylesheet" href="./format.css" />
 
 [toc]
 
