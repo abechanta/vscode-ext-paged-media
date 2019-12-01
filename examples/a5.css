@@ -1,0 +1,87 @@
+:root {
+	/* user settings */
+	--mvc-spread-view: 0;
+
+	/* extension default settings */
+	--mvc-page-margin: 5mm;
+	--mvc-page-width: calc(var(--pagedjs-width) + 2 * var(--mvc-page-margin));
+	--mvc-screen-width: calc(var(--mvc-page-width) * (1 + var(--mvc-spread-view)));
+	--mvc-cutoff-background: gray;
+	--mvc-font-color: black;
+	--mvc-shadow-color: rgba(0, 0, 0, 0.5);
+	--mvc-paper-color: white;
+	--mvc-margin-box-color: rgba(0, 255, 255, 0.1);
+	--mvc-margin-box-size: 1px;
+	--mvc-heading-deco-color: black;
+
+	padding: 0;
+}
+body {
+	padding: 0 !important;
+	margin: 0 !important;
+	color: var(--mvc-font-color) !important;
+	background-color: var(--mvc-cutoff-background) !important;
+	font-size: 9.00pt !important;
+	font-weight: 100 !important;
+	line-height: 1.6 !important;
+	/* widows: 2 !important; */
+	/* orphans: 2 !important; */
+}
+@page {
+	size: A5;
+	marks: crop cross;
+	bleed: 3mm;
+	@top-left {
+		content: element(running-title1);
+	}
+	@bottom-center {
+		content: "- " counter(page) " -";
+	}
+}
+@page:right {
+	margin: 10mm 15mm 15mm 20mm;
+	@left-bottom {
+		text-align: left;
+		margin: 1mm;
+		content: counter(page);
+	}
+}
+@page:left {
+	margin: 10mm 20mm 15mm 15mm;
+	@right-bottom {
+		text-align: right;
+		margin: 1mm;
+		content: counter(page);
+	}
+}
+.pagedjs_margin-top {
+	border-bottom: .5mm solid black;
+}
+.pagedjs_area {
+	padding: 5mm 0mm;
+}
+@media screen {
+	.pagedjs_pages {
+		display: flex;
+		width: var(--mvc-screen-width);
+		margin: 0 auto;
+		flex: 0;
+		flex-wrap: wrap;
+	}
+	.pagedjs_page {
+		background: var(--mvc-paper-color);
+		box-shadow: 0 .5mm 2mm var(--mvc-shadow-color);
+		margin: var(--mvc-page-margin);
+		flex-shrink: 0;
+		flex-grow: 0;
+	}
+	.pagedjs_first_page {
+		margin-left: calc(var(--mvc-screen-width) - var(--mvc-page-width) + var(--mvc-page-margin))
+	}
+	[class*="pagedjs_margin-top"],
+	[class*="pagedjs_margin-left"],
+	[class*="pagedjs_margin-right"],
+	[class*="pagedjs_margin-bottom"] {
+		box-shadow: 0 0 0 var(--mvc-margin-box-size) inset var(--mvc-margin-box-color);
+	}
+}
