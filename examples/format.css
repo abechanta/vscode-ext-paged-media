@@ -1,0 +1,205 @@
+:root {
+	--chap-quote-open: "Chapter ";
+	--chap-quote-close: "";
+	--sect-quote-open: "Section ";
+	--sect-quote-close: ": ";
+	--ref-quote-open: " (p.";
+	--ref-quote-close: ")";
+	--list-caption: "List ";
+	--figure-caption: "Figure ";
+	--table-caption: "Table ";
+}
+body {
+	font-family: "MyricaM M" !important;
+}
+nav.table-of-contents ol {
+	display: flex;
+	flex-direction: column;
+}
+nav.table-of-contents ol li {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+}
+nav.table-of-contents ol a {
+	display: inline-flex;
+	flex-direction: row;
+	color: currentColor;
+	content: target-text(attr(href), content(text));
+}
+nav.table-of-contents ol a::before {
+	margin-left: 0.5em;
+	margin-right: 0.5em;
+	border-bottom: 1px dotted;
+	content: "";
+	flex: 1;
+	order: 1;
+}
+nav.table-of-contents ol a::after {
+	content: target-counter(attr(href), page);
+	align-self: flex-end;
+	flex: 0;
+	order: 2;
+}
+h1 {
+	display: grid;
+	break-before: page;
+	font-size: 2.5em;
+}
+h1:not(.unnumbered) {
+	counter-increment: chapter-no 1;
+	counter-reset: section-no 0;
+}
+h1:not(.unnumbered)::before {
+	font-size: 0.9em;
+}
+div.running-title {
+	position: running(running-title1);
+	counter-increment: chapter-no 0;
+}
+h1:not(.unnumbered):before,
+div.running-title:before {
+	content: open-quote counter(chapter-no) close-quote;
+	quotes: var(--chap-quote-open) var(--chap-quote-close);
+}
+h2 {
+	/* break-after: avoid; */
+	font-size: 1.5em;
+	/* margin-top: 6mm; */
+	padding-left: 3mm;
+	border-top: 0mm solid white;
+	border-right: 0mm solid white;
+	border-bottom: 1px solid black;
+	border-left: 2mm solid black;
+}
+h2:not(.unnumbered) {
+	counter-increment: section-no 1;
+	font-size: 1.5em;
+}
+h2:not(.unnumbered):before {
+	content: open-quote counter(section-no) close-quote;
+	quotes: var(--sect-quote-open) var(--sect-quote-close);
+}
+a.ref::before {
+	content: target-text(attr(href), content);
+}
+a.ref::after,
+a.ref-page::after {
+	content: open-quote target-counter(attr(href), page) close-quote;
+	quotes: var(--ref-quote-open) var(--ref-quote-close);
+}
+pre {
+	margin-top: 0mm;
+	margin-bottom: 0mm;
+}
+pre code div {
+	border: 1px solid dimgray;
+	border-radius: 0mm;
+	/* padding: 2mm; */
+	color: black;
+	background-color: lightgray;
+}
+table {
+	border-collapse: collapse;
+	margin: 1em auto 1em auto;
+}
+table > caption {
+	caption-side: top;
+	counter-increment: table-index 1;
+}
+table > caption::before {
+	color: gray;
+	text-align: center;
+	content: open-quote /*counter(chapter-index) "."*/ counter(table-index) close-quote;
+	quotes: var(--table-caption) " ";
+}
+th, td {
+	border: 2px solid !important;
+	padding: 3px !important;
+}
+kbd {
+	color: black !important;
+	background-color: darkgray !important;
+	border-radius: 2px !important;
+	padding: 2px 8px !important;
+}
+p:not(.figures)::before {
+	content: "";
+}
+p.lcaption + pre code div {
+	border-radius: 0mm auto auto auto;
+}
+p.lcaption {
+	margin-bottom: 0mm;
+	padding: 2mm 0mm 1mm 0mm;
+	counter-increment: list-index 1;
+}
+p.lcaption::before {
+	color: white;
+	background-color: dimgray;
+	padding: 2mm;
+	margin: auto 2mm 0mm 0mm;
+	content: open-quote /*counter(chapter-index) "."*/ counter(list-index) close-quote;
+	quotes: var(--list-caption) " ";
+}
+p.caption {
+	margin: 0mm auto 0mm auto;
+	text-align: center;
+	counter-increment: figure-index 1;
+}
+p.caption::before {
+	color: gray;
+	content: open-quote /*counter(chapter-index) "."*/ counter(figure-index) close-quote;
+	quotes: var(--figure-caption) " ";
+}
+p.figures {
+	margin: 0mm auto 0mm auto;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+.hide {
+	display: none;
+}
+.shadow {
+	box-shadow: 0.5mm 0.5mm 2mm grey;
+}
+.warning {
+	color: white;
+	background-color: dimgray;
+}
+.note {
+	border-radius: 3mm;
+	padding: 3mm;
+	margin: 1em 0px;
+	background-color: lightgray;
+}
+.note hr {
+	border-style: dashed;
+	color: gray;
+}
+#title,
+#author,
+#issue {
+	text-align: center;
+	padding-top: 20%;
+	padding-bottom: 20%;
+	font-weight: 700;
+}
+#title {
+	font-size: 2.0em;
+}
+#author {
+	font-size: 1.5em;
+}
+#issue {
+	font-size: 1.17em;
+}
+#toc {
+	/* break-before: page; */
+	font-size: 2.5em;
+}
+#toc::before {
+	content: "";
+}

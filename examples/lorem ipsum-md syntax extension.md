@@ -1,18 +1,28 @@
 <!--
-	this demo document is designed to be viewed on modern browsers.
+	this demo document is designed to be viewed on vscode markdown previewer.
 	this demonstrates following.
 
-	- automatic paged view
-	- page numbering
-	- multi-level chapter numbering
-	- running title
+	- markdown-it-attrs for explicit attributes
+	- markdown-it-kbd 
+	- markdown-it-ruby
+	- markdown-it-div for fenced region
+	- markdown-it-multimd-table
+	- markdown-it-footnote-conventional for footnote
+	- markdown-it-anchor, markdown-it-toc-done-right for auto toc generation
 -->
+<link rel="stylesheet" href="./a4.css" />
+<link rel="stylesheet" href="./format.css" />
 
-# First Chapter
+[toc]
+
+# First Chapter {data-alias=chapter1}
 <div class="running-title">First Chapter</div>
 
-## First Section at First Chapter
+:::{style="color:lightgreen"}
+![rel=content](extension.md)
+:::
 
+## First Section at First Chapter
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -39,7 +49,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-# Second Chapter
+# Second Chapter {data-alias=chapter2}
 <div class="running-title">Second Chapter</div>
 
 ## First Section at Second Chapter
