@@ -1,14 +1,28 @@
 {
 	"name": "vscode-ext-paged-media",
-	"description": "W3C Paged Media Viewer",
+	"displayName": "W3C Paged Media Viewer",
+	"description": "This is a vscode extension for writing printing books using markdown and css paged media.",
 	"version": "0.1.0",
+	"preview": true,
 	"publisher": "abechanta",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/abechanta/vscode-ext-paged-media"
+	},
+	"__icon__": "./media/icon.png",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.15.0"
 	},
 	"categories": [
 		"Other"
+	],
+	"keywords": [
+		"markdown",
+		"paged",
+		"media",
+		"css",
+		"printing"
 	],
 	"activationEvents": [],
 	"contributes": {
@@ -21,7 +35,7 @@
 	"main": "./extension.js",
 	"devDependencies": {
 		"@babel/core": "^7.7.2",
-		"@types/vscode": "^1.33.0",
+		"@types/vscode": "^1.15.0",
 		"babel-loader": "^8.0.6",
 		"markdown-it-anchor": "^5.2.5",
 		"markdown-it-attrs": "^3.0.1",
@@ -39,7 +53,7 @@
 	},
 	"dependencies": {},
 	"scripts": {
-		"prepublish": "npm run build",
+		"vscode:prepublish": "npm run build",
 		"build": "webpack-cli --mode=production"
 	}
 }
