@@ -1,6 +1,6 @@
-# vscode-ext-paged-media
+# W3C Paged Media Viewer
 
-This is a vscode extension for writing books using markdown and css paged media.
+This is a vscode extension for writing printing books using markdown and css paged media.
 
 Goal of this project is:
 
@@ -11,15 +11,17 @@ This is done by 2 lovely great projects:
 -	[markdown-it](https://github.com/markdown-it/markdown-it)
 	-	this is a default markdown engine in vscode which renders md file to html.
 -	[Paged.js](https://www.pagedmedia.org/paged-js/)
-	-	this is a css-based paged-media engine defined by W3C which renders one big continuous html to chunked html pages.
+	-	this is a css-based paged-media engine defined by W3C which renders a chunked html pages from one big continuous html.
 
 ![](media/cover3.png)
 
 ## Features
 
--	Preview markdown file as if printed
+-	To preview as if printed:
+	-	Open a markdown file and press Ctrl+Shift+V
 	-	You can specify a form factor and fancy decorations via css stylesheets as you like
--	And export it into a PDF file (not yet, but will be covered soon)
+-	To export it into a PDF file:
+	-	Run the command "Export Markdown To PDF" (not yet, but will be covered soon)
 
 ![auto toc generation](media/cover1.png)
 
@@ -27,11 +29,17 @@ This is done by 2 lovely great projects:
 
 ![](media/cover4.png)
 
-## Install
+## Installation
 
-Currently, we support only installing via git clone followed by vscode debug execution.
+For users, you can install this extension via vscode extension marketplace.
 
--	On Windows 10 (can be done on macOS), for developers:
+-	On vscode, press Ctrl+Shift+X for opening "Extension" view
+-	In search box, type "paged-media" and find this extension named "vscode-ext-paged-media"
+-	Then, clink "install" button
+
+For developers, you can clone code for debugging and/or developing.
+
+-	On Windows 10 (can be done on macOS):
 
 	1.	Clone code as below:
 
@@ -39,17 +47,21 @@ Currently, we support only installing via git clone followed by vscode debug exe
 		PS C:\***some place***> git clone git@github.com:abechanta/vscode-ext-paged-media.git
 		```
 
-	1.	Exec vscode as below:
+	1.	Resolve dependency as below:
 
 		```
 		PS C:\***some place***> cd vscode-ext-paged-media
+		PS C:\***some place***\vscode-ext-paged-media> npm intall
+		```
+
+	1.	Exec vscode as below:
+
+		```
 		PS C:\***some place***\vscode-ext-paged-media> code .
 		```
 
+	1.	On vscode, press Ctrl+Shift+B for build.
 	1.	On vscode, press F5 for debug execution.
-
-We'll also support vscode extension marketplace for users, soon.
-Stay tuned.
 
 ## Usage / Syntax
 
@@ -81,4 +93,3 @@ We thank all of them.
 ## License
 
 MIT License (MIT), which you can read [here](https://github.com/abechanta/vscode-ext-paged-media/blob/master/LICENSE).
-
