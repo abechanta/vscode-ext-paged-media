@@ -9,7 +9,7 @@
 		"type": "git",
 		"url": "https://github.com/abechanta/vscode-ext-paged-media"
 	},
-	"__icon__": "./media/icon.png",
+	"icon": "icon.png",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.15.0"

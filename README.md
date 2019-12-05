@@ -11,7 +11,7 @@ This is done by 2 lovely great projects:
 -	[markdown-it](https://github.com/markdown-it/markdown-it)
 	-	this is a default markdown engine in vscode which renders md file to html.
 -	[Paged.js](https://www.pagedmedia.org/paged-js/)
-	-	this is a css-based paged-media engine defined by W3C which renders a chunked html pages from one big continuous html.
+	-	this is a css-based paged-media engine defined by W3C which renders chunked html pages from one big continuous html.
 
 ![](media/cover3.png)
 
@@ -33,9 +33,11 @@ This is done by 2 lovely great projects:
 
 For users, you can install this extension via vscode extension marketplace.
 
--	On vscode, press Ctrl+Shift+X for opening "Extension" view
--	In search box, type "paged-media" and find this extension named "vscode-ext-paged-media"
--	Then, clink "install" button
+1.	On vscode, press Ctrl+Shift+X to open "Extension" view
+1.	In search box, type "paged media" and find this extension named "vscode-ext-paged-media"
+1.	Then, click "install" button
+
+## Development
 
 For developers, you can clone code for debugging and/or developing.
 
@@ -54,13 +56,13 @@ For developers, you can clone code for debugging and/or developing.
 		PS C:\***some place***\vscode-ext-paged-media> npm intall
 		```
 
-	1.	Exec vscode as below:
+	1.	Open workspace with vscode as below:
 
 		```
 		PS C:\***some place***\vscode-ext-paged-media> code .
 		```
 
-	1.	On vscode, press Ctrl+Shift+B for build.
+	1.	On vscode, press Ctrl+Shift+B to build.
 	1.	On vscode, press F5 for debug execution.
 
 ## Usage / Syntax
@@ -70,7 +72,21 @@ As first, vscode supports markdown spec named [CommonMark](https://spec.commonma
 As second, paged.js supports @page rule named [CSS Paged Media Module Level 3](https://gitlab.pagedmedia.org/tools/pagedjs/wikis/Support-of-specifications).
 
 And then, this extension extends some useful syntax and features which focus on writing technical books.
-<!-- You can read full specs [here](https://github.com/abechanta/vscode-ext-paged-media/blob/master/LICENSE). -->
+You can read full specs [here](https://github.com/abechanta/vscode-ext-paged-media/wiki/Syntax).
+
+### First Time You Preview...
+
+When you open markdown previewer at first time, you'll encount a warning button at the top-right corner.
+
+![](media/csp-warning1.png)
+
+This is caused by Content Security Policy (CSP) mismatch between vscode's markdown previewer and this extension.
+To resolve, you have to click it and change security settings of markdown previewer from "Strict" to "Disable" so that this extension works perfect.
+
+![](media/csp-warning2.png)
+
+This is by design (for now).
+This extension works completely offline and won't connect any servers via http/https.
 
 ## Dependency
 
