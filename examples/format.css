@@ -1,13 +1,14 @@
 :root {
-	--chap-quote-open: "Chapter ";
-	--chap-quote-close: "";
-	--sect-quote-open: "Section ";
-	--sect-quote-close: ": ";
-	--ref-quote-open: " (p.";
-	--ref-quote-close: ")";
-	--list-caption: "List ";
-	--figure-caption: "Figure ";
-	--table-caption: "Table ";
+	--chapter-open: "Chapter ";
+	--chapter-close: "";
+	--section-open: "Section ";
+	--section-close: ": ";
+	--ref-open: " (p.";
+	--ref-close: ")";
+	--list-caption-open: "List ";
+	--figure-caption-open: "Figure ";
+	--table-caption-open: "Table ";
+	--caption-close: ": ";
 }
 body {
 	font-family: "MyricaM M" !important;
@@ -45,6 +46,7 @@ h1 {
 	display: grid;
 	break-before: page;
 	font-size: 2.5em;
+	pointer-events: none;
 }
 h1:not(.unnumbered) {
 	counter-increment: chapter-no 1;
@@ -60,7 +62,7 @@ div.running-title {
 h1:not(.unnumbered):before,
 div.running-title:before {
 	content: open-quote counter(chapter-no) close-quote;
-	quotes: var(--chap-quote-open) var(--chap-quote-close);
+	quotes: var(--chapter-open) var(--chapter-close);
 }
 h2 {
 	/* break-after: avoid; */
@@ -71,6 +73,7 @@ h2 {
 	border-right: 0mm solid white;
 	border-bottom: 1px solid black;
 	border-left: 2mm solid black;
+	pointer-events: none;
 }
 h2:not(.unnumbered) {
 	counter-increment: section-no 1;
@@ -78,7 +81,7 @@ h2:not(.unnumbered) {
 }
 h2:not(.unnumbered):before {
 	content: open-quote counter(section-no) close-quote;
-	quotes: var(--sect-quote-open) var(--sect-quote-close);
+	quotes: var(--section-open) var(--section-close);
 }
 a.ref::before {
 	content: target-text(attr(href), content);
@@ -86,18 +89,7 @@ a.ref::before {
 a.ref::after,
 a.ref-page::after {
 	content: open-quote target-counter(attr(href), page) close-quote;
-	quotes: var(--ref-quote-open) var(--ref-quote-close);
-}
-pre {
-	margin-top: 0mm;
-	margin-bottom: 0mm;
-}
-pre code div {
-	border: 1px solid dimgray;
-	border-radius: 0mm;
-	/* padding: 2mm; */
-	color: black;
-	background-color: lightgray;
+	quotes: var(--ref-open) var(--ref-close);
 }
 table {
 	border-collapse: collapse;
@@ -111,7 +103,7 @@ table > caption::before {
 	color: gray;
 	text-align: center;
 	content: open-quote /*counter(chapter-index) "."*/ counter(table-index) close-quote;
-	quotes: var(--table-caption) " ";
+	quotes: var(--table-caption-open) var(--caption-close);
 }
 th, td {
 	border: 2px solid !important;
@@ -119,38 +111,47 @@ th, td {
 }
 kbd {
 	color: black !important;
-	background-color: darkgray !important;
+	background-color: lightgray !important;
 	border-radius: 2px !important;
 	padding: 2px 8px !important;
+}
+pre {
+	counter-increment: list-index 1;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: lightgray !important;
+	border: 1px solid black !important;
+	border-radius: 2mm !important;
+	pointer-events: none;
+}
+pre > code {
+	background-color: lightgray !important;
+	color: black !important;
 }
 p:not(.figures)::before {
 	content: "";
 }
-p.lcaption + pre code div {
-	border-radius: 0mm auto auto auto;
-}
-p.lcaption {
-	margin-bottom: 0mm;
-	padding: 2mm 0mm 1mm 0mm;
+p.top-caption {
+	margin: 0mm auto 0mm auto;
+	text-align: center;
 	counter-increment: list-index 1;
+	pointer-events: none;
 }
-p.lcaption::before {
-	color: white;
-	background-color: dimgray;
-	padding: 2mm;
-	margin: auto 2mm 0mm 0mm;
+p.top-caption::before {
+	color: gray;
 	content: open-quote /*counter(chapter-index) "."*/ counter(list-index) close-quote;
-	quotes: var(--list-caption) " ";
+	quotes: var(--list-caption-open) var(--caption-close);
 }
-p.caption {
+p.bottom-caption {
 	margin: 0mm auto 0mm auto;
 	text-align: center;
 	counter-increment: figure-index 1;
+	pointer-events: none;
 }
-p.caption::before {
+p.bottom-caption::before {
 	color: gray;
 	content: open-quote /*counter(chapter-index) "."*/ counter(figure-index) close-quote;
-	quotes: var(--figure-caption) " ";
+	quotes: var(--figure-caption-open) var(--caption-close);
 }
 p.figures {
 	margin: 0mm auto 0mm auto;
@@ -164,10 +165,11 @@ p.figures {
 }
 .shadow {
 	box-shadow: 0.5mm 0.5mm 2mm grey;
+	margin: 1%;
 }
 .warning {
 	color: white;
-	background-color: dimgray;
+	background-color: black;
 }
 .note {
 	border-radius: 3mm;
