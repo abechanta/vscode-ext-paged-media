@@ -4,9 +4,33 @@ const vscode = require("vscode");
 const child_process = require("child_process");
 
 module.exports = function Exporter(context) {
-	function _exportHtml(uri) {
+	function _makeHtml(body) {
+		const styleBase = path.join(context.extensionPath, "media", "github-markdown.css");
+		const re = /.*(\<\s*link[^\>]*rel=['"]stylesheet['"][^\>]*\>).*/;
+		var links = "", styles;
+		while (styles = re.exec(body)) {
+			links += styles[0];
+			body = body.substr(0, styles.index) + body.substr(styles.index + styles[0].length);
+		}
+		return `
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<meta http-equiv="Content-Security-Policy" content="">
+		<link rel="stylesheet" href="${styleBase}" />
+${links}
+	</head>
+	<body class="vscode-body">
+		<div class="markdown-body">
+${body}
+		</div>
+	</body>
+</html>`;
+	}
+
+	function _exportHtml(uri, body) {
 		const html = uri.with({path: uri.path.toString().replace(/\.md$/, ".html")});
-		var data = "---HTML CONTENT COMES HERE---\n";
+		var data = _makeHtml(body);
 		data = (new TextEncoder).encode(data);
 		return vscode.workspace.fs.writeFile(html, data).then(() => {
 			console.log(`export html done: ${html.fsPath}`);
@@ -42,7 +66,7 @@ module.exports = function Exporter(context) {
 
 	return {
 		exportFiles(uri, body) {
-			return _exportHtml(uri).then(html => {
+			return _exportHtml(uri, body).then(html => {
 				return _exportPdf(html);
 			});
 		}
