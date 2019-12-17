@@ -40,7 +40,13 @@ ${body}
 
 	function _exportPdf(uri) {
 		const pdf = uri.with({path: uri.path.toString().replace(/\.html$/, ".pdf")});
-		const proc = child_process.spawn("node", ["--version", ], { encoding: "utf8", cwd: context.extensionPath, });
+		const cli = path.join(context.extensionPath, "node_modules", "pagedjs-cli", "bin", "paged");
+		// NOTE: workaround for pagedjs-cli.
+		// ---> pass "uri.fsPath.replace(...)" instead of "uri.fsPath"
+		// this will surpress unexpected progress stopping when launching chromium.
+		//
+		// const proc = child_process.spawn("node", [cli, "--inputs", uri.fsPath, "--output", pdf.fsPath, ], { encoding: "utf8", cwd: context.extensionPath, });
+		const proc = child_process.spawn("node", [cli, "--inputs", uri.fsPath.replace(/^[A-Za-z]:/, ""), "--output", pdf.fsPath, ], { encoding: "utf8", cwd: context.extensionPath, });
 		console.log(`invoke cli: args: ${proc.spawnargs}`);
 		return new Promise((resolve, reject) => {
 			proc.stdout.on("data", data => {
