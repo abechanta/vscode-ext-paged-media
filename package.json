@@ -12,7 +12,7 @@
 	"icon": "icon.png",
 	"license": "MIT",
 	"engines": {
-		"vscode": "^1.15.0"
+		"vscode": "^1.22.0"
 	},
 	"categories": [
 		"Other"
@@ -51,7 +51,7 @@
 	"main": "./extension.js",
 	"devDependencies": {
 		"@babel/core": "^7.7.2",
-		"@types/vscode": "^1.15.0",
+		"@types/vscode": "^1.22.0",
 		"babel-loader": "^8.0.6",
 		"markdown-it-anchor": "^5.2.5",
 		"markdown-it-attrs": "^3.0.1",

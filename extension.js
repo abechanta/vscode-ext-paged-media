@@ -17,12 +17,24 @@ function activate(context) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('pagedView.exportPdf', () => {
 			const title = "Export in PDF Format";
-			return sleep(3).then(message => {
-				vscode.window.showInformationMessage(`${title}: done.\n${message}`);
-				return null;
-			}).catch(message => {
-				vscode.window.showErrorMessage(`${title}: failed.\n${message}`);
-				return null;
+			vscode.window.withProgress({
+				title: title,
+				location: vscode.ProgressLocation.Notification,
+				cancellable: true,
+			}, (progress, token) => {
+				token.onCancellationRequested(() => {
+					// subprocess.kill("SIGTERM");
+					vscode.window.showWarningMessage(`${title}: cancelled.`);
+				});
+
+				progress.report({ increment: 10, message: "", });
+				return sleep(3).then(message => {
+					vscode.window.showInformationMessage(`${title}: done.\n${message}`);
+					return null;
+				}).catch(message => {
+					vscode.window.showErrorMessage(`${title}: failed.\n${message}`);
+					return null;
+				});
 			});
 		})
 	);
