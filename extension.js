@@ -1,6 +1,11 @@
 'use strict';
 const path = require('path');
 const vscode = require('vscode');
+const sleep = sec => {
+	return new Promise((resolve, reject) => {
+		setTimeout(Math.random() < 0.5 ? resolve : reject, sec * 1000, new vscode.Uri({path: process.cwd(), scheme: "file", }));
+	});
+};
 
 // FIXME
 // loading "loading.js" from "markdown.previewScripts" causes csp violation,
@@ -9,6 +14,19 @@ const vscode = require('vscode');
 // refs: https://github.com/webpack/webpack/issues/6461
 
 function activate(context) {
+	context.subscriptions.push(
+		vscode.commands.registerCommand('pagedView.exportPdf', () => {
+			const title = "Export in PDF Format";
+			return sleep(3).then(message => {
+				vscode.window.showInformationMessage(`${title}: done.\n${message}`);
+				return null;
+			}).catch(message => {
+				vscode.window.showErrorMessage(`${title}: failed.\n${message}`);
+				return null;
+			});
+		})
+	);
+
 	const slugify = function (str) {
 		str = str || "__blank__";
 		return encodeURIComponent(String(str).trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-'));

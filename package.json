@@ -26,6 +26,13 @@
 	],
 	"activationEvents": [],
 	"contributes": {
+		"commands": [
+			{
+				"command": "pagedView.exportPdf",
+				"title": "Export in PDF Format",
+				"category": "Paged View"
+			}
+		],
 		"markdown.previewStyles": [],
 		"markdown.previewScripts": [
 			"./out/loading.bundle.js"
