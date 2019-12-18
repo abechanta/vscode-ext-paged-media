@@ -33,6 +33,15 @@
 				"category": "Paged View"
 			}
 		],
+		"menus": {
+			"editor/title": [
+				{
+					"when": "resourceLangId == markdown",
+					"command": "pagedView.exportPdf",
+					"group": "z_commands"
+				}
+			]
+		},
 		"markdown.previewStyles": [],
 		"markdown.previewScripts": [
 			"./out/loading.bundle.js"
