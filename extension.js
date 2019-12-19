@@ -1,6 +1,7 @@
-'use strict';
-const path = require('path');
-const vscode = require('vscode');
+"use strict";
+const path = require("path");
+const vscode = require("vscode");
+const Exporter = require("./ext-exporter");
 
 // FIXME
 // loading "loading.js" from "markdown.previewScripts" causes csp violation,
@@ -9,6 +10,38 @@ const vscode = require('vscode');
 // refs: https://github.com/webpack/webpack/issues/6461
 
 function activate(context) {
+	const exporter = Exporter(context);
+	var document = {
+		uri: undefined,
+		body: undefined,
+	};
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('pagedView.exportPdf', () => {
+			const title = "Export in PDF Format";
+			vscode.window.withProgress({
+				title: title,
+				location: vscode.ProgressLocation.Notification,
+				cancellable: true,
+			}, (progress, token) => {
+				const registerCancelHandler = onCancel => {
+					token.onCancellationRequested(() => {
+						onCancel();
+					});
+				};
+
+				progress.report({ increment: 10, message: "", });
+				return exporter.exportFiles(document.uri, document.body, { registerCancelHandler: registerCancelHandler, reporter: progress, }).then(message => {
+					vscode.window.showInformationMessage(`${title}: done.\n${message}`);
+					return undefined;
+				}).catch(message => {
+					vscode.window.showErrorMessage(`${title}: ${message}`);
+					return undefined;
+				});
+			});
+		})
+	);
+
 	const slugify = function (str) {
 		str = str || "__blank__";
 		return encodeURIComponent(String(str).trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-'));
@@ -29,7 +62,9 @@ function activate(context) {
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
 				try {
-					return render.call(md.renderer, tokens, options, env);
+					document.body = render.call(md.renderer, tokens, options, env);
+					document.uri = vscode.window.activeTextEditor.document.uri.with();
+					return document.body;
 				} catch (err) {
 					throw err;
 				}
