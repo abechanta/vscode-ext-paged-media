@@ -28,17 +28,19 @@ ${body}
 </html>`;
 	}
 
-	function _exportHtml(uri, body) {
+	function _exportHtml(uri, body, options) {
+		const reporter = options.reporter;
 		const html = uri.with({path: uri.path.toString().replace(/\.md$/, ".html")});
 		var data = _makeHtml(body);
 		data = (new TextEncoder).encode(data);
 		return vscode.workspace.fs.writeFile(html, data).then(() => {
-			console.log(`export html done: ${html.fsPath}`);
+			reporter.report({ increment: 10, message: `export html done: ${html.fsPath}`, });
 			return html;
 		});
 	}
 
-	function _exportPdf(uri) {
+	function _exportPdf(uri, options) {
+		const reporter = options.reporter;
 		const pdf = uri.with({path: uri.path.toString().replace(/\.html$/, ".pdf")});
 		const cli = path.join(context.extensionPath, "node_modules", "pagedjs-cli", "bin", "paged");
 		// NOTE: workaround for pagedjs-cli.
@@ -47,13 +49,21 @@ ${body}
 		//
 		// const proc = child_process.spawn("node", [cli, "--inputs", uri.fsPath, "--output", pdf.fsPath, ], { encoding: "utf8", cwd: context.extensionPath, });
 		const proc = child_process.spawn("node", [cli, "--inputs", uri.fsPath.replace(/^[A-Za-z]:/, ""), "--output", pdf.fsPath, ], { encoding: "utf8", cwd: context.extensionPath, });
-		console.log(`invoke cli: args: ${proc.spawnargs}`);
+		reporter.report({ increment: 10, message: `invoke cli: args: ${proc.spawnargs}`, });
+		const handler = options.registerCancelHandler;
+		handler(() => {
+			proc.kill("SIGTERM");
+		});
+
 		return new Promise((resolve, reject) => {
 			proc.stdout.on("data", data => {
-				console.log(data.toString());
+				reporter.report({ increment: 10, message: data.toString(), });
+			});
+			proc.stderr.on("data", data => {
+				reporter.report({ increment: 10, message: data.toString(), });
 			});
 			proc.on("close", () => {
-				console.log(`export pdf done: ${pdf.fsPath}`);
+				reporter.report({ increment: 10, message: `export pdf done: ${pdf.fsPath}`, });
 				resolve(pdf);
 			});
 			proc.on("error", err => {
@@ -71,9 +81,9 @@ ${body}
 	}
 
 	return {
-		exportFiles(uri, body) {
-			return _exportHtml(uri, body).then(html => {
-				return _exportPdf(html);
+		exportFiles(uri, body, options) {
+			return _exportHtml(uri, body, options).then(html => {
+				return _exportPdf(html, options);
 			});
 		}
 	};
