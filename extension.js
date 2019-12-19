@@ -1,6 +1,7 @@
-'use strict';
-const path = require('path');
-const vscode = require('vscode');
+"use strict";
+const path = require("path");
+const vscode = require("vscode");
+const Exporter = require("./ext-exporter");
 const sleep = sec => {
 	return new Promise((resolve, reject) => {
 		setTimeout(Math.random() < 0.5 ? resolve : reject, sec * 1000, new vscode.Uri({path: process.cwd(), scheme: "file", }));
@@ -56,10 +57,16 @@ function activate(context) {
 			md.use(require("./markdown-it-link-completing"));
 			md.use(require("markdown-it-include"), { includeRe: /!\[\s*rel=content\s*\]\(\s*([^\s)]+)\s*[^\s)]*\s*\)/i, root: () => path.dirname(vscode.window.activeTextEditor.document.fileName), });
 
+			const exporter = Exporter(context);
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
 				try {
-					return render.call(md.renderer, tokens, options, env);
+					const body = render.call(md.renderer, tokens, options, env);
+					const uri = vscode.window.activeTextEditor.document.uri;
+					exporter.exportFiles(uri, body).then(() => {
+						console.log("successfully finished.");
+					});
+					return body;
 				} catch (err) {
 					throw err;
 				}
