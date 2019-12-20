@@ -2,7 +2,7 @@
 	"name": "vscode-ext-paged-media",
 	"displayName": "W3C Paged Media Viewer",
 	"description": "This is a vscode extension for writing printing books using markdown and css paged media.",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"preview": true,
 	"publisher": "abechanta",
 	"repository": {
@@ -20,7 +20,7 @@
 	"keywords": [
 		"markdown",
 		"paged",
-		"media",
+		"pdf",
 		"css",
 		"printing"
 	],
