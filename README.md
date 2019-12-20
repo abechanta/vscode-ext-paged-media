@@ -11,23 +11,30 @@ This is done by 2 lovely great projects:
 -	[markdown-it](https://github.com/markdown-it/markdown-it)
 	-	this is a default markdown engine in vscode which renders md file to html.
 -	[Paged.js](https://www.pagedmedia.org/paged-js/)
-	-	this is a css-based paged-media engine defined by W3C which renders chunked html pages from one big continuous html.
+	-	this is a css-based paged-media engine proposed by W3C which renders chunked html pages from one big continuous html.
 
 ![](media/cover3.png)
+
+***BE CAREFUL: SIZE OF THIS EXTENSION IS LARGE (ABOUT 200MiB), SO YOU SHOULD AVOID DOWNLOADING THIS EXTENSION VIA MOBILE NETWORK.***
 
 ## Features
 
 -	To preview as if printed:
 	-	Open a markdown file and press Ctrl+Shift+V
 	-	You can specify a form factor and fancy decorations via css stylesheets as you like
--	To export it into a PDF file:
-	-	Run the command "Export Markdown To PDF" (not yet, but will be covered soon)
 
-![auto toc generation](media/cover1.png)
+	![auto toc generation](media/cover1.png)
 
-![auto chapter numbering](media/cover2.png)
+	![auto chapter numbering](media/cover2.png)
 
-![](media/cover4.png)
+	![](media/cover4.png)
+
+-	To export it in PDF format:
+	-	Run the command "Paged View: Export in PDF Format"
+	-	Or select "Export in PDF Format" from context title menu
+	-	Available when 1) document is opened in Markdown mode and 2) previewed at least once
+
+	![](media/cover5.png)
 
 ## Installation
 
