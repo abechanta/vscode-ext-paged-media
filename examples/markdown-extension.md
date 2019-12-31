@@ -1,4 +1,5 @@
 <!--
+    @toppage
     source: https://github.com/Microsoft/vscode-docs/blob/master/api/extension-guides/markdown-extension.md
 -->
 

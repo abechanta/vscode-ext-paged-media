@@ -22,6 +22,7 @@ This is done by 2 lovely great projects:
 -	To preview as if printed:
 	-	Open a markdown file and press Ctrl+Shift+V
 	-	You can specify a form factor and fancy decorations via css stylesheets as you like
+	-	Available when 1) document has comment "@toppage" at its first line
 
 	![auto toc generation](media/cover1.png)
 

@@ -1,4 +1,5 @@
 <!--
+	@toppage
 	this demo document is designed to be viewed on modern browsers.
 	this demonstrates following.
 
