@@ -19,14 +19,15 @@ window.Paged = require('pagedjs');
 		});
 	}
 
-	const firstNode = document.body.firstChild && document.body.firstChild.nextSibling || undefined;
-	console.log("firstNode: ", firstNode);
-	if (firstNode && (firstNode.nodeName === "#comment") && firstNode.data.includes("@toppage")) {
-		window.addEventListener("load", () => {
+	window.addEventListener("load", () => {
+		const rootNode = document.querySelector(".vscode-body");
+		const firstNode = rootNode && rootNode.firstChild && rootNode.firstChild.nextSibling || undefined;
+		console.log("firstNode: ", firstNode);
+		if (firstNode && (firstNode.nodeName === "#comment") && firstNode.data.includes("@toppage")) {
 			console.log("onload event invoked.");
 			salvageStyles();
 			const pv = new window.Paged.Previewer();
 			pv.preview();
-		});
-	}
+		}
+	});
 }());

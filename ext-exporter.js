@@ -6,6 +6,7 @@ const child_process = require("child_process");
 module.exports = function Exporter(context) {
 	function _makeHtml(body) {
 		const styleBase = path.join(context.extensionPath, "media", "github-markdown.css");
+		const script = path.join(context.extensionPath, "out", "loading.bundle.js");
 		const re = /.*(\<\s*link[^\>]*rel=['"]stylesheet['"][^\>]*\>).*/;
 		var links = "", styles;
 		while (styles = re.exec(body)) {
@@ -19,11 +20,10 @@ module.exports = function Exporter(context) {
 		<meta http-equiv="Content-Security-Policy" content="">
 		<link rel="stylesheet" href="${styleBase}" />
 ${links}
+		<!--<script src="${script}"></script>-->
 	</head>
 	<body class="vscode-body">
-		<div class="markdown-body">
 ${body}
-		</div>
 	</body>
 </html>`;
 	}
