@@ -53,7 +53,7 @@ function activate(context) {
 			md.use(require("markdown-it-kbd"));
 			md.use(require("markdown-it-ruby"));
 			md.use(require("markdown-it-div"));
-			md.use(require("markdown-it-multimd-table"), { enableMultilineRows: true, enableRowspan: true, });
+			md.use(require("markdown-it-multimd-table"), { multiline: true, rowspan: true, headerless: true, });
 			md.use(require("markdown-it-footnote-conventional"));
 			md.use(require("./markdown-it-toc"), { slugify: slugify, selection: [1, 2, 3], });
 			md.use(require("./markdown-it-link-completing"));

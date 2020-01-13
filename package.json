@@ -65,7 +65,7 @@
 		"markdown-it-for-inline": "^0.1.1",
 		"markdown-it-include": "https://github.com/abechanta/markdown-it-include",
 		"markdown-it-kbd": "^2.0.0",
-		"markdown-it-multimd-table": "^3.2.3",
+		"markdown-it-multimd-table": "^4.0.0",
 		"markdown-it-ruby": "^0.1.1",
 		"markdown-it-toc-done-right": "^4.1.0",
 		"pagedjs-cli": "0.0.9"
