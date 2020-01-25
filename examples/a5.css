@@ -12,23 +12,20 @@
 	--mvc-margin-box-color: rgba(0, 255, 255, 0.1);
 	--mvc-margin-box-size: 1px;
 
-	/* paged.js settings */
+	/* pagedjs default settings */
 	--pagedjs-padding-top: 5mm;
-	--pagedjs-padding-right: 0mm;
 	--pagedjs-padding-bottom: 5mm;
-	--pagedjs-padding-left: 0mm;
-
-	padding: 0;
+}
+html {
+	font-size: 8.25pt !important;
+	font-weight: 100 !important;
+	line-height: 1.6 !important;
+	padding: 0 !important;
 }
 body {
 	padding: 0 !important;
 	margin: 0 !important;
 	color: black !important;
-	font-size: 9.00pt !important;
-	font-weight: 100 !important;
-	line-height: 1.6 !important;
-	/* widows: 2 !important; */
-	/* orphans: 2 !important; */
 }
 @page {
 	size: A5;
@@ -58,7 +55,18 @@ body {
 	}
 }
 .pagedjs_margin-top {
-	border-bottom: .5mm solid black;
+	border-bottom: 1px solid black;
+}
+.pagedjs_page_content {
+	padding: 5mm 0 5mm 0;
+}
+@page blank-layout {
+	@top-left {
+		content: none;
+	}
+	@bottom-center {
+		content: none;
+	}
 }
 @media screen {
 	.pagedjs_pages {
