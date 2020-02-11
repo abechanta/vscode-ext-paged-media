@@ -3,19 +3,19 @@
     source: https://github.com/Microsoft/vscode-docs/blob/master/api/extension-guides/webview.md
 -->
 <link rel="stylesheet" href="a5.css">
-<link rel="stylesheet" href="format.css">
+<link rel="stylesheet" href="minimal.css">
+
+# Table of Contents{.unnumbered}
+[toc]
 
 # Webview API
-
-1{.hide .new-chapter .workaround}
-
-Webview API{.running}
 
 The webview API allows extensions to create fully customizable views within Visual Studio Code. For example, the built-in Markdown extension uses webviews to render Markdown previews. Webviews can also be used to build complex user interfaces beyond what VS Code's native APIs support.
 
 Think of a webview as an `iframe` within VS Code that your extension controls. A webview can render almost any HTML content in this frame, and it communicates with extensions using message passing. This freedom makes webviews incredibly powerful, and opens up a whole new range of extension possibilities.
 
 ## Links
+Links{.running}
 
 - [Webview Sample](https://github.com/Microsoft/vscode-extension-samples/blob/master/webview-sample/README.md)
 
@@ -25,6 +25,7 @@ Think of a webview as an `iframe` within VS Code that your extension controls. A
 - [`window.registerWebviewPanelSerializer`](/api/references/vscode-api#window.registerWebviewPanelSerializer)
 
 ## Should I use a webview?
+Should I use a webview?{.running}
 
 Webviews are pretty amazing, but they should also be used sparingly and only when VS Code's native API is inadequate. Webviews are resource heavy and run in a separate context from normal extensions. A poorly designed webview can also easily feel out of place within VS Code.
 
@@ -39,6 +40,7 @@ Before using a webview, please consider the following:
 Remember: Just because you can do something with webviews, doesn't mean you should. However, if you are confident that you need to use webviews, then this document is here to help. Let's get started.
 
 ## Webviews API basics
+Webviews API basics{.running}
 
 To explain the webview API, we are going to build a simple extension called **Cat Coding**. This extension will use a webview to show a gif of a cat writing some code (presumably in VS Code). As we work through the API, we'll continue adding functionality to the extension, including a counter that keeps track of how many lines of source code our cat has written and notifications that inform the user when the cat introduces a bug.
 
@@ -447,6 +449,7 @@ The **active frame** environment is where the webview scripts themselves are exe
 In addition, the **Developer: Reload Webview** command reloads all active webviews. This can be helpful if you need to reset a webview's state, or if some webview content on disk has changed and you want the new content to be loaded.
 
 ## Loading local content
+Loading local content{.running}
 
 Webviews run in isolated contexts that cannot directly access local resources. This is done for security reasons. This means that in order to load images, stylesheets, and other resources from your extension, or to load any content from the user's current workspace, you must use the `Webview.asWebviewUri` function to convert a local `file:` URI into a special URI that VS Code can use to load a subset of local resources.
 
@@ -590,6 +593,7 @@ The following font related variables are also defined:
 - `--vscode-editor-font-size` - Editor font size (from the `editor.fontSize` setting).
 
 ## Scripts and message passing
+Scripts and message passing{.running}
 
 Webviews are just like iframes, which means that they can also run scripts. JavaScript is disabled in webviews by default, but it can easily re-enable by passing in the `enableScripts: true` option.
 
@@ -828,6 +832,7 @@ caption{.bottom-caption}
 For security reasons, you must keep the VS Code API object private and make sure it is never leaked into the global scope.
 
 ## Security
+Security{.running}
 
 As with any webpage, when creating a webview you must follow some basic security best practices.
 
@@ -897,6 +902,7 @@ Consider using a helper library to construct your HTML strings, or at least ensu
 Never rely on sanitization alone for security. Make sure to follow the other security best practices, such as having a [content security policy](#content-security-policy) to minimize the impact of any potential content injections.
 
 ## Persistence
+Persistence{.running}
 
 In the standard webview [lifecycle](#lifecycle), webviews are created by `createWebviewPanel` and destroyed when the user closes them or when `.dispose()` is called. The contents of webviews however are created when the webview becomes visible and destroyed when the webview is moved into the background. Any state inside the webview will be lost when the webview is moved to a background tab.
 
@@ -1035,6 +1041,7 @@ Notice how the counter does not reset now when the webview is hidden and then re
 Although `retainContextWhenHidden` may be appealing, keep in mind that this has high memory overhead and should only be used when other persistence techniques will not work.
 
 ## Next steps
+Next steps{.running}
 
 If you'd like to learn more about VS Code extensibility, try these topics:
 

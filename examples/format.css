@@ -1,22 +1,24 @@
 :root {
-	--chapter-open: "Chapter ";
-	--chapter-close: " ";
-	--section-open: "Section ";
-	--section-close: ": ";
+	--chapter-open: "第 ";
+	--chapter-close: " 章 ";
+	--section-open: "";
+	--section-close: ". ";
 	--ref-open: " (p.";
 	--ref-close: ")";
 	--list-caption-open: "▼List ";
 	--figure-caption-open: "▲Figure ";
 	--table-caption-open: "▼Table ";
 	--caption-close: ": ";
-	--font-family: "MyricaM M";
+	--font-family-body: "Meiryo";
+	--font-family-fixed: "Courier New", "Meiryo";
 
 	/* override user settings */
 	/* --mvc-spread-view: 1; */
 }
 body {
-	font-family: var(--font-family) !important;
+	font-family: var(--font-family-body) !important;
 	font-size: 1.0rem !important;
+	font-weight: lighter !important;
 }
 div [data-split-to] {
 	border-bottom-width: 0px !important;
@@ -28,6 +30,12 @@ div [data-split-from] {
 	border-top-left-radius: 0px !important;
 	border-top-right-radius: 0px !important;
 }
+nav.table-of-contents > ol > li {
+	list-style: decimal !important;
+	display: list-item !important;
+	font-size: 1.66rem !important;
+	margin: 0 0 0.5em 0;
+}
 nav.table-of-contents ol {
 	display: flex;
 	flex-direction: column;
@@ -36,6 +44,7 @@ nav.table-of-contents ol li {
 	list-style: none;
 	display: flex;
 	flex-direction: column;
+	font-size: 1rem;
 }
 nav.table-of-contents ol ol a {
 	display: inline-flex;
@@ -44,10 +53,10 @@ nav.table-of-contents ol ol a {
 	content: target-text(attr(href), content(text));
 }
 nav.table-of-contents ol ol a::before {
+	content: "";
+	border-bottom: 1px dotted gray;
 	margin-left: 0.5em;
 	margin-right: 0.5em;
-	border-bottom: 1px dotted;
-	content: "";
 	flex: 1;
 	order: 1;
 }
@@ -57,16 +66,20 @@ nav.table-of-contents ol ol a::after {
 	flex: 0;
 	order: 2;
 }
+nav.table-of-contents ol ol ol li {
+	display: none;
+}
 h1, h2, h3, h4, h5, h6 {
-	font-weight: bolder;
+	font-weight: bolder !important;
 	pointer-events: none;
 }
 h1 {
-	display: grid;
+	display: grid !important;
 	break-before: page;
 	font-size: 2.5rem !important;
-    margin: 0.5em 0 1.5em 0;
-    padding: 0;
+	padding: 0 !important;
+	border-width: 0 !important;
+	margin: 0.5em 0 1.5em 0 !important;
 }
 h1:not(.unnumbered) {
 	counter-increment: chapter-no 1;
@@ -90,12 +103,12 @@ h2 {
 	break-before: page;
 	/* break-after: avoid; */
 	font-size: 1.66rem !important;
-    margin: 0.5em 0 0.66em 0;
-    padding: 0 0 0 3mm;
-	border-top: 0mm solid white;
-	border-right: 0mm solid white;
-	border-bottom: 1px solid black;
-	border-left: 2mm solid black;
+	padding: 0 0 0 3mm !important;
+	border-top: 0mm solid white !important;
+	border-right: 0mm solid white !important;
+	border-bottom: 0.25mm solid black !important;
+	border-left: 2mm solid black !important;
+	margin: 0.5em 0 0.66em 0 !important;
 }
 h2:not(.unnumbered):before {
 	content: open-quote attr(data-chapter-number) close-quote;
@@ -105,69 +118,109 @@ h3,
 h4 {
 	/* break-after: avoid; */
 	font-size: 1.33rem !important;
-    margin: 1.33em 0 0.66em 0;
+	margin: 1.33em 0 0.66em 0 !important;
 }
-p a[href^="#"]:empty::before {
+a[href^="#"]:empty::before {
 	content: target-text(attr(href), content);
 }
-p a[href^="#"]::after {
+a {
+	color: darkblue !important;
+}
+.pagedjs_page_content > div > :not(#toc) a[href^="#"]::after {
 	content: open-quote target-counter(attr(href), page) close-quote;
 	quotes: var(--ref-open) var(--ref-close);
 }
 table {
 	break-inside: avoid;
+	font-size: inherit !important;
+	width: fit-content !important;
 	border-collapse: collapse;
-	margin: 1em auto 1em auto;
-	font-size: inherit;
+	margin: 1em auto 1em auto !important;
 }
 table > caption {
 	/* break-after: avoid-page; */
-	caption-side: top;
-	margin: 2.5em auto 0.5em auto;
+	caption-side: top !important;
 	counter-increment: table-index 1;
+	margin: 1em auto 1em auto !important;
 }
 table > caption::before {
 	text-align: center;
 	content: open-quote string(chapter-index) "." counter(table-index) close-quote;
 	quotes: var(--table-caption-open) var(--caption-close);
 }
-th, td {
-	border: 2px solid !important;
-	padding: 3px !important;
+thead tr {
+	background-color: rgba(0,0,0,0.2) !important;
+}
+tbody tr:nth-child(2n+0) {
+	background-color: rgba(0,0,0,0.1) !important;
+}
+th,
+td {
+	padding: 0.5em !important;
+	border: 1px solid gray !important;
+}
+table.open-end th:first-child,
+table.open-end td:first-child {
+	border-left-width: 0 !important;
+}
+table.open-end th:last-child,
+table.open-end td:last-child {
+	border-right-width: 0 !important;
 }
 kbd {
 	color: black !important;
 	background-color: lightgray !important;
-	border-radius: 2px !important;
-	border: 1px solid black !important;
 	box-shadow: none !important;
+	vertical-align: middle !important;
+	text-indent: 0 !important;
 	padding: 0px 6px !important;
+	border: 1px solid black !important;
+	border-radius: 2px !important;
 }
-pre {
-	margin-top: 0px;
-	margin-bottom: 0px;
+td > pre {
+	color: inherit !important;
+	background-color: inherit !important;
+}
+:not(td) > pre {
 	color: black !important;
-	background-color: lightgray !important;
+	background-color: rgba(0,0,0,0.1) !important;
+	tab-size: 4em;
+	padding: 0.5em !important;
 	border: 1px solid black !important;
 	border-radius: 1.5mm !important;
-	padding: 0.5em !important;
+	margin: 1em 0 1em 0 !important;
 }
 pre > code {
-	color: black !important;
-	background-color: lightgray !important;
+	color: inherit !important;
+	white-space: pre-wrap !important;
+	word-break: break-all !important;
+}
+code {
+	font-family: var(--font-family-fixed) !important;
+	color: inherit !important;
+}
+blockquote {
+	color: inherit !important;
+	background-color: rgba(0,0,0,0.1) !important;
+	padding: 0.33em 1em !important;
+	border-width: 0px 0.5mm 0 0.5mm !important;
+	border-style: solid !important;
+	border-color: rgba(0,0,0,0.3) !important;
+	margin: 1em !important;
 }
 hr {
-	border: 1px solid gray !important;
+	background-color: lightgray !important;
+	margin: 1em 0 1em 0 !important;
 }
 .pagedjs_page_content > div > p {
 	text-indent: 1em;
 }
 p.top-caption {
 	/* break-after: avoid-page; */
-	margin: 2.5em auto 0.5em auto;
 	text-align: center;
 	text-indent: 0;
 	counter-increment: code-index 1;
+	margin: 1.66em auto 0em auto;
 	pointer-events: none;
 }
 p.top-caption::before {
@@ -176,10 +229,10 @@ p.top-caption::before {
 }
 p.bottom-caption {
 	/* break-before: avoid-page; */
-	margin: 0.5em auto 2.5em auto;
 	text-align: center;
 	text-indent: 0;
 	counter-increment: figure-index 1;
+	margin: 0em auto 1.66em auto;
 	pointer-events: none;
 }
 p.bottom-caption::before {
@@ -188,18 +241,18 @@ p.bottom-caption::before {
 }
 p.figures {
 	break-inside: avoid;
-	margin: 0 auto 0 auto;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+	margin: 1em auto 1em auto;
 }
 .hide {
 	display: none;
 }
 .shadow {
-	box-shadow: 0.5mm 0.5mm 2mm grey;
 	margin: 1%;
+	box-shadow: 0.5mm 0.5mm 2mm grey;
 }
 .xl {
 	max-width: 100%;
@@ -225,23 +278,41 @@ p.figures {
 .new-chapter {
 	string-set: chapter-index content();
 }
-.warning {
-	color: white;
-	background-color: black;
-}
-.note {
-	border-radius: 3mm;
-	padding: 1em;
-	margin: 1em 0px;
+div.warning {
+	font-weight: bold;
 	color: black;
-	background-color: lightgray;
+	background-color: rgba(0,0,0,0.3);
+	padding: 1em 2em;
+	border-left: 2mm solid black;
+	margin: 1.66em 0 1.66em 0;
 }
-.output {
+div.warning > h4 {
+	border-bottom: 1px dotted black !important;
+	margin-top: 0.66em !important;
+}
+div.warning h4:before {
+	content: "→ ";
+}
+div.note {
+	color: black;
+	background-color: rgba(0,0,0,0.1);
+	padding: 1em 2em;
+	border-radius: 3mm;
+	margin: 1.66em 0 1.66em 0;
+}
+div.note > h4 {
+	border-bottom: 1px dotted black !important;
+	margin-top: 0.66em !important;
+}
+div.note > h4:before {
+	content: "≫ ";
+}
+div.output {
 	break-inside: avoid;
 	color: black;
 	background-color: white;
+	padding: 0.5em;
 	border: 1px solid gray;
-	padding: 1mm;
 	margin: 1em 0 1em 0;
 }
 .blank {
@@ -253,14 +324,14 @@ p.figures {
 #titlepage ul {
 	width: 100%;
 	height: 100%;
-	padding: 0px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	padding: 0px;
 }
 #titlepage li {
 	text-align: center;
-	font-weight: 700;
+	font-weight: bolder;
 	list-style-type: none;
 }
 #titlepage li#title {
