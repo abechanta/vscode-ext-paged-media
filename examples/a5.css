@@ -29,7 +29,7 @@ body {
 }
 @page {
 	size: A5;
-	marks: crop cross;
+	marks: crop;
 	bleed: 3mm;
 	@top-left {
 		content: element(running-title1);
@@ -59,6 +59,10 @@ body {
 }
 .pagedjs_page_content {
 	padding: 5mm 0 5mm 0;
+}
+p.running {
+	margin-block-start: 2rem !important;
+	margin-block-end: 0 !important;
 }
 @page blank-layout {
 	@top-left {
