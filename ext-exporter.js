@@ -43,12 +43,20 @@ ${body}
 		const reporter = options.reporter;
 		const pdf = uri.with({path: uri.path.toString().replace(/\.html$/, ".pdf")});
 		const cli = path.join(context.extensionPath, "node_modules", "pagedjs-cli", "bin", "paged");
-		// NOTE: workaround for pagedjs-cli.
-		// ---> pass "uri.fsPath.replace(...)" instead of "uri.fsPath"
-		// this will surpress unexpected progress stopping when launching chromium.
-		//
 		// const proc = child_process.spawn("node", [cli, "--inputs", uri.fsPath, "--output", pdf.fsPath, ], { encoding: "utf8", cwd: context.extensionPath, });
-		const proc = child_process.spawn("node", [cli, "--inputs", uri.fsPath.replace(/^[A-Za-z]:/, ""), "--output", pdf.fsPath, ], { encoding: "utf8", cwd: context.extensionPath, });
+		// NOTE: workaround for pagedjs-cli.
+		//     ---> pass "uri.fsPath.replace(...)" instead of "uri.fsPath"
+		//     ---> pass "uri.fsPath.replace(...)" instead of "context.extensionPath"
+		//     this will surpress unexpected progress stopping when launching chromium.
+		//
+		const _escape_ = function (path) {
+			return path.replace(/^[A-Za-z]:/, "");
+		};
+		const _extract_ = function (path) {
+			return path.replace(/^([A-Za-z]:).*/, "$1");
+		};
+		const proc = child_process.spawn("node", [cli, "--inputs", _escape_(uri.fsPath), "--output", pdf.fsPath, ], { encoding: "utf8", cwd: _extract_(uri.fsPath), });
+
 		reporter.report({ increment: 10, message: `invoke cli: args: ${proc.spawnargs}`, });
 		const handler = options.registerCancelHandler;
 		handler(() => {
