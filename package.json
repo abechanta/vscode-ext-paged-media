@@ -49,6 +49,9 @@
 		"markdown.markdownItPlugins": true
 	},
 	"main": "./extension.js",
+	"extensionDependencies": [
+		"vscode.markdown-language-features"
+	],
 	"devDependencies": {
 		"@babel/core": "^7.7.2",
 		"@types/vscode": "^1.22.0",

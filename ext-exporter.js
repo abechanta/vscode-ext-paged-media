@@ -4,22 +4,36 @@ const vscode = require("vscode");
 const child_process = require("child_process");
 
 module.exports = function Exporter(context) {
-	function _makeHtml(body) {
-		const styleBase = path.join(context.extensionPath, "media", "github-markdown.css");
+	function _getStyles(uri) {
+		let styles = [];
+		const markdownExtention = vscode.extensions.getExtension("vscode.markdown-language-features");
+		for (const style of markdownExtention.packageJSON.contributes["markdown.previewStyles"]) {
+			styles.push(path.join(markdownExtention.extensionPath, style));
+		}
+		const markdownConfig = vscode.workspace.getConfiguration("markdown", uri);
+		for (const style of markdownConfig.get("styles")) {
+			styles.push(style);
+		}
+		return styles;
+	}
+
+	function _makeHtml(body, styles) {
 		const script = path.join(context.extensionPath, "out", "loading.bundle.js");
 		const re = /.*(\<\s*link[^\>]*rel=['"]stylesheet['"][^\>]*\>).*/;
-		var links = "", styles;
-		while (styles = re.exec(body)) {
-			links += styles[0];
-			body = body.substr(0, styles.index) + body.substr(styles.index + styles[0].length);
+		let linkNodes = "", node;
+		for (const style of styles) {
+			linkNodes += `<link rel="stylesheet" href="${style}" />\n`;
+		}
+		while (node = re.exec(body)) {
+			linkNodes += node[0] + "\n";
+			body = body.substr(0, node.index) + body.substr(node.index + node[0].length);
 		}
 		return `
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta http-equiv="Content-Security-Policy" content="">
-		<link rel="stylesheet" href="${styleBase}" />
-${links}
+${linkNodes}
 		<!--<script src="${script}"></script>-->
 	</head>
 	<body class="vscode-body">
@@ -31,7 +45,8 @@ ${body}
 	function _exportHtml(uri, body, options) {
 		const reporter = options.reporter;
 		const html = uri.with({path: uri.path.toString().replace(/\.md$/, ".html")});
-		var data = _makeHtml(body);
+		const styles = _getStyles(uri);
+		let data = _makeHtml(body, styles);
 		data = (new TextEncoder).encode(data);
 		return vscode.workspace.fs.writeFile(html, data).then(() => {
 			reporter.report({ increment: 10, message: `export html done: ${html.fsPath}`, });
