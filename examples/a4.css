@@ -1,3 +1,6 @@
+/*
+	Standard Style for W3C Paged Media Viewer ver.0.2.2 or later.
+*/
 :root {
 	/* user settings */
 	--mvc-spread-view: 0;
@@ -6,6 +9,7 @@
 	--mvc-page-margin: 5mm;
 	--mvc-page-width: calc(var(--pagedjs-width) + 2 * var(--mvc-page-margin));
 	--mvc-screen-width: calc(var(--mvc-page-width) * (1 + var(--mvc-spread-view)));
+	--mvc-page-content-height: calc(297mm - 25mm - 5mm);
 	--mvc-cutoff-background: gray;
 	--mvc-shadow-color: rgba(0, 0, 0, 0.5);
 	--mvc-paper-color: white;
@@ -13,8 +17,7 @@
 	--mvc-margin-box-size: 1px;
 
 	/* pagedjs default settings */
-	--pagedjs-padding-top: 5mm;
-	--pagedjs-padding-bottom: 5mm;
+	--pagedjs-padding-top: 1mm;
 }
 html {
 	font-size: 11.75pt !important;
@@ -29,7 +32,7 @@ body {
 }
 @page {
 	size: A4;
-	marks: crop;
+	/* marks: crop cross; */
 	bleed: 3mm;
 	@top-left {
 		content: element(running-title1);
@@ -56,9 +59,6 @@ body {
 }
 .pagedjs_margin-top {
 	border-bottom: 1px solid black;
-}
-.pagedjs_page_content {
-	padding: 5mm 0 5mm 0;
 }
 p.running {
 	margin-block-start: 2rem !important;
