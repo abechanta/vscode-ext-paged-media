@@ -64,6 +64,8 @@ For developers, you can clone code for debugging and/or developing.
 		PS C:\***some place***\vscode-ext-paged-media> npm intall
 		```
 
+		Git commands are required for a successful installation.
+
 	1.	Open workspace with vscode as below:
 
 		```
