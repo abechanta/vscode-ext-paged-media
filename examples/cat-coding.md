@@ -104,6 +104,7 @@ export function activate(context: vscode.ExtensionContext) {
 The `vscode.window.createWebviewPanel` function creates and shows a webview in the editor. Here is what you see if you try running the `catCoding.start` command in its current state:
 
 ![An empty webview](images/webview/basics-no_content.png)
+{.figures}
 
 An empty webview{.bottom-caption}
 
@@ -149,6 +150,7 @@ function getWebviewContent() {
 If you run the command again, now the webview looks like this:
 
 ![A webview with some HTML](images/webview/basics-html.png)
+{.figures}
 
 A webview with some HTML{.bottom-caption}
 
@@ -212,6 +214,7 @@ function getWebviewContent(cat: keyof typeof cats) {
 ```
 
 ![Updating the webview content](images/webview/basics-update.gif)
+{.figures}
 
 Updating the webview content{.bottom-caption}
 
@@ -308,6 +311,7 @@ export function activate(context: vscode.ExtensionContext) {
 When a webview panel is moved into a background tab, it becomes hidden. It is not destroyed however. VS Code will automatically restore the webview's content from `webview.html` when the panel is brought to the foreground again:
 
 ![Webview content is automatically restored when the webview becomes visible again](images/webview/basics-restore.gif)
+{.figures}
 
 Webview content is automatically restored when the webview becomes visible again{.bottom-caption}
 
@@ -316,6 +320,7 @@ The `.visible` property tells you if the webview panel is currently visible or n
 Extensions can programmatically bring a webview panel to the foreground by calling `reveal()`. This method takes an optional target view column to show the panel in. A webview panel may only show in a single editor column at a time. Calling `reveal()` or dragging a webview panel to a new editor column moves the webview into that new column.
 
 ![Webviews are moved when you drag them between tabs](images/webview/basics-drag.gif)
+{.figures}
 
 Webviews are moved when you drag them between tabs{.bottom-caption}
 
@@ -364,6 +369,7 @@ export function activate(context: vscode.ExtensionContext) {
 Here's the new extension in action:
 
 ![Using a single panel and reveal](images/webview/basics-single_panel.gif)
+{.figures}
 
 Using a single panel and reveal{.bottom-caption}
 
@@ -421,6 +427,7 @@ function updateWebviewForCat(panel: vscode.WebviewPanel, catName: keyof typeof c
 ```
 
 ![Responding to onDidChangeViewState events](images/webview/basics-ondidchangeviewstate.gif)
+{.figures}
 
 Responding to onDidChangeViewState events{.bottom-caption}
 
@@ -429,6 +436,7 @@ Responding to onDidChangeViewState events{.bottom-caption}
 The **Developer: Open Webview Developer Tools** VS Code command lets you debug webviews. Running the command launches an instance of Developer Tools for any currently visible webviews:
 
 ![Webview Developer Tools](images/webview/basics-developer_tools.png)
+{.figures}
 
 Webview Developer Tools{.bottom-caption}
 
@@ -436,7 +444,8 @@ The contents of the webview are within an iframe inside the webview document. Yo
 
 If you use the webview Developer Tools console, make sure to select the **active frame** environment from the drop-down in the top left corner of the Console panel:
 
-![Selecting the active frame](images/webview/debug-active-frame.png)
+![Selecting the active frame](images/webview/debug-active-frame.png){.md}
+{.figures}
 
 Selecting the active frame{.bottom-caption}
 
@@ -482,7 +491,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 If we debug this code, we'd see that the actual value for `catGifSrc` is something like:
 
-extension.ts{.top-caption}
+URL for catGifSrc{.top-caption}
 
 ```
 vscode-resource:/Users/toonces/projects/vscode-cat-coding/media/cat.gif
@@ -643,6 +652,7 @@ function getWebviewContent() {
 ```
 
 ![A script running in a webview](images/webview/scripts-basic.gif)
+{.figures}
 
 A script running in a webview{.bottom-caption}
 
@@ -741,6 +751,7 @@ function getWebviewContent() {
 ```
 
 ![Passing messages to a webview](images/webview/scripts-extension_to_webview.gif)
+{.figures}
 
 Passing messages to a webview{.bottom-caption}
 
@@ -820,6 +831,7 @@ function getWebviewContent() {
 ```
 
 ![Passing messages from the webview to the main extension](images/webview/scripts-webview_to_extension.gif)
+{.figures}
 
 Passing messages from the webview to the main extension{.bottom-caption}
 
@@ -1025,6 +1037,7 @@ function getWebviewContent() {
 ```
 
 ![persistence retrain](images/webview/persistence-retrain.gif)
+{.figures}
 
 persistence retrain{.bottom-caption}
 

@@ -18,9 +18,6 @@
 	--table-caption-close: ": ";
 	--font-family-body: "Meiryo";
 	--font-family-fixed: "Courier New", "Meiryo";
-
-	/* override user settings */
-	/* --mvc-spread-view: 1; */
 }
 body {
 	font-family: var(--font-family-body) !important;
@@ -29,6 +26,7 @@ body {
 	line-height: 1.6rem !important;
 }
 [data-split-to] {
+	padding-bottom: 1em !important;
 	border-bottom-width: 0px !important;
 	border-bottom-left-radius: 0px !important;
 	border-bottom-right-radius: 0px !important;
@@ -43,10 +41,10 @@ nav.table-of-contents > ol > li {
 	list-style: decimal !important;
 	display: list-item !important;
 	font-size: 1.66rem !important;
-	margin: 0 0 0.5em 0;
+	margin: 0.5em 0;
 }
 nav.table-of-contents > ol > li > ol {
-	margin: 0.5em 0 0.5em 0;
+	margin: 0.5em 0;
 }
 nav.table-of-contents ol {
 	display: flex;
@@ -94,7 +92,7 @@ h1 {
 	font-size: 2.5rem !important;
 	padding: 0 !important;
 	border-width: 0 !important;
-	margin: 1.5em 0 1.5em 0 !important;
+	margin: 1.5em 0 !important;
 }
 h1:not(.unnumbered) {
 	string-set: chapter-text content(text);
@@ -105,6 +103,8 @@ h1:not(.unnumbered)::before {
 .running {
 	font-weight: bolder;
 	position: running(running-title1);
+	margin-block-start: 1em;
+	margin-block-end: 0em;
 	pointer-events: none;
 }
 h1:not(.unnumbered):before,
@@ -174,13 +174,13 @@ table {
 	font-size: inherit !important;
 	width: fit-content !important;
 	border-collapse: collapse;
-	margin: 1em auto 1em auto !important;
+	margin: 1em auto !important;
 }
 table > caption {
 	/* break-after: avoid-page; */
 	caption-side: top !important;
 	counter-increment: table-index 1;
-	margin: 1em auto 1em auto !important;
+	margin: 1em auto !important;
 }
 table > caption::before {
 	text-align: center;
@@ -221,20 +221,29 @@ td > pre {
 	background-color: inherit !important;
 }
 :not(td) > pre {
-	break-inside: avoid;
+	/* break-inside: avoid; */
 	color: black !important;
 	background-color: rgba(0,0,0,0.1) !important;
 	tab-size: 4em;
-	padding: 0.5em !important;
+	padding: 1em !important;
 	border: 1px solid black !important;
 	border-radius: 1.5mm !important;
-	margin: 1em 0 1em 0 !important;
+	margin: 0.5em 0 !important;
+}
+:not(td) > pre[data-split-to] {
+	padding-bottom: 1em !important;
+	margin-bottom: unset !important;
+}
+:not(td) > pre[data-split-from] {
+	padding-top: unset !important;
+	margin-top: unset !important;
 }
 pre > code {
-	break-inside: avoid;
-	color: inherit !important;
+	/* break-inside: avoid; */
+	display: block;
 	white-space: pre-wrap !important;
 	word-break: break-all !important;
+	line-height: 1.35rem !important;
 }
 code {
 	font-family: var(--font-family-fixed) !important;
@@ -244,14 +253,14 @@ blockquote {
 	color: inherit !important;
 	background-color: rgba(0,0,0,0.1) !important;
 	padding: 0.33em 1em !important;
-	border-width: 0px 0.5mm 0 0.5mm !important;
+	border-width: 0 0.5mm !important;
 	border-style: solid !important;
 	border-color: rgba(0,0,0,0.3) !important;
 	margin: 1em !important;
 }
 hr {
 	background-color: lightgray !important;
-	margin: 1em 0 1em 0 !important;
+	margin: 1em 0 !important;
 }
 .pagedjs_page_content > div > p {
 	text-indent: 1em;
@@ -289,7 +298,7 @@ p.figures {
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-	margin: 1em auto 1em auto;
+	margin: 1em auto;
 }
 .hide {
 	display: none;
@@ -368,16 +377,20 @@ p.figures {
 }
 .new-chapter {
 	counter-increment: chapter-index 1;
-	counter-reset: table-index 0 code-index 0 figure-index 0;
+	/* counter-reset: table-index 0 code-index 0 figure-index 0; */
 }
 div.warning,
 div.note {
 	padding: 1em 2em;
-	margin: 1.66em 0 1.66em 0;
+	margin: 1.66em 0;
 }
 div.warning[data-split-to],
 div.note[data-split-to] {
 	height: -webkit-fill-available;
+}
+div.warning[data-split-from],
+div.note[data-split-from] {
+	margin-top: unset !important;
 }
 div.warning {
 	font-weight: bold;
@@ -412,7 +425,7 @@ div.output {
 	background-color: white;
 	padding: 0.5em;
 	border: 1px solid gray;
-	margin: 1em 0 1em 0;
+	margin: 1em 0;
 }
 .blank {
 	page: blank-layout;
