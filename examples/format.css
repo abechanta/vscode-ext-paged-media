@@ -1,3 +1,8 @@
+/*
+	Standard Style for W3C Paged Media Viewer ver.0.3.0 or later.
+
+	Not Recommended using with Viewer ver.0.2.2 or before.
+*/
 :root {
 	--chapter-open: "第 ";
 	--chapter-close: " 章 ";
@@ -6,9 +11,11 @@
 	--ref-open: " (p.";
 	--ref-close: ")";
 	--list-caption-open: "▼List ";
+	--list-caption-close: ": ";
 	--figure-caption-open: "▲Figure ";
+	--figure-caption-close: ": ";
 	--table-caption-open: "▼Table ";
-	--caption-close: ": ";
+	--table-caption-close: ": ";
 	--font-family-body: "Meiryo";
 	--font-family-fixed: "Courier New", "Meiryo";
 
@@ -19,13 +26,15 @@ body {
 	font-family: var(--font-family-body) !important;
 	font-size: 1.0rem !important;
 	font-weight: lighter !important;
+	line-height: 1.6rem !important;
 }
-div [data-split-to] {
+[data-split-to] {
 	border-bottom-width: 0px !important;
 	border-bottom-left-radius: 0px !important;
 	border-bottom-right-radius: 0px !important;
 }
-div [data-split-from] {
+[data-split-from] {
+	padding-top: 1em !important;
 	border-top-width: 0px !important;
 	border-top-left-radius: 0px !important;
 	border-top-right-radius: 0px !important;
@@ -36,11 +45,17 @@ nav.table-of-contents > ol > li {
 	font-size: 1.66rem !important;
 	margin: 0 0 0.5em 0;
 }
+nav.table-of-contents > ol > li > ol {
+	margin: 0.5em 0 0.5em 0;
+}
 nav.table-of-contents ol {
 	display: flex;
 	flex-direction: column;
 }
-nav.table-of-contents ol li {
+nav.table-of-contents[data-split-from] li {
+	color: var(--mvc-paper-color);	/**/
+}
+nav.table-of-contents li {
 	list-style: none;
 	display: flex;
 	flex-direction: column;
@@ -79,11 +94,10 @@ h1 {
 	font-size: 2.5rem !important;
 	padding: 0 !important;
 	border-width: 0 !important;
-	margin: 0.5em 0 1.5em 0 !important;
+	margin: 1.5em 0 1.5em 0 !important;
 }
 h1:not(.unnumbered) {
-	counter-increment: chapter-no 1;
-	counter-reset: table-index 0 code-index 0 figure-index 0;
+	string-set: chapter-text content(text);
 }
 h1:not(.unnumbered)::before {
 	font-size: 0.9em;
@@ -91,24 +105,25 @@ h1:not(.unnumbered)::before {
 .running {
 	font-weight: bolder;
 	position: running(running-title1);
-	counter-increment: chapter-no 0;
 	pointer-events: none;
 }
 h1:not(.unnumbered):before,
 .running:not(.hide):before {
-	content: open-quote counter(chapter-no) close-quote;
+	content: open-quote counter(chapter-index) close-quote;
 	quotes: var(--chapter-open) var(--chapter-close);
+}
+.running:not(.hide):after {
+	content: string(chapter-text);
 }
 h2 {
 	break-before: page;
-	/* break-after: avoid; */
 	font-size: 1.66rem !important;
-	padding: 0 0 0 3mm !important;
+	padding: 2mm 2mm 2mm 5mm !important;
 	border-top: 0mm solid white !important;
 	border-right: 0mm solid white !important;
 	border-bottom: 0.25mm solid black !important;
-	border-left: 2mm solid black !important;
-	margin: 0.5em 0 0.66em 0 !important;
+	border-left: 3mm solid black !important;
+	margin: 1em 0 0.66em 0 !important;
 }
 h2:not(.unnumbered):before {
 	content: open-quote attr(data-chapter-number) close-quote;
@@ -116,9 +131,33 @@ h2:not(.unnumbered):before {
 }
 h3,
 h4 {
-	/* break-after: avoid; */
+	break-after: avoid;
 	font-size: 1.33rem !important;
-	margin: 1.33em 0 0.66em 0 !important;
+	margin: 1.66em 0 0.66em 0 !important;
+}
+li {
+	margin: 0 0 0.25em 0;
+}
+.error,
+img::after {
+	color: #f33;
+	display: block;
+	position: absolute;
+	z-index: 2;
+	width: 100%;
+	background-color: rgba(255,224,224,0.8);
+	padding: 1.5em;
+	border-radius: 0.25em;
+}
+img {
+	color: #f33;
+	/* string-set: figure-text attr(alt); */
+}
+img::after {
+	content: "(" attr(src) " NOT FOUND)";
+}
+a:empty::before {
+	content: attr(href);
 }
 a[href^="#"]:empty::before {
 	content: target-text(attr(href), content);
@@ -145,8 +184,8 @@ table > caption {
 }
 table > caption::before {
 	text-align: center;
-	content: open-quote string(chapter-index) "." counter(table-index) close-quote;
-	quotes: var(--table-caption-open) var(--caption-close);
+	content: open-quote counter(chapter-index) "." counter(table-index) close-quote;
+	quotes: var(--table-caption-open) var(--table-caption-close);
 }
 thead tr {
 	background-color: rgba(0,0,0,0.2) !important;
@@ -182,6 +221,7 @@ td > pre {
 	background-color: inherit !important;
 }
 :not(td) > pre {
+	break-inside: avoid;
 	color: black !important;
 	background-color: rgba(0,0,0,0.1) !important;
 	tab-size: 4em;
@@ -191,6 +231,7 @@ td > pre {
 	margin: 1em 0 1em 0 !important;
 }
 pre > code {
+	break-inside: avoid;
 	color: inherit !important;
 	white-space: pre-wrap !important;
 	word-break: break-all !important;
@@ -216,7 +257,7 @@ hr {
 	text-indent: 1em;
 }
 p.top-caption {
-	/* break-after: avoid-page; */
+	break-after: avoid;
 	text-align: center;
 	text-indent: 0;
 	counter-increment: code-index 1;
@@ -224,11 +265,11 @@ p.top-caption {
 	pointer-events: none;
 }
 p.top-caption::before {
-	content: open-quote string(chapter-index) "." counter(code-index) close-quote;
-	quotes: var(--list-caption-open) var(--caption-close);
+	content: open-quote counter(chapter-index) "." counter(code-index) close-quote;
+	quotes: var(--list-caption-open) var(--list-caption-close);
 }
 p.bottom-caption {
-	/* break-before: avoid-page; */
+	break-before: avoid;
 	text-align: center;
 	text-indent: 0;
 	counter-increment: figure-index 1;
@@ -236,9 +277,12 @@ p.bottom-caption {
 	pointer-events: none;
 }
 p.bottom-caption::before {
-	content: open-quote string(chapter-index) "." counter(figure-index) close-quote;
-	quotes: var(--figure-caption-open) var(--caption-close);
+	content: open-quote counter(chapter-index) "." counter(figure-index) close-quote;
+	quotes: var(--figure-caption-open) var(--figure-caption-close);
 }
+/* p.bottom-caption::after {
+	content: string(figure-text);
+} */
 p.figures {
 	break-inside: avoid;
 	display: flex;
@@ -254,20 +298,67 @@ p.figures {
 	margin: 1%;
 	box-shadow: 0.5mm 0.5mm 2mm grey;
 }
+.w100,
 .xl {
-	max-width: 100%;
+	max-width: 100% !important;
 }
+.w95,
 .lg {
-	max-width: 95%;
+	max-width: 95% !important;
 }
+.w90 {
+	max-width: 90% !important;
+}
+.w85 {
+	max-width: 85% !important;
+}
+.w80,
 .md {
-	max-width: 80%;
+	max-width: 80% !important;
 }
+.w75 {
+	max-width: 75% !important;
+}
+.w70 {
+	max-width: 70% !important;
+}
+.w65,
 .sm {
-	max-width: 65%;
+	max-width: 65% !important;
 }
+.w60 {
+	max-width: 60% !important;
+}
+.w55 {
+	max-width: 55% !important;
+}
+.w50 {
+	max-width: 50% !important;
+}
+.w45,
 .xs {
-	max-width: 45%;
+	max-width: 45% !important;
+}
+.w40 {
+	max-width: 40% !important;
+}
+.w35 {
+	max-width: 35% !important;
+}
+.w30 {
+	max-width: 30% !important;
+}
+.w25 {
+	max-width: 25% !important;
+}
+.w20 {
+	max-width: 20% !important;
+}
+.w15 {
+	max-width: 15% !important;
+}
+.w10 {
+	max-width: 10% !important;
 }
 .break {
 	break-after: page;
@@ -276,17 +367,26 @@ p.figures {
 	break-inside: avoid;
 }
 .new-chapter {
-	string-set: chapter-index content();
+	counter-increment: chapter-index 1;
+	counter-reset: table-index 0 code-index 0 figure-index 0;
+}
+div.warning,
+div.note {
+	padding: 1em 2em;
+	margin: 1.66em 0 1.66em 0;
+}
+div.warning[data-split-to],
+div.note[data-split-to] {
+	height: -webkit-fill-available;
 }
 div.warning {
 	font-weight: bold;
 	color: black;
 	background-color: rgba(0,0,0,0.3);
-	padding: 1em 2em;
 	border-left: 2mm solid black;
-	margin: 1.66em 0 1.66em 0;
 }
 div.warning > h4 {
+	break-before: avoid;
 	border-bottom: 1px dotted black !important;
 	margin-top: 0.66em !important;
 }
@@ -296,11 +396,10 @@ div.warning h4:before {
 div.note {
 	color: black;
 	background-color: rgba(0,0,0,0.1);
-	padding: 1em 2em;
 	border-radius: 3mm;
-	margin: 1.66em 0 1.66em 0;
 }
 div.note > h4 {
+	break-before: avoid;
 	border-bottom: 1px dotted black !important;
 	margin-top: 0.66em !important;
 }
@@ -308,7 +407,7 @@ div.note > h4:before {
 	content: "≫ ";
 }
 div.output {
-	break-inside: avoid;
+	/* break-inside: avoid; */
 	color: black;
 	background-color: white;
 	padding: 0.5em;
@@ -323,7 +422,7 @@ div.output {
 }
 #titlepage ul {
 	width: 100%;
-	height: 100%;
+	height: var(--mvc-page-content-height);
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -346,7 +445,7 @@ div.output {
 #colophon {
 	break-before: left;
 	width: 100%;
-	height: 100%;
+	height: var(--mvc-page-content-height);
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
