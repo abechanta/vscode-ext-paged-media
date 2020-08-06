@@ -106,7 +106,6 @@ This extension is made from lots of graceful extensions below:
 -	markdown-it-attrs
 -	markdown-it-div
 -	markdown-it-footnote-conventional
--	markdown-it-for-inline
 -	markdown-it-include
 -	markdown-it-kbd
 -	markdown-it-multimd-table
