@@ -15,9 +15,9 @@
 [toc]
 :::
 
-![rel=content](cat-coding.md)
+![rel=content](cat-coding-revised.md)
 
-![rel=content](another-cat-coding.md)
+![rel=content](cat-coding-advanced.md)
 
 ![rel=content](appendix.md)
 
