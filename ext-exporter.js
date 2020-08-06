@@ -1,7 +1,8 @@
 "use strict";
 const path = require("path");
 const vscode = require("vscode");
-const child_process = require("child_process");
+const Printer = require("pagedjs-cli");
+const vscodeVars = "";
 
 module.exports = function Exporter(context) {
 	function _getStyles(uri) {
@@ -19,6 +20,7 @@ module.exports = function Exporter(context) {
 
 	function _makeHtml(body, styles) {
 		const script = path.join(context.extensionPath, "out", "loading.bundle.js");
+		const config = path.join(context.extensionPath, "paged-config.js");
 		const re = /.*(\<\s*link[^\>]*rel=['"]stylesheet['"][^\>]*\>).*/;
 		let linkNodes = "", node;
 		for (const style of styles) {
@@ -29,12 +31,25 @@ module.exports = function Exporter(context) {
 			body = body.substr(0, node.index) + body.substr(node.index + node[0].length);
 		}
 		return `
-<html>
+<html style="${vscodeVars}">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta http-equiv="Content-Security-Policy" content="">
 ${linkNodes}
+		<script src="${config}"></script>
 		<!--<script src="${script}"></script>-->
+		<script>
+			"use strict";
+			(function() {
+				const pagedConfigAfter = window.PagedConfig.after;
+				window.PagedConfig.after = () => {
+					window.PagedPolyfill.on("rendered", flow => {
+						console.log("after", flow);
+						pagedConfigAfter();
+					});
+				};
+			}());
+		</script>
 	</head>
 	<body class="vscode-body">
 ${body}
@@ -49,7 +64,7 @@ ${body}
 		let data = _makeHtml(body, styles);
 		data = (new TextEncoder).encode(data);
 		return vscode.workspace.fs.writeFile(html, data).then(() => {
-			reporter.report({ increment: 10, message: `export html done: ${html.fsPath}`, });
+			reporter.report({ increment: 10, message: `Export HTML done: ${html.fsPath}`, });
 			return html;
 		});
 	}
@@ -57,57 +72,44 @@ ${body}
 	function _exportPdf(uri, options) {
 		const reporter = options.reporter;
 		const pdf = uri.with({path: uri.path.toString().replace(/\.html$/, ".pdf")});
-		const cli = path.join(context.extensionPath, "node_modules", "pagedjs-cli", "bin", "paged");
-		// const proc = child_process.spawn("node", [cli, "--inputs", uri.fsPath, "--output", pdf.fsPath, ], { encoding: "utf8", cwd: context.extensionPath, });
-		// NOTE: workaround for pagedjs-cli.
-		//     ---> pass "uri.fsPath.replace(...)" instead of "uri.fsPath"
-		//     ---> pass "uri.fsPath.replace(...)" instead of "context.extensionPath"
-		//     this will surpress unexpected progress stopping when launching chromium.
-		//
-		const _escape_ = function (path) {
-			return path.replace(/^[A-Za-z]:/, "");
-		};
-		const _extract_ = function (path) {
-			return path.replace(/^([A-Za-z]:).*/, "$1");
-		};
-		const proc = child_process.spawn("node", [cli, "--inputs", _escape_(uri.fsPath), "--output", pdf.fsPath, ], { encoding: "utf8", cwd: _extract_(uri.fsPath), });
-
-		reporter.report({ increment: 10, message: `invoke cli: args: ${proc.spawnargs}`, });
-		const handler = options.registerCancelHandler;
-		handler(() => {
-			proc.kill("SIGTERM");
+		const headless = true;
+		const printer = new Printer(headless, true);
+		printer.on("page", page => {
+			reporter.report(page.position == 0 ?
+				{ increment: 10, message: `Loading browser done.`, } :
+				{ increment: 1, message: `Rendering page: ${page.position + 1}`, }
+			);
+		});
+		printer.on("rendered", message => {
+			reporter.report({ increment: 10, message: `Generating: ${message}`, });
+		});
+		printer.on("postprocessing", message => {
+			reporter.report({ increment: 10, message: `Postprocessing: ${message}`, });
 		});
 
-		return new Promise((resolve, reject) => {
-			proc.stdout.on("data", data => {
-				reporter.report({ increment: 10, message: data.toString(), });
+		const handler = options.registerCancelHandler;
+		const canceled = new Promise((resolve, reject) => {
+			handler(() => reject("Canceled"));
+		});
+		if (!headless) {
+			return Promise.race([canceled, printer.preview(uri.fsPath), ]).then(page => {
+				return uri.toString();
+			}).catch(err => {
+				throw err;
 			});
-			proc.stderr.on("data", data => {
-				reporter.report({ increment: 10, message: data.toString(), });
-			});
-			proc.on("close", () => {
-				reporter.report({ increment: 10, message: `export pdf done: ${pdf.fsPath}`, });
-				resolve(pdf);
-			});
-			proc.on("error", err => {
-				reject(err.message);
-			});
-			proc.on("exit", (code, signal) => {
-				if (code > 0) {
-					reject(`process terminated with exit code: ${code}`);
-				}
-				if (signal) {
-					reject(`process terminated with signal: ${signal}`);
-				}
-			});
+		}
+		return Promise.race([canceled, printer.pdf(uri.fsPath, { "outlineTags": [], }), ]).then(content => {
+			return Promise.race([canceled, vscode.workspace.fs.writeFile(pdf, content), ]);
+		}).then(() => {
+			return pdf.toString();
+		}).catch(err => {
+			throw err;
 		});
 	}
 
 	return {
 		exportFiles(uri, body, options) {
-			return _exportHtml(uri, body, options).then(html => {
-				return _exportPdf(html, options);
-			});
+			return _exportHtml(uri, body, options).then(html => _exportPdf(html, options));
 		}
 	};
 };

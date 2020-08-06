@@ -35,7 +35,7 @@ function activate(context) {
 
 				progress.report({ increment: 10, message: "", });
 				return exporter.exportFiles(document.uri, document.bodyHtml, { registerCancelHandler: registerCancelHandler, reporter: progress, }).then(message => {
-					vscode.window.showInformationMessage(`${title}: done.\n${message}`);
+					vscode.window.showInformationMessage(`${title}: Done.\n${message}`);
 					return undefined;
 				}).catch(message => {
 					vscode.window.showErrorMessage(`${title}: ${message}`);
