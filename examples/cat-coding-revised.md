@@ -1,4 +1,13 @@
+<!--
+    @page
+    source: https://github.com/Microsoft/vscode-docs/blob/master/api/extension-guides/webview.md
+-->
+
+{.new-chapter}
+
 # Webview API
+
+{.running}
 
 The webview API allows extensions to create fully customizable views within Visual Studio Code. For example, the built-in Markdown extension uses webviews to render Markdown previews. Webviews can also be used to build complex user interfaces beyond what VS Code's native APIs support.
 
@@ -32,6 +41,8 @@ Remember: Just because you can do something with webviews, doesn't mean you shou
 To explain the webview API, we are going to build a simple extension called **Cat Coding**. This extension will use a webview to show a gif of a cat writing some code (presumably in VS Code). As we work through the API, we'll continue adding functionality to the extension, including a counter that keeps track of how many lines of source code our cat has written and notifications that inform the user when the cat introduces a bug.
 
 Here's the `package.json` for the first version of the **Cat Coding** extension. You can find the complete code for the example app [here](https://github.com/Microsoft/vscode-extension-samples/blob/master/webview-sample/README.md). The first version of our extension [contributes a command](/api/references/contribution-points#contributes.commands) called `catCoding.start`. When a user invokes this command, we will show a simple webview with our cat in it. Users will be able to invoke this command from the **Command Palette** as **Cat Coding: Start new cat coding session** or even create a keybinding for it if they are so inclined.
+
+package.json{.top-caption}
 
 ```json
 {
@@ -70,6 +81,8 @@ Here's the `package.json` for the first version of the **Cat Coding** extension.
 
 Now let's implement the `catCoding.start` command. In our extension's main file, we register the `catCoding.start` command and use it to show a basic webview:
 
+extension.ts{.top-caption}
+
 ```ts
 import * as vscode from 'vscode';
 
@@ -91,8 +104,13 @@ export function activate(context: vscode.ExtensionContext) {
 The `vscode.window.createWebviewPanel` function creates and shows a webview in the editor. Here is what you see if you try running the `catCoding.start` command in its current state:
 
 ![An empty webview](images/webview/basics-no_content.png)
+{.figures}
+
+An empty webview{.bottom-caption}
 
 Our command opens a new webview panel with the correct title, but with no content! To add our cat to new panel, we also need to set the HTML content of the webview using `webview.html`:
+
+extension.ts{.top-caption}
 
 ```ts
 import * as vscode from 'vscode';
@@ -132,6 +150,9 @@ function getWebviewContent() {
 If you run the command again, now the webview looks like this:
 
 ![A webview with some HTML](images/webview/basics-html.png)
+{.figures}
+
+A webview with some HTML{.bottom-caption}
 
 Progress!
 
@@ -140,6 +161,8 @@ Progress!
 ### Updating webview content
 
 `webview.html` can also update a webview's content after it has been created. Let's use this to make **Cat Coding** more dynamic by introducing a rotation of cats:
+
+extension.ts{.top-caption}
 
 ```ts
 import * as vscode from 'vscode';
@@ -191,6 +214,9 @@ function getWebviewContent(cat: keyof typeof cats) {
 ```
 
 ![Updating the webview content](images/webview/basics-update.gif)
+{.figures}
+
+Updating the webview content{.bottom-caption}
 
 Setting `webview.html` replaces the entire webview content, similar to reloading an iframe. This is important to remember once you start using scripts in a webview, since it means that setting `webview.html` also resets the script's state.
 
@@ -203,6 +229,8 @@ Webview panels are owned by the extension that creates them. The extension must 
 As with text editors, a user can also close a webview panel at any time. When a webview panel is closed by the user, the webview itself is destroyed. Attempting to use a destroyed webview throws an exception. This means that the example above using `setInterval` actually has an important bug: if the user closes the panel, `setInterval` will continue to fire, which will try to update `panel.webview.html`, which of course will throw an exception. Cats hate exceptions. Let's fix this!
 
 The `onDidDispose` event is fired when a webview is destroyed. We can use this event to cancel further updates and clean up the webview's resources:
+
+extension.ts{.top-caption}
 
 ```ts
 import * as vscode from 'vscode';
@@ -247,6 +275,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 Extensions can also programmatically close webviews by calling `dispose()` on them. If, for example, we wanted to restrict our cat's workday to five seconds:
 
+extension.ts{.top-caption}
+
 ```ts
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
@@ -281,14 +311,22 @@ export function activate(context: vscode.ExtensionContext) {
 When a webview panel is moved into a background tab, it becomes hidden. It is not destroyed however. VS Code will automatically restore the webview's content from `webview.html` when the panel is brought to the foreground again:
 
 ![Webview content is automatically restored when the webview becomes visible again](images/webview/basics-restore.gif)
+{.figures}
+
+Webview content is automatically restored when the webview becomes visible again{.bottom-caption}
 
 The `.visible` property tells you if the webview panel is currently visible or not.
 
 Extensions can programmatically bring a webview panel to the foreground by calling `reveal()`. This method takes an optional target view column to show the panel in. A webview panel may only show in a single editor column at a time. Calling `reveal()` or dragging a webview panel to a new editor column moves the webview into that new column.
 
 ![Webviews are moved when you drag them between tabs](images/webview/basics-drag.gif)
+{.figures}
+
+Webviews are moved when you drag them between tabs{.bottom-caption}
 
 Let's update our extension to only allow a single webview to exist at a time. If the panel is in the background, then the `catCoding.start` command will bring it to the foreground:
+
+extension.ts{.top-caption}
 
 ```ts
 export function activate(context: vscode.ExtensionContext) {
@@ -331,8 +369,13 @@ export function activate(context: vscode.ExtensionContext) {
 Here's the new extension in action:
 
 ![Using a single panel and reveal](images/webview/basics-single_panel.gif)
+{.figures}
+
+Using a single panel and reveal{.bottom-caption}
 
 Whenever a webview's visibility changes, or when a webview is moved into a new column, the `onDidChangeViewState` event is fired. Our extension can use this event to change cats based on which column the webview is showing in:
+
+extension.ts{.top-caption}
 
 ```ts
 const cats = {
@@ -384,18 +427,27 @@ function updateWebviewForCat(panel: vscode.WebviewPanel, catName: keyof typeof c
 ```
 
 ![Responding to onDidChangeViewState events](images/webview/basics-ondidchangeviewstate.gif)
+{.figures}
+
+Responding to onDidChangeViewState events{.bottom-caption}
 
 ### Inspecting and debugging webviews
 
 The **Developer: Open Webview Developer Tools** VS Code command lets you debug webviews. Running the command launches an instance of Developer Tools for any currently visible webviews:
 
 ![Webview Developer Tools](images/webview/basics-developer_tools.png)
+{.figures}
+
+Webview Developer Tools{.bottom-caption}
 
 The contents of the webview are within an iframe inside the webview document. You can use Developer Tools to inspect and modify the webview's DOM, and debug scripts running within the webview itself.
 
 If you use the webview Developer Tools console, make sure to select the **active frame** environment from the drop-down in the top left corner of the Console panel:
 
-![Selecting the active frame](images/webview/debug-active-frame.png)
+![Selecting the active frame](images/webview/debug-active-frame.png){.md}
+{.figures}
+
+Selecting the active frame{.bottom-caption}
 
 The **active frame** environment is where the webview scripts themselves are executed.
 
@@ -406,6 +458,8 @@ In addition, the **Developer: Reload Webview** command reloads all active webvie
 Webviews run in isolated contexts that cannot directly access local resources. This is done for security reasons. This means that in order to load images, stylesheets, and other resources from your extension, or to load any content from the user's current workspace, you must use the `Webview.asWebviewUri` function to convert a local `file:` URI into a special URI that VS Code can use to load a subset of local resources.
 
 Imagine that we want to start bundling the cat gifs into our extension rather pulling them from Giphy. To do this, we first create a URI to the file on disk and then pass these URIs through the `asWebviewUri` function:
+
+extension.ts{.top-caption}
 
 ```ts
 import * as vscode from 'vscode';
@@ -437,6 +491,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 If we debug this code, we'd see that the actual value for `catGifSrc` is something like:
 
+URL for catGifSrc{.top-caption}
+
 ```
 vscode-resource:/Users/toonces/projects/vscode-cat-coding/media/cat.gif
 ```
@@ -457,6 +513,8 @@ You can also always use data URIs to embed resources directly within the webview
 Webviews can control which resources can be loaded from the user's machine with `localResourceRoots` option. `localResourceRoots` defines a set of root URIs from which local content may be loaded.
 
 We can use `localResourceRoots` to restrict **Cat Coding** webviews to only load resources from a `media` directory in our extension:
+
+extension.ts{.top-caption}
 
 ```ts
 import * as vscode from 'vscode';
@@ -502,6 +560,8 @@ Webview can use CSS to change their appearance based on VS Code's current theme.
 
 The following CSS changes the text color of the webview based on the user's current theme:
 
+style.css{.top-caption}
+
 ```css
 body.vscode-light {
   color: black;
@@ -519,6 +579,8 @@ body.vscode-high-contrast {
 When developing a webview application, make sure that it works for the three types of themes. And always test your webview in high-contrast mode to make sure it will be usable by people with visual disabilities.
 
 Webviews can also access VS Code theme colors using [CSS variables](https://developer.mozilla.org/docs/Web/CSS/Using_CSS_variables). These variable names are prefixed with `vscode` and replace the `.` with `-`. For example `editor.foreground` becomes `var(--vscode-editor-foreground)`:
+
+style.css{.top-caption}
 
 ```css
 code {
@@ -539,6 +601,8 @@ The following font related variables are also defined:
 Webviews are just like iframes, which means that they can also run scripts. JavaScript is disabled in webviews by default, but it can easily re-enable by passing in the `enableScripts: true` option.
 
 Let's use a script to add a counter tracking the lines of source code our cat has written. Running a basic script is pretty simple, but note that this example is only for demonstration purposes. In practice, your webview should always disable inline scripts using a [content security policy](#content-security-policy):
+
+extension.ts{.top-caption}
 
 ```ts
 import * as path from 'path';
@@ -588,6 +652,9 @@ function getWebviewContent() {
 ```
 
 ![A script running in a webview](images/webview/scripts-basic.gif)
+{.figures}
+
+A script running in a webview{.bottom-caption}
 
 Wow! that's one productive cat.
 
@@ -598,6 +665,8 @@ Webview scripts can do just about anything that a script on a normal webpage can
 An extension can send data to its webviews using `webview.postMessage()`. This method sends any JSON serializable data to the webview. The message is received inside the webview through the standard `message` event.
 
 To demonstrate this, let's add a new command to **Cat Coding** that instructs the currently coding cat to refactor their code (thereby reducing the total number of lines). The new `catCoding.doRefactor` command use `postMessage` to send the instruction to the current webview, and `window.addEventListener('message', event => { ... })` inside the webview itself to handle the message:
+
+extension.ts{.top-caption}
 
 ```ts
 export function activate(context: vscode.ExtensionContext) {
@@ -682,12 +751,17 @@ function getWebviewContent() {
 ```
 
 ![Passing messages to a webview](images/webview/scripts-extension_to_webview.gif)
+{.figures}
+
+Passing messages to a webview{.bottom-caption}
 
 ### Passing messages from a webview to an extension
 
 Webviews can also pass messages back to their extension. This is accomplished using a `postMessage` function on a special VS Code API object inside the webview. To access the VS Code API object, call `acquireVsCodeApi` inside the webview. This function can only be invoked once per session. You must hang onto the instance of the VS Code API returned by this method, and hand it out to any other functions that wish to use it.
 
 We can use the VS Code API and `postMessage` in our **Cat Coding** webview to alert the extension when our cat introduces a bug in their code:
+
+extension.js{.top-caption}
 
 ```js
 export function activate(context: vscode.ExtensionContext) {
@@ -757,6 +831,9 @@ function getWebviewContent() {
 ```
 
 ![Passing messages from the webview to the main extension](images/webview/scripts-webview_to_extension.gif)
+{.figures}
+
+Passing messages from the webview to the main extension{.bottom-caption}
 
 For security reasons, you must keep the VS Code API object private and make sure it is never leaked into the global scope.
 
@@ -773,6 +850,8 @@ A webview should have the minimum set of capabilities that it needs. For example
 [Content security policies](https://developers.google.com/web/fundamentals/security/csp/) further restrict the content that can be loaded and executed in webviews. For example, a content security policy can make sure that only a list of allowed scripts can be run in the webview, or even tell the webview to only load images over `https`.
 
 To add a content security policy, put a `<meta http-equiv="Content-Security-Policy">` directive at the top of the webview's `<head>`
+
+extension.ts{.top-caption}
 
 ```ts
 function getWebviewContent() {
@@ -795,6 +874,8 @@ function getWebviewContent() {
 ```
 
 The policy `default-src 'none';` disallows all content. We can then turn back on the minimal amount of content that our extension needs to function. Here's a content security policy that allows loading local scripts and stylesheets, and loading images over `https`:
+
+Content Security Policy{.top-caption}
 
 ```html
 <meta
@@ -835,6 +916,8 @@ The best way to solve this is to make your webview stateless. Use [message passi
 
 Scripts running inside a webview can use the `getState` and `setState` methods to save off and restore a JSON serializable state object. This state is persisted even the webview content itself is destroyed when a webview panel becomes hidden. The state is destroyed when the webview panel is destroyed.
 
+bundle.js{.top-caption}
+
 ```js
 // Inside a webview script
 const vscode = acquireVsCodeApi();
@@ -861,6 +944,8 @@ By implementing a `WebviewPanelSerializer`, your webviews can be automatically r
 
 To make our coding cats persist across VS Code restarts, first add a `onWebviewPanel` activation event to the extension's `package.json`:
 
+package.json{.top-caption}
+
 ```json
 "activationEvents": [
     ...,
@@ -871,6 +956,8 @@ To make our coding cats persist across VS Code restarts, first add a `onWebviewP
 This activation event ensures that our extension will be activated whenever VS Code needs to restore a webview with the viewType: `catCoding`.
 
 Then, in our extension's `activate` method, call `registerWebviewPanelSerializer` to register a new `WebviewPanelSerializer`. The `WebviewPanelSerializer` is responsible for restoring the contents of the webview from its persisted state. This state is the JSON blob that the webview contents set using `setState`.
+
+extension.ts{.top-caption}
 
 ```ts
 export function activate(context: vscode.ExtensionContext) {
@@ -901,6 +988,8 @@ Now if you restart VS Code with a cat coding panel open, the panel will be autom
 For webviews with very complex UI or state that cannot be quickly saved and restored, you can instead use the `retainContextWhenHidden` option. This option makes a webview keep its content around but in a hidden state, even when the webview itself is no longer in the foreground.
 
 Although **Cat Coding** can hardly be said to have complex state, let's try enabling `retainContextWhenHidden` to see how the option changes a webview's behavior:
+
+extension.ts{.top-caption}
 
 ```ts
 import * as vscode from 'vscode';
@@ -948,6 +1037,9 @@ function getWebviewContent() {
 ```
 
 ![persistence retrain](images/webview/persistence-retrain.gif)
+{.figures}
+
+persistence retrain{.bottom-caption}
 
 Notice how the counter does not reset now when the webview is hidden and then restored. No extra code required! With `retainContextWhenHidden`, the webview acts similarly to a background tab in a web browser. Scripts and other dynamic content are suspended, but immediately resumed once the webview becomes visible again. You cannot send messages to a hidden webview, even when `retainContextWhenHidden` is enabled.
 
