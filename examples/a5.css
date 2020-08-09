@@ -17,8 +17,8 @@
 	--mvc-margin-box-size: 1px;
 
 	/* pagedjs default settings */
-	--pagedjs-padding-top: 1mm;
-	--pagedjs-padding-bottom: 1mm;
+	/* --pagedjs-padding-top: 1mm; */
+	/* --pagedjs-padding-bottom: 1mm; */
 }
 html {
 	font-size: 8.25pt !important;
@@ -60,6 +60,9 @@ body {
 }
 .pagedjs_margin-top {
 	border-bottom: 1px solid black;
+}
+.pagedjs_pagebox > .pagedjs_area {
+	margin: 1mm 0;
 }
 @page blank-layout {
 	@top-left {

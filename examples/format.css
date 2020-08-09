@@ -37,6 +37,9 @@ body {
 	border-top-left-radius: 0px !important;
 	border-top-right-radius: 0px !important;
 }
+[data-split-from] > :first-child {
+	margin-top: unset !important;
+}
 nav.table-of-contents > ol > li {
 	list-style: decimal !important;
 	display: list-item !important;
@@ -62,7 +65,6 @@ nav.table-of-contents li {
 nav.table-of-contents ol ol a {
 	display: inline-flex;
 	flex-direction: row;
-	color: currentColor;
 	content: target-text(attr(href), content(text));
 }
 nav.table-of-contents ol ol a::before {
@@ -112,7 +114,7 @@ h1:not(.unnumbered):before,
 	content: open-quote counter(chapter-index) close-quote;
 	quotes: var(--chapter-open) var(--chapter-close);
 }
-.running:not(.hide):after {
+.running:not(.hide):empty:after {
 	content: string(chapter-text);
 }
 h2 {
@@ -163,7 +165,7 @@ a[href^="#"]:empty::before {
 	content: target-text(attr(href), content);
 }
 a {
-	color: darkblue !important;
+	color: blue !important;
 }
 .pagedjs_page_content > div > :not(#toc) a[href^="#"]::after {
 	content: open-quote target-counter(attr(href), page) close-quote;
@@ -223,9 +225,9 @@ td > pre {
 :not(td) > pre {
 	/* break-inside: avoid; */
 	color: black !important;
-	background-color: rgba(0,0,0,0.1) !important;
+	background-color: lightgray !important;
 	tab-size: 4em;
-	padding: 1em !important;
+	padding: 0.4em !important;
 	border: 1px solid black !important;
 	border-radius: 1.5mm !important;
 	margin: 0.5em 0 !important;
@@ -235,7 +237,6 @@ td > pre {
 	margin-bottom: unset !important;
 }
 :not(td) > pre[data-split-from] {
-	padding-top: unset !important;
 	margin-top: unset !important;
 }
 pre > code {
@@ -245,12 +246,14 @@ pre > code {
 	word-break: break-all !important;
 	line-height: 1.35rem !important;
 }
+pre[data-split-from] > code {
+	padding-top: unset !important;
+}
 code {
 	font-family: var(--font-family-fixed) !important;
 	color: inherit !important;
 }
 blockquote {
-	color: inherit !important;
 	background-color: rgba(0,0,0,0.1) !important;
 	padding: 0.33em 1em !important;
 	border-width: 0 0.5mm !important;
@@ -394,7 +397,6 @@ div.note[data-split-from] {
 }
 div.warning {
 	font-weight: bold;
-	color: black;
 	background-color: rgba(0,0,0,0.3);
 	border-left: 2mm solid black;
 }
@@ -407,7 +409,6 @@ div.warning h4:before {
 	content: "→ ";
 }
 div.note {
-	color: black;
 	background-color: rgba(0,0,0,0.1);
 	border-radius: 3mm;
 }
@@ -421,9 +422,7 @@ div.note > h4:before {
 }
 div.output {
 	/* break-inside: avoid; */
-	color: black;
-	background-color: white;
-	padding: 0.5em;
+	padding: 0.4em;
 	border: 1px solid gray;
 	margin: 1em 0;
 }
