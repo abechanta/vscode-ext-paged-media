@@ -3,11 +3,15 @@ window.Paged = require('pagedjs');
 require('./paged-config');
 (function() {
 	window.addEventListener("load", () => {
-		const rootNode = document.querySelector(".vscode-body");
-		const firstNode = rootNode && rootNode.firstChild && rootNode.firstChild.nextSibling || undefined;
-		console.log("firstNode: ", firstNode);
-		if (firstNode && (firstNode.nodeName === "#comment") && firstNode.data.includes("@toppage")) {
+		const containerElement = document.querySelector(".markdown-body");
+		console.log("containerElement: ", containerElement);
+		if (containerElement && Array.from(containerElement.childNodes).some(n => n.nodeName == "#comment" && n.data.includes("@toppage"))) {
 			console.log("onload event invoked.");
+			while (containerElement.childNodes[0].nodeName != "#comment") {
+				console.log("removed: ", containerElement.childNodes[0].nodeName);
+				containerElement.childNodes[0].remove();
+			}
+			containerElement.childNodes[0].nextElementSibling.remove();
 			window.PagedConfig.before();
 			const pv = new window.Paged.Previewer(/*{ "hyphenGlyph": "\u2011", }*/);
 			pv.preview().then(window.PagedConfig.after);
