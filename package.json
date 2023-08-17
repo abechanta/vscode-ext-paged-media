@@ -12,7 +12,7 @@
 	"icon": "icon.png",
 	"license": "MIT",
 	"engines": {
-		"vscode": "^1.22.0"
+		"vscode": "^1.80.0"
 	},
 	"categories": [
 		"Other"
@@ -44,36 +44,36 @@
 		},
 		"markdown.previewStyles": [],
 		"markdown.previewScripts": [
-			"./out/loading.bundle.js"
+			"./dist/previewer.bundle.js"
 		],
 		"markdown.markdownItPlugins": true
 	},
-	"main": "./extension.js",
+	"main": "./dist/extension.bundle",
 	"extensionDependencies": [
 		"vscode.markdown-language-features"
 	],
 	"devDependencies": {
-		"@babel/core": "^7.7.2",
-		"@types/vscode": "^1.22.0",
-		"babel-loader": "^8.0.6",
-		"webpack": "^4.30.0",
-		"webpack-cli": "^3.3.0"
+		"@types/vscode": "^1.80.0",
+		"esbuild": "^0.18.20"
 	},
 	"dependencies": {
-		"markdown-it-anchor": "^5.2.5",
-		"markdown-it-attrs": "^3.0.1",
+		"markdown-it-anchor": "^5.3.0",
+		"markdown-it-attrs": "^3.0.3",
 		"markdown-it-div": "^1.1.0",
 		"markdown-it-footnote-conventional": "^2.0.1",
 		"markdown-it-include": "git://github.com/abechanta/markdown-it-include.git#1.1.0-1",
-		"markdown-it-kbd": "^2.0.0",
-		"markdown-it-multimd-table": "^4.0.0",
+		"markdown-it-kbd": "^2.2.2",
+		"markdown-it-multimd-table": "^4.2.2",
 		"markdown-it-ruby": "^0.1.1",
-		"markdown-it-toc-done-right": "^4.1.0",
-		"pagedjs": "^0.1.42",
-		"pagedjs-cli": "0.0.9"
+		"markdown-it-toc-done-right": "^4.2.0",
+		"pagedjs": "^0.4.3",
+		"pagedjs-cli": "^0.4.3"
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run build",
-		"build": "webpack-cli --mode=production"
+		"vscode:prepublish": "npm run esbuild-base -- --minify",
+		"esbuild-base": "esbuild ./src/extension.js ./src/previewer.js --bundle --outdir=dist --entry-names=[dir]/[name].bundle --external:vscode --format=cjs --platform=node",
+		"esbuild": "npm run esbuild-base -- --sourcemap",
+		"esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+		"prepack": "copy .\\node_modules\\pagedjs-cli\\dist\\browser.js .\\dist"
 	}
 }
