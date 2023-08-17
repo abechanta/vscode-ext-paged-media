@@ -1,44 +1,33 @@
 "use strict";
 import path from "path";
 import vscode from "vscode";
-import Printer from "pagedjs-cli";
-const vscodeVars = "";
+// import Printer from "pagedjs-cli";	// this line causes activation error concerning to "fileURLToPath" imported from this line.
+import Printer from "./printer";		// so we fork it here.
 
-module.exports = function Exporter(context) {
-	function _getStyles(uri) {
-		let styles = [];
-		const markdownExtention = vscode.extensions.getExtension("vscode.markdown-language-features");
-		for (const style of markdownExtention.packageJSON.contributes["markdown.previewStyles"]) {
-			styles.push(path.join(markdownExtention.extensionPath, style));
-		}
-		const markdownConfig = vscode.workspace.getConfiguration("markdown", uri);
-		for (const style of markdownConfig.get("styles")) {
-			styles.push(style);
-		}
-		return styles;
+class Exporter {
+	constructor(context) {
+		this.context = context;
+		this.vscodeVars = "";
 	}
 
-	function _makeHtml(body, styles) {
-		const script = path.join(context.extensionPath, "out", "loading.bundle.js");
-		const config = path.join(context.extensionPath, "paged-config.js");
-		const re = /.*(\<\s*link[^\>]*rel=['"]stylesheet['"][^\>]*\>).*/;
-		let linkNodes = "", node;
-		for (const style of styles) {
-			linkNodes += `<link rel="stylesheet" href="${style}" />\n`;
-		}
-		while (node = re.exec(body)) {
-			linkNodes += node[0] + "\n";
-			body = body.substr(0, node.index) + body.substr(node.index + node[0].length);
-		}
+	_getStyles(uri) {
+		const markdownExtention = vscode.extensions.getExtension("vscode.markdown-language-features");
+		const markdownConfig = vscode.workspace.getConfiguration("markdown", uri);
+		return [].concat(
+			markdownExtention.packageJSON.contributes["markdown.previewStyles"].map(style => path.join(markdownExtention.extensionPath, style)),
+			markdownConfig.get("styles"),
+		);
+	}
+
+	_makeHtml(body, styles) {
+		let linkNodes = styles.map(style => `<link rel="stylesheet" href="${style}" />`).join("\n");
 		return `
-<html style="${vscodeVars}">
+<html style="${this.vscodeVars}">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta http-equiv="Content-Security-Policy" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 ${linkNodes}
-		<script src="${config}"></script>
-		<!--<script src="${script}"></script>-->
 	</head>
 	<body class="vscode-body">
 ${body}
@@ -46,11 +35,11 @@ ${body}
 </html>`;
 	}
 
-	function _exportHtml(uri, body, options) {
+	_exportHtml(uri, body, options) {
 		const reporter = options.reporter;
 		const html = uri.with({path: uri.path.toString().replace(/\.md$/, ".html")});
-		const styles = _getStyles(uri);
-		let data = _makeHtml(body, styles);
+		const styles = this._getStyles(uri);
+		let data = this._makeHtml(body, styles);
 		data = (new TextEncoder).encode(data);
 		return vscode.workspace.fs.writeFile(html, data).then(() => {
 			reporter.report({ increment: 10, message: `Export HTML done: ${html.fsPath}`, });
@@ -58,15 +47,13 @@ ${body}
 		});
 	}
 
-	function _exportPdf(uri, options) {
+	_exportPdf(uri, options) {
 		const reporter = options.reporter;
 		const pdf = uri.with({path: uri.path.toString().replace(/\.html$/, ".pdf")});
 		const headless = true;
 		const allowLocal = true;
-		
 		const additionalScripts = [
-			path.join(context.extensionPath, "dist", "browser.js"),
-			// "C:/Users/abech/Documents/dev/vscode-ext-paged-media/dist/browser.js",
+			path.join(this.context.extensionPath, "dist", "browser.js"),
 		];
 		const printer = new Printer({ headless, allowLocal, additionalScripts, });
 		printer.on("page", page => {
@@ -93,7 +80,7 @@ ${body}
 				throw err;
 			});
 		}
-		return Promise.race([canceled, printer.pdf(uri.fsPath, { "outlineTags": [ "h1", "h2", "h3", ], }), ]).then(content => {
+		return Promise.race([canceled, printer.pdf(uri.fsPath, { "outlineTags": options.outlineTags, }), ]).then(content => {
 			return Promise.race([canceled, vscode.workspace.fs.writeFile(pdf, content), ]);
 		}).then(() => {
 			return pdf.toString();
@@ -102,9 +89,9 @@ ${body}
 		});
 	}
 
-	return {
-		exportFiles(uri, body, options) {
-			return _exportHtml(uri, body, options).then(html => _exportPdf(html, options));
-		}
-	};
+	exportFiles(uri, body, options) {
+		return this._exportHtml(uri, body, options).then(html => this._exportPdf(html, options));
+	}
 };
+
+export default Exporter;
