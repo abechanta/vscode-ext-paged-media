@@ -1,7 +1,7 @@
 "use strict";
-const path = require("path");
-const vscode = require("vscode");
-const Printer = require("pagedjs-cli");
+import path from "path";
+import vscode from "vscode";
+import Printer from "pagedjs-cli";
 const vscodeVars = "";
 
 module.exports = function Exporter(context) {
@@ -35,21 +35,10 @@ module.exports = function Exporter(context) {
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta http-equiv="Content-Security-Policy" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 ${linkNodes}
 		<script src="${config}"></script>
 		<!--<script src="${script}"></script>-->
-		<script>
-			"use strict";
-			(function() {
-				const pagedConfigAfter = window.PagedConfig.after;
-				window.PagedConfig.after = () => {
-					window.PagedPolyfill.on("rendered", flow => {
-						console.log("after", flow);
-						pagedConfigAfter();
-					});
-				};
-			}());
-		</script>
 	</head>
 	<body class="vscode-body">
 ${body}
@@ -73,7 +62,13 @@ ${body}
 		const reporter = options.reporter;
 		const pdf = uri.with({path: uri.path.toString().replace(/\.html$/, ".pdf")});
 		const headless = true;
-		const printer = new Printer(headless, true);
+		const allowLocal = true;
+		
+		const additionalScripts = [
+			path.join(context.extensionPath, "dist", "browser.js"),
+			// "C:/Users/abech/Documents/dev/vscode-ext-paged-media/dist/browser.js",
+		];
+		const printer = new Printer({ headless, allowLocal, additionalScripts, });
 		printer.on("page", page => {
 			reporter.report(page.position == 0 ?
 				{ increment: 10, message: `Loading browser done.`, } :
@@ -98,7 +93,7 @@ ${body}
 				throw err;
 			});
 		}
-		return Promise.race([canceled, printer.pdf(uri.fsPath, { "outlineTags": [], }), ]).then(content => {
+		return Promise.race([canceled, printer.pdf(uri.fsPath, { "outlineTags": [ "h1", "h2", "h3", ], }), ]).then(content => {
 			return Promise.race([canceled, vscode.workspace.fs.writeFile(pdf, content), ]);
 		}).then(() => {
 			return pdf.toString();

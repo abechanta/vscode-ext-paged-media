@@ -43,7 +43,9 @@
 
     window.PagedConfig = {
         // auto: false,
-        before: salvageStyles,
-        after: fixSplitCodeBlocks,
+        // before: salvageStyles,
+        before: () => {},
+        // after: fixSplitCodeBlocks,
+        after: () => {},
     };
 }());

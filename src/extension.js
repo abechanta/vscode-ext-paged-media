@@ -1,11 +1,11 @@
 "use strict";
-const path = require("path");
-const vscode = require("vscode");
-const Exporter = require("./ext-exporter");
+import path from "path";
+import vscode from "vscode";
+import Exporter from "./exporter";
 
 // FIXME
-// loading "loading.js" from "markdown.previewScripts" causes csp violation,
-// markdown previewer restricts to "script-src 'nonce-xxxxxxxxxxxxxxxx'", loading.bundle.js has "unsafe-eval".
+// loading "previewer.js" from "markdown.previewScripts" causes csp violation,
+// markdown previewer restricts to "script-src 'nonce-xxxxxxxxxxxxxxxx'", previewer.bundle.js has "unsafe-eval".
 // so user must set "Markdown: Change Preview Security Settings" from "Strict" to "Disable" for each user document.
 // refs: https://github.com/webpack/webpack/issues/6461
 
