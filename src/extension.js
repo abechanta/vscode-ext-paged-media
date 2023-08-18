@@ -23,37 +23,39 @@ function activate(context) {
 	};
 	let didRecommend = false;
 
-	context.subscriptions.push(
-		vscode.commands.registerCommand('pagedView.exportPdf', () => {
-			const title = "Export in PDF Format";
-			if (!document.uri || !document.bodyHtml ||!document.bodyMd ||!document.bodyMdTokens || !hasTopPage(document.bodyMdTokens)) {
-				vscode.window.showInformationMessage(`${title}: Active document has no \"@toppage\" content. Exporting skipped.`);
-				return undefined;
-			}
-			vscode.window.withProgress({
-				title: title,
-				location: vscode.ProgressLocation.Notification,
-				cancellable: true,
-			}, (progress, token) => {
-				const exportOptions = {
-					registerCancelHandler: onCancel => token.onCancellationRequested(() => onCancel()),
-					reporter: progress,
-					outlineTags: ["h1", "h2", "h3"],
-				};
+	const exporterBuilder = (title, exportFile) => () => {
+		if (!document.uri || !document.bodyHtml ||!document.bodyMd ||!document.bodyMdTokens || !hasTopPage(document.bodyMdTokens)) {
+			vscode.window.showInformationMessage(`${title}: Active document has no \"@toppage\" header at beggining. Exporting skipped.`);
+			return undefined;
+		}
+		vscode.window.withProgress({
+			title: title,
+			location: vscode.ProgressLocation.Notification,
+			cancellable: true,
+		}, (progress, token) => {
+			const exportOptions = {
+				registerCancelHandler: onCancel => token.onCancellationRequested(() => onCancel()),
+				reporter: progress,
+				outlineTags: ["h1", "h2", "h3"],
+			};
 
-				progress.report({ increment: 10, message: "", });
-				return exporter.exportFiles(document.uri, document.bodyHtml, exportOptions).then(message => {
-					vscode.window.showInformationMessage(`${title}: Done. ${message}`);
-					return undefined;
-				}).catch(message => {
-					vscode.window.showErrorMessage(`${title}: ${message}`);
-					return undefined;
-				});
+			progress.report({ increment: 10, message: "", });
+			return exportFile.apply(exporter, [document.uri, document.bodyHtml, exportOptions]).then(uri => {
+				vscode.window.showInformationMessage(`${title}: Done. ${uri.fsPath}`);
+				return undefined;
+			}).catch(message => {
+				vscode.window.showErrorMessage(`${title}: ${message}`);
+				return undefined;
 			});
-		})
+		});
+	}
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('pagedView.exportPdf', exporterBuilder("Export in PDF Format", exporter.exportPdf)),
+		vscode.commands.registerCommand('pagedView.exportHtml', exporterBuilder("Export in HTML Format", exporter.exportHtml)),
 	);
 
-	const recommendUserSettings = function (tokens, doc) {
+	const recommendUserSettings = (tokens, doc) => {
 		if (didRecommend || !hasTopPage(tokens) || !hasInclude(doc.bodyMd)) {
 			return;
 		}

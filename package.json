@@ -31,6 +31,11 @@
 				"command": "pagedView.exportPdf",
 				"title": "Export in PDF Format",
 				"category": "Paged View"
+			},
+			{
+				"command": "pagedView.exportHtml",
+				"title": "Export in HTML Format (Debug)",
+				"category": "Paged View"
 			}
 		],
 		"menus": {
@@ -38,6 +43,11 @@
 				{
 					"when": "resourceLangId == markdown",
 					"command": "pagedView.exportPdf",
+					"group": "z_commands"
+				},
+				{
+					"when": "resourceLangId == markdown",
+					"command": "pagedView.exportHtml",
 					"group": "z_commands"
 				}
 			]

@@ -14,48 +14,36 @@ class Exporter {
 		const markdownExtention = vscode.extensions.getExtension("vscode.markdown-language-features");
 		const markdownConfig = vscode.workspace.getConfiguration("markdown", uri);
 		return [].concat(
-			markdownExtention.packageJSON.contributes["markdown.previewStyles"].map(style => path.join(markdownExtention.extensionPath, style)),
-			markdownConfig.get("styles"),
+			markdownExtention.packageJSON.contributes["markdown.previewStyles"].map(style => path.resolve(markdownExtention.extensionPath, style)),
+			markdownConfig.get("styles").map(style => path.resolve(path.dirname(uri.fsPath), style)),
 		);
 	}
 
-	_makeHtml(body, styles) {
-		let linkNodes = styles.map(style => `<link rel="stylesheet" href="${style}" />`).join("\n");
-		return `
+	_prepareHtml(bodyHtml, uriContent) {
+		const contentHtml = `
 <html style="${this.vscodeVars}">
 	<head>
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta http-equiv="Content-Security-Policy" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-${linkNodes}
 	</head>
 	<body class="vscode-body">
-${body}
+${bodyHtml}
 	</body>
 </html>`;
+		const bodyEncoded = (new TextEncoder).encode(contentHtml);
+		return vscode.workspace.fs.writeFile(uriContent, bodyEncoded)
+			.then(() => uriContent);
 	}
 
-	_exportHtml(uri, body, options) {
+	_exportFile(uriSrc, uriDst, options, exporter) {
 		const reporter = options.reporter;
-		const html = uri.with({path: uri.path.toString().replace(/\.md$/, ".html")});
-		const styles = this._getStyles(uri);
-		let data = this._makeHtml(body, styles);
-		data = (new TextEncoder).encode(data);
-		return vscode.workspace.fs.writeFile(html, data).then(() => {
-			reporter.report({ increment: 10, message: `Export HTML done: ${html.fsPath}`, });
-			return html;
-		});
-	}
-
-	_exportPdf(uri, options) {
-		const reporter = options.reporter;
-		const pdf = uri.with({path: uri.path.toString().replace(/\.html$/, ".pdf")});
 		const headless = true;
 		const allowLocal = true;
 		const additionalScripts = [
 			path.join(this.context.extensionPath, "dist", "browser.js"),
 		];
-		const printer = new Printer({ headless, allowLocal, additionalScripts, });
+		const printer = new Printer({ headless, allowLocal, additionalScripts, "styles": options.styles, });
 		printer.on("page", page => {
 			reporter.report(page.position == 0 ?
 				{ increment: 10, message: `Loading browser done.`, } :
@@ -73,24 +61,44 @@ ${body}
 		const canceled = new Promise((resolve, reject) => {
 			handler(() => reject("Canceled"));
 		});
-		if (!headless) {
-			return Promise.race([canceled, printer.preview(uri.fsPath), ]).then(page => {
-				return uri.toString();
-			}).catch(err => {
-				throw err;
-			});
-		}
-		return Promise.race([canceled, printer.pdf(uri.fsPath, { "outlineTags": options.outlineTags, }), ]).then(content => {
-			return Promise.race([canceled, vscode.workspace.fs.writeFile(pdf, content), ]);
-		}).then(() => {
-			return pdf.toString();
-		}).catch(err => {
+		return Promise.race([
+			canceled,
+			exporter(uriSrc.fsPath, printer, { "outlineTags": options.outlineTags, })
+				.then(content => {
+					return vscode.workspace.fs.writeFile(uriDst, content);
+				}).then(() => {
+					return printer.close();
+				}).then(() => uriDst),
+		]).catch(err => {
 			throw err;
 		});
 	}
 
-	exportFiles(uri, body, options) {
-		return this._exportHtml(uri, body, options).then(html => this._exportPdf(html, options));
+	exportHtml(uri, bodyHtml, options) {
+		options.styles = this._getStyles(uri);
+		const uriSrcHtml = uri.with({ path: uri.path + ".1.html", });
+		const uriDstHtml = uri.with({ path: uri.path + ".2.html", });
+		return this._prepareHtml(bodyHtml, uriSrcHtml)
+			.then(uriSrcHtml_ => {
+				return this._exportFile(uriSrcHtml, uriDstHtml, options, (srcPath, printer, printerOption) => {
+					return printer.html(srcPath, printerOption)
+						.then(bodyHtml => {
+							return (new TextEncoder).encode(bodyHtml);
+						});
+					});
+			});
+	}
+
+	exportPdf(uri, bodyHtml, options) {
+		options.styles = this._getStyles(uri);
+		const uriSrcHtml = uri.with({ path: uri.path + ".1.html", });
+		const uriPdf = uri.with({ path: uri.path + ".pdf", });
+		return this._prepareHtml(bodyHtml, uriSrcHtml)
+			.then(uriSrcHtml_ => {
+				return this._exportFile(uriSrcHtml, uriPdf, options, (srcPath, printer, printerOption) => {
+					return printer.pdf(srcPath, printerOption);
+				});
+			});
 	}
 };
 
