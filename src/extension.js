@@ -11,7 +11,7 @@ import Exporter from "./exporter";
 
 function activate(context) {
 	const includeRe = /^!\[\s*rel=content\s*\]\(\s*([^\s)]+)\s*[^\s)]*\s*\)$/im;
-	const slugify = str => encodeURIComponent(String(str || "__blank__").trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-'));
+	const slugify = str => encodeURIComponent(String(str || "__blank__").trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-').replace(/-$/, ''));
 	const hasTopPage = tokens => (tokens[0].type == "html_block") && (tokens[0].content.includes("@toppage"));
 	const hasInclude = bodyMd => bodyMd.match(includeRe);
 	const exporter = new Exporter(context);
@@ -74,9 +74,11 @@ function activate(context) {
 			md.use(require("markdown-it-ruby"));
 			md.use(require("markdown-it-div"));
 			md.use(require("markdown-it-multimd-table"), { multiline: true, rowspan: true, headerless: true, });
-			md.use(require("markdown-it-footnote-conventional"));
+			md.use(require("markdown-it-footnote-here"));
 			md.use(require("./markdown-it-toc"), { slugify: slugify, selection: [1, 2, 3], });
-			md.use(require("markdown-it-include"), { includeRe: includeRe, root: () => path.dirname(vscode.window.activeTextEditor.document.fileName), });
+			md.use(require("markdown-it-include"), { includeRe: includeRe, root: () => {
+				return path.dirname(vscode.window.activeTextEditor.document.fileName);
+			}, });
 
 			const render = md.renderer.render;
 			md.renderer.render = (tokens, options, env) => {
