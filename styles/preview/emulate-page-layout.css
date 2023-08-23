@@ -1,0 +1,11 @@
+.pagedjs_pages {
+	background-color: var(--mpm-preview-cut-off-color, #777);
+}
+.pagedjs_page {
+	color: var(--mpm-preview-font-color, #000);
+	background-color: var(--mpm-preview-paper-color, #fff);
+	margin: var(--mpm-preview-page-margin, 5mm);
+}
+.pagedjs_page hr {
+	border-color: var(--mpm-preview-font-color, #000);
+}
