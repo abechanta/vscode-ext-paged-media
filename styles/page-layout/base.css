@@ -1,0 +1,20 @@
+@page blank-layout {
+	@top-left {
+		content: none;
+	}
+	@top-center {
+		content: none;
+	}
+	@top-right {
+		content: none;
+	}
+	@bottom-left-corner {
+		content: none;
+	}
+	@bottom-center {
+		content: none;
+	}
+	@bottom-right-corner {
+		content: none;
+	}
+}

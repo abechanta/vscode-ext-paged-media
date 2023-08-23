@@ -1,0 +1,5 @@
+@page {
+	@bottom-center:not(.pagedjs_blank_page) {
+		content: "- " counter(page) " -";
+	}
+}

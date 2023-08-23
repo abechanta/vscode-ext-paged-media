@@ -1,0 +1,26 @@
+@page:left {
+	@top-left {
+		content: var(--quote-open-chapter1, "") string(chapterTextBefore) var(--quote-close-chapter1, " ") string(chapterText);
+		margin: 3mm 0 1mm 0;
+		padding: 2mm;
+		box-shadow: none !important;
+		border-bottom: solid 1px;
+	}
+}
+@page:right {
+	@top-right {
+		content: var(--quote-open-chapter2, "") string(subchapterTextBefore) var(--quote-close-chapter2, " ") string(subchapterText);
+		margin: 3mm 0 1mm 0;
+		padding: 2mm;
+		box-shadow: none !important;
+		border-bottom: solid 1px;
+	}
+}
+h1:not(.unnumbered) {
+	/* string-set: chaptertext content(text), chaptertextbefore content(before), subchapterText content(text), subchapterTextBefore attr(data-chapter-number); */
+	string-set: chapterText content(text), chapterTextBefore attr(data-chapter-number), subchapterText content(text), subchapterTextBefore attr(data-chapter-number);
+}
+h2:not(.unnumbered) {
+	/* string-set: subchapterText content(text), subchapterTextBefore content(before); */
+	string-set: subchapterText content(text), subchapterTextBefore attr(data-chapter-number);
+}
