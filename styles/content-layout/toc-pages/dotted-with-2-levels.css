@@ -1,0 +1,41 @@
+nav.table-of-contents > ol > li {
+	list-style: decimal !important;
+	display: flex !important;
+	flex-direction: column;
+	font-size: 1.66rem !important;
+	margin: 0.5em 0;
+}
+nav.table-of-contents > ol > li > ol {
+	margin: 0.5em 0;
+}
+nav.table-of-contents ol {
+	display: flex;
+	flex-direction: column;
+}
+nav.table-of-contents li {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	font-size: 1rem;
+}
+nav.table-of-contents ol a {
+	display: inline-flex;
+	flex-direction: row;
+	content: target-text(attr(href), content(text));
+}
+nav.table-of-contents ol a::before {
+	content: "";
+	border-bottom: 1px dotted gray;
+	margin: 0.5em;
+	flex: 1;
+	order: 1;
+}
+nav.table-of-contents ol a::after {
+	content: target-counter(attr(href), page);
+	align-self: flex-end;
+	flex: 0;
+	order: 2;
+}
+nav.table-of-contents ol ol ol li {
+	display: none;
+}
