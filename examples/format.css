@@ -429,9 +429,11 @@ div.output {
 .blank {
 	page: blank-layout;
 }
+/*
 #titlepage {
 	break-before: right;
 }
+*/
 #titlepage ul {
 	width: 100%;
 	height: var(--mvc-page-content-height);

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 function hasClass(token, classname) {
 	return token.attrGet("class") && token.attrGet("class").split(" ").includes(classname);
@@ -88,7 +88,7 @@ function deleteUnnumberedHeadingsFromTocAst(md, options) {
 	});
 }
 
-module.exports = function include_plugin(md, options) {
+function include_plugin(md, options) {
 	const excludeClassname = "unnumbered";
 
 	md.use(require("markdown-it-anchor"), { slugify: options.slugify, callback: numbering({ selection: options.selection, excludeClassname: excludeClassname, }), });
@@ -98,3 +98,5 @@ module.exports = function include_plugin(md, options) {
 
 	return md;
 };
+
+module.exports = (md, options) => include_plugin(md, options);

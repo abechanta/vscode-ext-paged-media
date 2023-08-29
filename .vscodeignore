@@ -1,5 +1,4 @@
 .vscode
 examples
+src
 .gitignore
-loading.js
-webpack.config.js
