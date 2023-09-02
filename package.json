@@ -57,7 +57,402 @@
 			"./dist/previewer.bundle.js",
 			"./dist/browser.js"
 		],
-		"markdown.markdownItPlugins": true
+		"markdown.markdownItPlugins": true,
+		"configuration": [
+			{
+				"title": "Markdown Paged Media",
+				"properties": {
+					"markdownPagedMedia.ignorePresetStyles": {
+						"order": 10,
+						"type": "boolean",
+						"default": false,
+						"description": "自前で準備したスタイルを適用するために、以降のプリセット設定を無視します。"
+					},
+					"markdownPagedMedia.applyPreviewStylesWhenExporting": {
+						"order": 20,
+						"type": "boolean",
+						"default": false,
+						"description": "プレビュー専用のスタイルを、エクスポート時にも適用します。[DEBUG]"
+					},
+					"markdownPagedMedia.preset.preview.highlightPageMargin.enable": {
+						"order": 100,
+						"type": "boolean",
+						"default": false,
+						"description": "各ページのマージンをハイライトで表示します。"
+					},
+					"markdownPagedMedia.preset.preview.highlightPageMargin.lineColor": {
+						"order": 101,
+						"type": "string",
+						"default": "#0ff",
+						"description": "ハイライト線の色"
+					},
+					"markdownPagedMedia.preset.preview.emulatePageLayout.enable": {
+						"order": 110,
+						"type": "boolean",
+						"default": false,
+						"description": "エディターのカラーテーマによらず、各ページのレイアウトと紙色を実物と同様に表示します。"
+					},
+					"markdownPagedMedia.preset.preview.emulatePageLayout.fontColor": {
+						"order": 111,
+						"type": "string",
+						"default": "#000",
+						"description": "文字色"
+					},
+					"markdownPagedMedia.preset.preview.emulatePageLayout.paperColor": {
+						"order": 112,
+						"type": "string",
+						"default": "#fff",
+						"description": "下地色"
+					},
+					"markdownPagedMedia.preset.preview.emulatePageLayout.cutOffColor": {
+						"order": 113,
+						"type": "string",
+						"default": "#777",
+						"description": "欄外の色"
+					},
+					"markdownPagedMedia.preset.preview.emulateIn2Columns.enable": {
+						"order": 120,
+						"type": "boolean",
+						"default": false,
+						"description": "各ページを見開きで表示します。"
+					},
+					"markdownPagedMedia.preset.preview.emulateIn2Columns.margin": {
+						"order": 121,
+						"type": "integer",
+						"default": 5,
+						"description": "ページの間隔（mm）"
+					},
+					"markdownPagedMedia.preset.pageLayout.base": {
+						"order": 200,
+						"type": "boolean",
+						"default": true,
+						"description": ""
+					},
+					"markdownPagedMedia.preset.pageLayout.size": {
+						"order": 210,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"a0",
+							"a1",
+							"a2",
+							"a3",
+							"a4",
+							"a5",
+							"a6",
+							"a7",
+							"a10",
+							"b4",
+							"b5",
+							"letter",
+							"legal",
+							"ledger"
+						],
+						"enumDescriptions": [
+							"ページサイズを指定しません。",
+							"ページサイズを A0 に指定します。",
+							"ページサイズを A1 に指定します。",
+							"ページサイズを A2 に指定します。",
+							"ページサイズを A3 に指定します。",
+							"ページサイズを A4 に指定します。",
+							"ページサイズを A5 に指定します。",
+							"ページサイズを A6 に指定します。",
+							"ページサイズを A7 に指定します。",
+							"ページサイズを A10 に指定します。",
+							"ページサイズを B4 に指定します。",
+							"ページサイズを B5 に指定します。",
+							"ページサイズを letter に指定します。",
+							"ページサイズを legal に指定します。",
+							"ページサイズを ledger に指定します。"
+						],
+						"description": "各ページのサイズ"
+					},
+					"markdownPagedMedia.preset.pageLayout.marks": {
+						"order": 220,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"crop",
+							"cross",
+							"crop-and-cross"
+						],
+						"enumDescriptions": [
+							"ページ補助を何も追加しません。",
+							"ページ補助としてトリムマーク（コーナートンボ）を追加します。",
+							"ページ補助として十字マーク（センタートンボ）を追加します。",
+							"ページ補助としてトリムマーク（コーナートンボ）と十字マーク（センタートンボ）を追加します。"
+						],
+						"description": "各ページの印刷補助"
+					},
+					"markdownPagedMedia.preset.pageLayout.bleed": {
+						"order": 230,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"normal",
+							"wide"
+						],
+						"enumDescriptions": [
+							"塗り足しを追加しません。",
+							"塗り足しを追加します。",
+							"塗り足しを広めに追加します。"
+						],
+						"description": "各ページの裁ち落とし（塗り足し領域）"
+					},
+					"markdownPagedMedia.preset.pageLayout.margin": {
+						"order": 240,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"normal",
+							"narrow",
+							"normal-balanced",
+							"narrow-balanced"
+						],
+						"enumDescriptions": [
+							"余白幅を指定しません。",
+							"余白幅を通常サイズに指定します。",
+							"余白幅を狭めに指定します。",
+							"余白幅を通常サイズに、見開き外側（小口）寄せに指定します。",
+							"余白幅を狭めに、見開き外側（小口）寄せに指定します。"
+						],
+						"description": "各ページの余白幅"
+					},
+					"markdownPagedMedia.preset.pageLayout.pageNumber": {
+						"order": 250,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"bottom-center",
+							"bottom-outside"
+						],
+						"enumDescriptions": [
+							"ページ番号を挿入しません。",
+							"ページ番号を下段中央に挿入します。",
+							"ページ番号を見開き外側（小口）に挿入します。"
+						],
+						"description": "各ページのページ番号（ノンブル）"
+					},
+					"markdownPagedMedia.preset.pageLayout.hiddenPageNumber": {
+						"order": 260,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"inside-middle"
+						],
+						"enumDescriptions": [
+							"隠しページ番号を挿入しません。",
+							"隠しページ番号を見開き内側（ノド）に挿入します。"
+						],
+						"description": "各ページの隠しページ番号（隠しノンブル）"
+					},
+					"markdownPagedMedia.preset.pageLayout.runningHeader": {
+						"order": 270,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"top-chapters-only",
+							"top-chapters-and-subchapters",
+							"top-chapters-and-subchapters-with-numbers"
+						],
+						"enumDescriptions": [
+							"ヘッダーを指定しません。",
+							"ヘッダーとして見出しレベル 1 のみを挿入します。",
+							"ヘッダーとして見出しレベル 1、2 を挿入します。[EXPERIMENTAL]",
+							"ヘッダーとして見出しレベル 1、2 および見出し番号を挿入します。[EXPERIMENTAL]"
+						],
+						"description": "各ページのヘッダー（柱）"
+					},
+					"markdownPagedMedia.preset.contentLayout.pageBreakChapters": {
+						"order": 300,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"chapters-only",
+							"chapters-and-subchapters",
+							"chapters-only-on-right",
+							"chapters-and-subchapters-on-right"
+						],
+						"enumDescriptions": [
+							"見出し直前に改ページを挿入しません。",
+							"見出しレベル 1 のみの直前に改ページを挿入します。",
+							"見出しレベル 1、2 の直前に改ページを挿入します。",
+							"見出しレベル 1 のみの直前に改ページを挿入して、見開き右ページになるようにします。",
+							"見出しレベル 1、2 の直前に改ページを挿入して、見開き右ページになるようにします。"
+						],
+						"description": "見出し直前の改ページ"
+					},
+					"markdownPagedMedia.preset.contentLayout.pageBreakCaptions": {
+						"order": 310,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"all-captions"
+						],
+						"enumDescriptions": [
+							"ページまたぎを指定しません。",
+							"すべて（リスト、図、表）のキャプション前後のページまたぎを抑制します。[EXPERIMENTAL]"
+						],
+						"description": "キャプション前後のページまたぎ"
+					},
+					"markdownPagedMedia.preset.contentLayout.widowsAndOrphans": {
+						"order": 320,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"paragraph-2",
+							"paragraph-3"
+						],
+						"enumDescriptions": [
+							"ページまたぎの大きさを指定しません。",
+							"ページをまたぐ段落が 2 行未満に分割されないよう指定します。",
+							"ページをまたぐ段落が 3 行未満に分割されないよう指定します。"
+						],
+						"description": "ページまたぎで残す大きさ"
+					},
+					"markdownPagedMedia.preset.contentLayout.titlePage": {
+						"order": 330,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"space-around"
+						],
+						"enumDescriptions": [
+							"表紙のフォーマットを細かく指定しません。",
+							"表紙に含まれる要素を等間隔に配置します。"
+						],
+						"description": "表紙のフォーマット"
+					},
+					"markdownPagedMedia.preset.contentLayout.colophonPage": {
+						"order": 340,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"bottom-on-left"
+						],
+						"enumDescriptions": [
+							"奥付のフォーマットを細かく指定しません。",
+							"奥付に含まれる要素を見開き左ページの下段に配置します。"
+						],
+						"description": "奥付のフォーマット"
+					},
+					"markdownPagedMedia.preset.contentLayout.tocPages": {
+						"order": 350,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"dotted-with-2-levels"
+						],
+						"enumDescriptions": [
+							"目次のフォーマットを細かく指定しません。",
+							"見出しレベル 2 までを目次に載せ、見出しとページ番号をドット線でを対応させます。"
+						],
+						"description": "目次のフォーマット"
+					},
+					"markdownPagedMedia.preset.contentStyle.base": {
+						"order": 400,
+						"type": "boolean",
+						"default": true,
+						"description": ""
+					},
+					"markdownPagedMedia.preset.contentStyle.chapterBorder": {
+						"order": 410,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"blank",
+							"block"
+						],
+						"enumDescriptions": [
+							"見出しの装飾を細かく指定しません。",
+							"見出しの周辺に余白を残します。",
+							"見出しの周辺を太枠で装飾を施します。"
+						],
+						"description": "見出しの装飾"
+					},
+					"markdownPagedMedia.preset.contentStyle.chapterFontSize": {
+						"order": 420,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"large",
+							"medium",
+							"small"
+						],
+						"enumDescriptions": [
+							"見出しのサイズを細かく指定しません。",
+							"見出しのサイズを大きくします。",
+							"見出しのサイズを中くらいにします。",
+							"見出しのサイズを小さくします。"
+						],
+						"description": "見出しのサイズ"
+					},
+					"markdownPagedMedia.preset.contentStyle.numberingChapters": {
+						"order": 430,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"chapters-and-subchapters"
+						],
+						"enumDescriptions": [
+							"見出しに番号を追加しません。",
+							"レベル 3 までの見出しに番号を追加します。"
+						],
+						"description": "見出しの番号"
+					},
+					"markdownPagedMedia.preset.contentStyle.numberingCaptions": {
+						"order": 440,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"chapter-separated",
+							"total",
+							"chapter-separated-automated",
+							"total-automated"
+						],
+						"enumDescriptions": [
+							"キャプションに番号を追加しません。",
+							"キャプションに章番号ごとの番号を追加します。リストには .list-caption を、図には alt または .figure-caption を使います。",
+							"キャプションに通し番号を追加します。リストには .list-caption を、図には alt または .figure-caption を使います。",
+							"キャプションに章番号ごとの番号を追加します。リストにはキャプションを指定できません。図には alt または .figure-caption を使います。[EXPERIMENTAL]",
+							"キャプションに通し番号を追加します。リストにはキャプションを指定できません。図には alt または .figure-caption を使います。[EXPERIMENTAL]"
+						],
+						"description": "キャプションの番号"
+					},
+					"markdownPagedMedia.preset.contentStyle.tagLinks": {
+						"order": 450,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"content-with-page"
+						],
+						"enumDescriptions": [
+							"タグリンクに要素を追加しません。",
+							"タグリンクに参照先のページ番号を追加します。空欄のタグリンクに参照先のコンテンツを追加します。空欄のウェブリンクに参照先 URL を追加します。"
+						],
+						"description": "タグリンクの形式"
+					}
+				}
+			}
+		]
 	},
 	"main": "./dist/extension.bundle",
 	"extensionDependencies": [
