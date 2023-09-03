@@ -3,6 +3,43 @@ import path from "path";
 import vscode from "vscode";
 import Exporter from "./exporter";
 
+const previewStyles = [
+	["preset.preview.highlightPageMargin.lineColor", v => `--mpm-preview-page-margin-color: ${v};`],
+	["preset.preview.emulatePageLayout.fontColor", v => `--mpm-preview-font-color: ${v};`],
+	["preset.preview.emulatePageLayout.paperColor", v => `--mpm-preview-paper-color: ${v};`],
+	["preset.preview.emulatePageLayout.cutOffColor", v => `--mpm-preview-cut-off-color: ${v};`],
+	["preset.preview.emulateIn2Columns.margin", v => `--mpm-preview-page-margin: ${v}mm;`],
+];
+const previewStylesheets = [
+	["preset.preview.highlightPageMargin.enable", v => `styles/preview/highlight-page-margin.css`],
+	["preset.preview.emulatePageLayout.enable", v => `styles/preview/emulate-page-layout.css`],
+	["preset.preview.emulateIn2Columns.enable", v => `styles/preview/emulate-in-2-columns.css`],
+];
+const presetStyles = [
+];
+const presetStylesheets = [
+	["preset.pageLayout.base", v => `styles/page-layout/base.css`],
+	["preset.pageLayout.size", v => `styles/page-layout/size/${v}.css`],
+	["preset.pageLayout.marks", v => `styles/page-layout/marks/${v}.css`],
+	["preset.pageLayout.bleed", v => `styles/page-layout/bleed/${v}.css`],
+	["preset.pageLayout.margin", v => `styles/page-layout/margin/${v}.css`],
+	["preset.pageLayout.pageNumber", v => `styles/page-layout/page-number/${v}.css`],
+	["preset.pageLayout.hiddenPageNumber", v => `styles/page-layout/hidden-page-number/${v}.css`],
+	["preset.pageLayout.runningHeader", v => `styles/page-layout/running-header/${v}.css`],
+	["preset.contentLayout.pageBreakChapters", v => `styles/content-layout/page-break-chapters/${v}.css`],
+	["preset.contentLayout.pageBreakCaptions", v => `styles/content-layout/page-break-captions/${v}.css`],
+	["preset.contentLayout.widowsAndOrphans", v => `styles/content-layout/widows-and-orphans/${v}.css`],
+	["preset.contentLayout.titlePage", v => `styles/content-layout/title-page/${v}.css`],
+	["preset.contentLayout.colophonPage", v => `styles/content-layout/colophon-page/${v}.css`],
+	["preset.contentLayout.tocPages", v => `styles/content-layout/toc-pages/${v}.css`],
+	["preset.contentStyle.base", v => `styles/content-style/base.css`],
+	["preset.contentStyle.chapterBorder", v => `styles/content-style/chapter-border/${v}.css`],
+	["preset.contentStyle.chapterFontSize", v => `styles/content-style/chapter-font-size/${v}.css`],
+	["preset.contentStyle.numberingChapters", v => `styles/content-style/numbering-chapters/${v}.css`],
+	["preset.contentStyle.numberingCaptions", v => `styles/content-style/numbering-captions/${v}.css`],
+	["preset.contentStyle.tagLinks", v => `styles/content-style/tag-links/${v}.css`],
+];
+
 // FIXME
 // loading "previewer.js" from "markdown.previewScripts" causes csp violation,
 // markdown previewer restricts to "script-src 'nonce-xxxxxxxxxxxxxxxx'", previewer.bundle.js has "unsafe-eval".
@@ -21,7 +58,7 @@ function activate(context) {
 	const exporterBuilder = (title, exportFile) => () => {
 		const uri = vscode.window.activeTextEditor?.document?.uri?.with();
 		const bodyMd = vscode.window.activeTextEditor?.document?.getText();
-		const bodyHtml = _md.render(bodyMd);
+		let bodyHtml = _md.render(bodyMd, { addStylesArgs: [true, ""], });
 		if (!uri || !bodyMd || !bodyHtml || !hasTopPage(bodyMd)) {
 			vscode.window.showInformationMessage(`${title}: Active document has no \"@toppage\" header at beggining. Exporting skipped.`);
 			return undefined;
@@ -54,6 +91,41 @@ function activate(context) {
 		vscode.commands.registerCommand('pagedView.exportHtml', exporterBuilder("Export in HTML Format", exporter.exportHtml)),
 	);
 
+	const getStyleTag = (myConfig, applyPreviewStyles) => {
+		let styles = [];
+		if (applyPreviewStyles) {
+			styles.push(...previewStyles.map(v => v[1](myConfig.get(v[0]))));
+		}
+		styles.push(...presetStyles.map(v => v[1](myConfig.get(v[0]))));
+		return styles.length > 0 ? `<style>
+:root {
+${styles.join("\n")}
+}
+</style>
+` : "";
+	};
+
+	const getStyleLinks = (myConfig, applyPreviewStyles, stylesheetPrefix) => {
+		let stylesheets = [];
+		if (applyPreviewStyles) {
+			stylesheets.push(...previewStylesheets.filter(v => myConfig.get(v[0])).map(v => v[1](myConfig.get(v[0]))))
+		}
+		stylesheets.push(...presetStylesheets.filter(v => myConfig.get(v[0])).map(v => v[1](myConfig.get(v[0]))))
+		return stylesheets.map(stylesheet => `<link rel="stylesheet" type="text/css" href="${stylesheetPrefix}${path.resolve(context.extensionPath, stylesheet)}" />`).join("\n");
+	}
+
+	const addStyles = (bodyHtml, isExporting, stylesheetPrefix) => {
+		const uri = vscode.window.activeTextEditor?.document?.uri?.with();
+		const myConfig = vscode.workspace.getConfiguration("markdownPagedMedia", uri);
+		if (myConfig.get("ignorePresetStyles")) {
+			return bodyHtml;
+		}
+		const applyPreviewStyles = !isExporting || myConfig.get("applyPreviewStylesWhenExporting");
+		const styleTag = getStyleTag(myConfig, applyPreviewStyles);
+		const styleLinks = getStyleLinks(myConfig, applyPreviewStyles, stylesheetPrefix);
+		return styleTag + styleLinks + bodyHtml;
+	};
+
 	const recommendUserSettings = () => {
 		const bodyMd = vscode.window.activeTextEditor?.document?.getText();
 		const uri = vscode.window.activeTextEditor?.document?.uri?.with();
@@ -82,7 +154,10 @@ function activate(context) {
 			md.renderer.render = (tokens, options, env) => {
 				try {
 					recommendUserSettings();
-					return render.call(md.renderer, tokens, options, env);
+					let bodyHtml = render.call(md.renderer, tokens, options, env);
+					const addStylesArgs = env.addStylesArgs || [false, "https://file+.vscode-resource.vscode-cdn.net/"];
+					bodyHtml = addStyles(bodyHtml, ...addStylesArgs);
+					return bodyHtml;
 				} catch (err) {
 					const title = "Pagenate";
 					vscode.window.showErrorMessage(`${title}: ${err.message}`);
