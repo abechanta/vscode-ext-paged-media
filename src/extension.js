@@ -147,7 +147,12 @@ ${styles.join("\n")}
 			md.use(require("markdown-it-footnote-here"));
 			md.use(require("./markdown-it-toc"), { slugify: slugify, selection: [1, 2, 3], });
 			md.use(require("markdown-it-include"), { includeRe: includeRe, root: () => {
-				return path.dirname(vscode.window.activeTextEditor?.document?.fileName);
+				if (!vscode.workspace.workspaceFolders?.length) {
+					const title = "Pagenate";
+					vscode.window.showErrorMessage(`${title}: You have to open your workspace folder before you open a markdown document that contains the syntax of "markdown expanding".`);
+					throw new Error("Path resolve error");
+				}
+				return vscode.workspace.workspaceFolders[0].uri._fsPath;
 			}, });
 
 			const render = md.renderer.render;

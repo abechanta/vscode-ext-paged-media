@@ -467,7 +467,7 @@
 		"markdown-it-attrs": "^4.1.6",
 		"markdown-it-div": "^1.1.0",
 		"markdown-it-footnote-here": "^1.0.3",
-		"markdown-it-include": "git://github.com/abechanta/markdown-it-include.git#1.1.0-1",
+		"markdown-it-include": "github:abechanta/markdown-it-include#1.1.0-2",
 		"markdown-it-kbd": "^2.2.2",
 		"markdown-it-multimd-table": "^4.2.3",
 		"markdown-it-ruby": "^0.1.1",
