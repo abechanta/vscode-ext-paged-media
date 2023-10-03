@@ -245,7 +245,7 @@ class Printer extends EventEmitter {
 					await window.PagedConfig.before();
 				}
 
-				done = await window.PagedPolyfill.preview();
+				done = await window.PagedPolyfill.preview(window.PagedConfig.content, window.PagedConfig.stylesheets, window.PagedConfig.renderTo);
 
 				if (window.PagedConfig.after) {
 					await window.PagedConfig.after(done);
