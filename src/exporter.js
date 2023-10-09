@@ -24,7 +24,7 @@ class Exporter {
 		const markdownConfig = vscode.workspace.getConfiguration("markdown.preview", uri);
 		// this.vscodeVars += `--markdown-font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, &quot;Ubuntu&quot;, &quot;Droid Sans&quot;, sans-serif; --markdown-font-size: 14px; --markdown-line-height: 1.6;`;
 		this.vscodeVars += `--markdown-font-family: ${markdownConfig.get("fontFamily")}; --markdown-font-size: ${markdownConfig.get("fontSize")}px; --markdown-line-height: ${markdownConfig.get("lineHeight")};`;
-		this.vscodeVars += `--vscode-font-family: &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, sans-serif; --vscode-font-weight: normal; --vscode-font-size: 13px;`;
+		this.vscodeVars += `--vscode-font-family: &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, sans-serif; --vscode-font-weight: normal; --vscode-font-size: 13px; --vscode-widget-border: #303031;`;
 		const editorConfig = vscode.workspace.getConfiguration("editor", uri);
 		// this.vscodeVars += `--vscode-editor-font-family: &quot;MyricaM M&quot;, Consolas, &quot;Courier New&quot;, monospace; --vscode-editor-font-weight: normal; --vscode-editor-font-size: 18px;`;
 		this.vscodeVars += `--vscode-editor-font-family: ${editorConfig.get("fontFamily")}; --vscode-editor-font-weight: ${editorConfig.get("fontWeight")}; --vscode-editor-font-size: ${editorConfig.get("fontSize")}px;`;

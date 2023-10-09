@@ -1,12 +1,3 @@
-pre:has(code) {
-    padding: 0 !important;
-}
-pre:not([data-split-from]):has(code) {
-	/* break-before: avoid; */
-}
-pre:not([data-split-from]) > code {
-	/* break-after: avoid; */
-}
 p.list-caption {
 	break-after: avoid;
 }

@@ -17,9 +17,16 @@ pre:not([data-split-from]) > code::before {
 	content: open-quote counter(listIndex) close-quote attr(data-caption);
 	quotes: var(--quote-open-list-caption) var(--quote-close-list-caption);
 	display: block;
-	margin-top: -2em;
-	margin-bottom: 1.5em;
+	width: max-content;
+	position: relative;
+	top: -1.5em;
+	left: 0em;
 	font-weight: bold;
+}
+pre:not([data-split-from]) > code {
+	position: relative;
+	top: -0.5em;
+	left: 0em;
 }
 p.figure-caption {
 	text-align: center;
