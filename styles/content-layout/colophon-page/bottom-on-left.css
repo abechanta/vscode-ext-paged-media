@@ -1,14 +1,10 @@
-.markdown-body:has(.colophon) {
-	height: 100%;
-}
 .colophon {
-	/* page: blank-layout; */
+	page: blank-layout;
 	break-before: left;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 	align-items: flex-start;
-	width: 100%;
 	height: 100%;
 }
 .colophon > hr {

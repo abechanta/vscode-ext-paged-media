@@ -1,20 +1,26 @@
 @page blank-layout {
 	@top-left {
 		content: none;
+		border: none;
 	}
 	@top-center {
 		content: none;
+		border: none;
 	}
 	@top-right {
 		content: none;
+		border: none;
 	}
 	@bottom-left-corner {
 		content: none;
+		border: none;
 	}
 	@bottom-center {
 		content: none;
+		border: none;
 	}
 	@bottom-right-corner {
 		content: none;
+		border: none;
 	}
 }

@@ -42,6 +42,18 @@ function moveStyles(container) {
 	});
 }
 
+function trimHeadingElements(container) {
+	while (!container.firstElementChild.innerText) {
+		container.removeChild(container.firstElementChild);
+	}
+}
+
+function trimTrailingElements(container) {
+	while (!container.lastElementChild.innerText) {
+		container.removeChild(container.lastElementChild);
+	}
+}
+
 function setup() {
 	const container = document.querySelector(".markdown-body");
 	if (window.PagedConfig.content) {
@@ -50,6 +62,8 @@ function setup() {
 	}
 	// assign once.
 	moveStyles(container);
+	trimHeadingElements(container);
+	trimTrailingElements(container);
 	window.PagedConfig.content = container.innerHTML;
 	window.PagedConfig.renderTo = container.parentElement;
 	container.remove();

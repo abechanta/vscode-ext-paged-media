@@ -1,8 +1,5 @@
-.markdown-body:has(.titlepage) {
-	height: 100%;
-}
 .titlepage {
-	/* page: blank-layout; */
+	page: blank-layout;
 	break-after: page;
 	display: flex;
 	flex-direction: column;
