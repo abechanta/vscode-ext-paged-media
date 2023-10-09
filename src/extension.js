@@ -159,7 +159,19 @@ ${styles.join("\n")}
 			md.renderer.render = (tokens, options, env) => {
 				try {
 					recommendUserSettings();
+
+					// customize slugifier, here.
+					const heading_open = md.renderer.rules.heading_open;
+					md.renderer.rules.heading_open = (tokens, n, options, env, renderer) => {
+						const id = tokens[n].attrGet("id");
+						const elm = heading_open.call(md.renderer.rules, tokens, n, options, env, renderer);
+						return elm.replace(/ id=\"[^\"]+\"/, ` id="${id}"`);
+					};
 					let bodyHtml = render.call(md.renderer, tokens, options, env);
+
+					// and restore it, here.
+					md.renderer.rules.heading_open = heading_open;
+
 					const addStylesArgs = env.addStylesArgs || [false, "https://file+.vscode-resource.vscode-cdn.net/"];
 					bodyHtml = addStyles(bodyHtml, ...addStylesArgs);
 					return bodyHtml;
