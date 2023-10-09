@@ -49,7 +49,7 @@ const presetStylesheets = [
 function activate(context) {
 	const includeRe = /^!\[\s*rel=content\s*\]\(\s*([^\s)]+)\s*[^\s)]*\s*\)$/im;
 	const slugify = str => encodeURIComponent(String(str || "__blank__").trim().toLowerCase().replace(/\s|[\]\[\!\"\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\\\^\_\{\|\}\~]/g, '-').replace(/-$/, ''));
-	const hasTopPage = bodyMd => bodyMd?.split("\n")[0]?.includes("@toppage");
+	// const hasTopPage = bodyMd => bodyMd?.split("\n")[0]?.includes("@toppage");
 	const hasInclude = bodyMd => bodyMd?.match(includeRe);
 	const exporter = new Exporter(context);
 	let _md = null;
@@ -59,8 +59,8 @@ function activate(context) {
 		const uri = vscode.window.activeTextEditor?.document?.uri?.with();
 		const bodyMd = vscode.window.activeTextEditor?.document?.getText();
 		let bodyHtml = _md.render(bodyMd, { addStylesArgs: [true, ""], });
-		if (!uri || !bodyMd || !bodyHtml || !hasTopPage(bodyMd)) {
-			vscode.window.showInformationMessage(`${title}: Active document has no \"@toppage\" header at beggining. Exporting skipped.`);
+		if (!uri || !bodyMd || !bodyHtml /*|| !hasTopPage(bodyMd)*/) {
+			vscode.window.showInformationMessage(`${title}: Active document has no valid content. Exporting skipped.`);
 			return undefined;
 		}
 
@@ -131,7 +131,7 @@ ${styles.join("\n")}
 		const uri = vscode.window.activeTextEditor?.document?.uri?.with();
 		const markdownConfig = vscode.workspace.getConfiguration("markdown", uri);
 		const scrollEditorWithPreview = !!markdownConfig.get("preview.scrollEditorWithPreview");
-		if (!_didRecommend && hasTopPage(bodyMd) && hasInclude(bodyMd) && scrollEditorWithPreview) {
+		if (!_didRecommend /*&& hasTopPage(bodyMd)*/ && hasInclude(bodyMd) && scrollEditorWithPreview) {
 			_didRecommend = true;
 			vscode.window.showInformationMessage("Recommended: When using W3C Paged Media Viewer, set \"markdown.preview.scrollEditorWithPreview\" to \"Off\". This will surpress unexpected scrolling of editor while editing.");
 		}
