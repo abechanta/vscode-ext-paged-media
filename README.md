@@ -1,4 +1,4 @@
-# W3C Paged Media Viewer
+# Markdown Paged Media
 
 This is a vscode extension for writing printing books using markdown and css paged media.
 
