@@ -4,6 +4,7 @@ import vscode from "vscode";
 import parser from "node-html-parser";
 // import Printer from "pagedjs-cli";	// this line causes activation error concerning to "fileURLToPath" imported from this line.
 import Printer from "./printer";		// so we fork it here.
+import { downloadBrowser, } from "../node_modules/puppeteer/lib/cjs/puppeteer/node/install";
 
 class Exporter {
 	constructor(context) {
@@ -19,7 +20,7 @@ class Exporter {
 		);
 	}
 
-	_prepareHtml(uri, bodyHtml, uriContent) {
+	async _prepareHtml(uri, bodyHtml, uriContent) {
 		this.vscodeVars = "padding: 0; margin: 0;";
 		const markdownConfig = vscode.workspace.getConfiguration("markdown.preview", uri);
 		// this.vscodeVars += `--markdown-font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, &quot;Ubuntu&quot;, &quot;Droid Sans&quot;, sans-serif; --markdown-font-size: 14px; --markdown-line-height: 1.6;`;
@@ -47,7 +48,14 @@ ${bodyHtml}
 			.then(() => uriContent);
 	}
 
-	_exportFile(uriSrc, uriDst, options, exporter) {
+	async _prepareBrowser(options) {
+		const reporter = options.reporter;
+		reporter.report({ increment: 1, message: `Loading browser...`, });
+		// process.env['PUPPETEER_EXECUTABLE_PATH'] = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+		return downloadBrowser();
+	}
+
+	async _exportFile(uriSrc, uriDst, options, exporter) {
 		const reporter = options.reporter;
 		const headless = true;
 		const allowLocal = true;
@@ -84,11 +92,14 @@ ${bodyHtml}
 		});
 	}
 
-	exportHtml(uri, bodyHtml, options) {
+	async exportHtml(uri, bodyHtml, options) {
 		options.styles = this._getStyles(uri);
 		const uriSrcHtml = uri.with({ path: uri.path + ".1.html", });
 		const uriDstHtml = uri.with({ path: uri.path + ".2.html", });
-		return this._prepareHtml(uri, bodyHtml, uriSrcHtml)
+		return this._prepareBrowser(options)
+			.then(() => {
+				return this._prepareHtml(uri, bodyHtml, uriSrcHtml)
+			})
 			.then(uriSrcHtml_ => {
 				return this._exportFile(uriSrcHtml, uriDstHtml, options, (srcPath, printer, printerOption) => {
 					return printer.html(srcPath, printerOption)
@@ -101,11 +112,14 @@ ${bodyHtml}
 			});
 	}
 
-	exportPdf(uri, bodyHtml, options) {
+	async exportPdf(uri, bodyHtml, options) {
 		options.styles = this._getStyles(uri);
 		const uriSrcHtml = uri.with({ path: uri.path + ".1.html", });
 		const uriPdf = uri.with({ path: uri.path + ".pdf", });
-		return this._prepareHtml(uri, bodyHtml, uriSrcHtml)
+		return this._prepareBrowser(options)
+			.then(() => {
+				return this._prepareHtml(uri, bodyHtml, uriSrcHtml);
+			})
 			.then(uriSrcHtml_ => {
 				return this._exportFile(uriSrcHtml, uriPdf, options, (srcPath, printer, printerOption) => {
 					return printer.pdf(srcPath, printerOption);
