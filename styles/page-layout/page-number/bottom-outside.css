@@ -1,0 +1,20 @@
+@page:left {
+	@bottom-left-corner:not(.pagedjs_blank_page) {
+		content: counter(page);
+		margin: 0 0 3mm 0;
+		padding: 2mm;
+		box-shadow: none !important;
+		border-width: 1px;
+		border-style: none solid none none;
+	}
+}
+@page:right {
+	@bottom-right-corner:not(.pagedjs_blank_page) {
+		content: counter(page);
+		margin: 0 0 3mm 0;
+		padding: 2mm;
+		box-shadow: none !important;
+		border-width: 1px;
+		border-style: none none none solid;
+	}
+}

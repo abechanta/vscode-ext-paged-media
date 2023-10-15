@@ -1,0 +1,57 @@
+:root {
+	--quote-open-list-caption: "▼リスト ";
+	--quote-close-list-caption: ". ";
+	--quote-open-figure-caption: "▲図 ";
+	--quote-close-figure-caption: ". ";
+	--quote-open-table-caption: "▼表 ";
+	--quote-close-table-caption: ". ";
+}
+pre:not([data-split-from]) {
+	counter-increment: listIndex;
+	margin-top: 3em;
+	padding-top: 0em;
+	overflow: visible;
+	pointer-events: none;
+}
+pre:not([data-split-from]) > code::before {
+	content: open-quote counter(listIndex) close-quote attr(data-caption);
+	quotes: var(--quote-open-list-caption) var(--quote-close-list-caption);
+	display: block;
+	width: max-content;
+	position: relative;
+	top: -1.5em;
+	left: 0em;
+	font-weight: bold;
+}
+pre:not([data-split-from]) > code {
+	position: relative;
+	top: -0.5em;
+	left: 0em;
+}
+p.figure-caption {
+	text-align: center;
+	counter-increment: figureIndex;
+	pointer-events: none;
+}
+p.figure-caption::before {
+	content: open-quote counter(figureIndex) close-quote;
+	quotes: var(--quote-open-figure-caption) var(--quote-close-figure-caption);
+	font-weight: bold;
+}
+p.figure-caption::after {
+	content: string(figureText);
+}
+img {
+	string-set: figureText attr(alt);
+}
+table > caption {
+	caption-side: top !important;
+	text-align: center;
+	counter-increment: tableIndex;
+	pointer-events: none;
+}
+table > caption::before {
+	content: open-quote counter(tableIndex) close-quote;
+	quotes: var(--quote-open-table-caption) var(--quote-close-table-caption);
+	font-weight: bold;
+}

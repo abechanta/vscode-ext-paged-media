@@ -1,0 +1,20 @@
+:root {
+	--quote-open-chapter1: "第 ";
+	--quote-close-chapter1: " 章 ";
+	--quote-open-chapter2: "";
+	--quote-close-chapter2: ". ";
+	--quote-open-chapter3: "";
+	--quote-close-chapter3: ". ";
+}
+h1:not(.unnumbered):before {
+	content: open-quote attr(data-chapter-number) close-quote;
+	quotes: var(--quote-open-chapter1) var(--quote-close-chapter1);
+}
+h2:not(.unnumbered):before {
+	content: open-quote attr(data-chapter-number) close-quote;
+	quotes: var(--quote-open-chapter2) var(--quote-close-chapter2);
+}
+h3:not(.unnumbered):before {
+	content: open-quote attr(data-chapter-number) close-quote;
+	quotes: var(--quote-open-chapter3) var(--quote-close-chapter3);
+}

@@ -24,11 +24,10 @@ class Exporter {
 		const markdownConfig = vscode.workspace.getConfiguration("markdown.preview", uri);
 		// this.vscodeVars += `--markdown-font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, system-ui, &quot;Ubuntu&quot;, &quot;Droid Sans&quot;, sans-serif; --markdown-font-size: 14px; --markdown-line-height: 1.6;`;
 		this.vscodeVars += `--markdown-font-family: ${markdownConfig.get("fontFamily")}; --markdown-font-size: ${markdownConfig.get("fontSize")}px; --markdown-line-height: ${markdownConfig.get("lineHeight")};`;
-		this.vscodeVars += `--vscode-font-family: &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, sans-serif; --vscode-font-weight: normal; --vscode-font-size: 13px;`;
+		this.vscodeVars += `--vscode-font-family: &quot;Segoe WPC&quot;, &quot;Segoe UI&quot;, sans-serif; --vscode-font-weight: normal; --vscode-font-size: 13px; --vscode-widget-border: #303031;`;
 		const editorConfig = vscode.workspace.getConfiguration("editor", uri);
 		// this.vscodeVars += `--vscode-editor-font-family: &quot;MyricaM M&quot;, Consolas, &quot;Courier New&quot;, monospace; --vscode-editor-font-weight: normal; --vscode-editor-font-size: 18px;`;
 		this.vscodeVars += `--vscode-editor-font-family: ${editorConfig.get("fontFamily")}; --vscode-editor-font-weight: ${editorConfig.get("fontWeight")}; --vscode-editor-font-size: ${editorConfig.get("fontSize")}px;`;
-		const previewScript = path.join(this.context.extensionPath, "dist", "previewer.bundle.js");
 		const contentHtml = `
 <!DOCTYPE html>
 <html style="${this.vscodeVars}">
@@ -36,9 +35,8 @@ class Exporter {
 		<meta http-equiv="content-type" content="text/html;charset=utf-8">
 		<meta http-equiv="Content-Security-Policy" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<script type="text/javascript" src="${previewScript}"></script>
 	</head>
-	<body class="vscode-body" style="padding: 0; margin: 0; /*overflow: hidden;*/ /*width: 100%;*/ /*height: 100%;*/ overscroll-behavior-x: none;">
+	<body class="vscode-body wordWrap" style="padding: 0; margin: 0; /*overflow: hidden;*/ /*width: 100%;*/ /*height: 100%;*/ overscroll-behavior-x: none;">
 		<div class="markdown-body">
 ${bodyHtml}
 		</div>
@@ -54,7 +52,7 @@ ${bodyHtml}
 		const headless = true;
 		const allowLocal = true;
 		const additionalScripts = [
-			// path.join(this.context.extensionPath, "dist", "previewer.bundle.js"),	// skip here. it's embedded at _prepareHtml() in advance.
+			path.join(this.context.extensionPath, "dist", "previewer.bundle.js"),
 			path.join(this.context.extensionPath, "dist", "browser.js"),
 		];
 		const printer = new Printer({ headless, allowLocal, additionalScripts, "styles": options.styles, });
@@ -80,8 +78,6 @@ ${bodyHtml}
 			exporter(uriSrc.fsPath, printer, { "outlineTags": options.outlineTags, })
 				.then(content => {
 					return vscode.workspace.fs.writeFile(uriDst, content);
-				}).then(() => {
-					return printer.close();
 				}).then(() => uriDst),
 		]).catch(err => {
 			throw err;

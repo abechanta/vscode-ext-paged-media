@@ -1,0 +1,15 @@
+.titlepage {
+	page: blank-layout;
+	break-after: page;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+	height: 100%;
+}
+.titlepage > * {
+	font-size: 1.66em;
+}
+.titlepage > :nth-child(1) {
+	font-size: 3.0em;
+}

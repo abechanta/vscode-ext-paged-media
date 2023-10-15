@@ -1,0 +1,9 @@
+.pagedjs_page {
+	box-shadow: 0 .5mm 2mm #000;
+}
+[class*="pagedjs_margin-top"],
+[class*="pagedjs_margin-left"],
+[class*="pagedjs_margin-right"],
+[class*="pagedjs_margin-bottom"] {
+	box-shadow: 0 0 0 1px inset var(--mpm-preview-page-margin-color, #0ff);
+}

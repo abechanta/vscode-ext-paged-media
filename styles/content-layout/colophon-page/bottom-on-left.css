@@ -1,0 +1,19 @@
+.colophon {
+	page: blank-layout;
+	break-before: left;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-start;
+	height: 100%;
+}
+.colophon > hr {
+	width: 100%;
+}
+.colophon > * {
+	line-height: 1em;
+}
+.colophon > :nth-child(1) {
+	font-size: 1.33em;
+	font-weight: bold;
+}

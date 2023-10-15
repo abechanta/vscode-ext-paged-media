@@ -1,0 +1,9 @@
+p.list-caption {
+	break-after: avoid;
+}
+p.figure-caption {
+	break-before: avoid;
+}
+table > tbody {
+	break-before: avoid;
+}

@@ -1,0 +1,12 @@
+:root {
+	--mpm-viewer-width: calc(2 * (var(--pagedjs-width) + 2 * var(--mpm-preview-page-margin, 5mm)));
+}
+.pagedjs_pages {
+	display: flex;
+	width: var(--mpm-viewer-width);
+	flex: 0;
+	flex-wrap: wrap;
+}
+.pagedjs_page.pagedjs_first_page {
+	margin-left: calc(var(--mpm-viewer-width) - var(--pagedjs-width) - var(--mpm-preview-page-margin, 5mm));
+}

@@ -1,0 +1,23 @@
+@page:left {
+	@top-left {
+		content: string(chapterText);
+		margin: 3mm 0 1mm 0;
+		padding: 2mm;
+		box-shadow: none !important;
+		border-bottom: solid 1px;
+	}
+}
+@page:right {
+	@top-right {
+		content: string(chapterText);
+		margin: 3mm 0 1mm 0;
+		padding: 2mm;
+		box-shadow: none !important;
+		border-bottom: solid 1px;
+	}
+}
+h1:not(.unnumbered) {
+	string-set: chapterText content(text);
+	font-size: 20px;
+	margin-bottom: 0;
+}

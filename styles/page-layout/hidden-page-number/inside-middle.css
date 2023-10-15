@@ -1,0 +1,16 @@
+@page:left {
+	@right-middle {
+		content: counter(page);
+		margin: 2mm;
+		text-align: right;
+		box-shadow: none !important;
+	}
+}
+@page:right {
+	@left-middle {
+		content: counter(page);
+		margin: 2mm;
+		text-align: left;
+		box-shadow: none !important;
+	}
+}
