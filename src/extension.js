@@ -87,8 +87,8 @@ function activate(context) {
 	}
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('pagedView.exportPdf', exporterBuilder("Export in PDF Format", exporter.exportPdf)),
-		vscode.commands.registerCommand('pagedView.exportHtml', exporterBuilder("Export in HTML Format", exporter.exportHtml)),
+		vscode.commands.registerCommand('pagedMedia.exportPdf', exporterBuilder("Export in PDF Format", exporter.exportPdf)),
+		vscode.commands.registerCommand('pagedMedia.exportHtml', exporterBuilder("Export in HTML Format", exporter.exportHtml)),
 	);
 
 	const getStyleTag = (myConfig, applyPreviewStyles) => {

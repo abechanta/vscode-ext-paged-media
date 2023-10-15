@@ -2,7 +2,7 @@
 // fork from pagedjs-cli/src/printer.js @0.4.3
 //
 import EventEmitter from "events";
-import puppeteer from "puppeteer";
+// import puppeteer from "puppeteer";
 
 import path from "path";
 import fs from "fs";
@@ -48,6 +48,8 @@ class Printer extends EventEmitter {
 	}
 
 	async setup() {
+		const puppeteer = require("puppeteer");
+		
 		let puppeteerOptions = {
 			headless: this.headless,
 			args: ["--disable-dev-shm-usage", "--export-tagged-pdf"],

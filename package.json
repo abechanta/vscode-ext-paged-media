@@ -1,8 +1,8 @@
 {
 	"name": "vscode-ext-paged-media",
-	"displayName": "W3C Paged Media Viewer",
+	"displayName": "Markdown Paged Media",
 	"description": "This is a vscode extension for writing printing books using markdown and css paged media.",
-	"version": "0.3.0",
+	"version": "0.4.1",
 	"preview": true,
 	"publisher": "abechanta",
 	"repository": {
@@ -28,26 +28,26 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "pagedView.exportPdf",
+				"command": "pagedMedia.exportPdf",
 				"title": "Export in PDF Format",
-				"category": "Paged View"
+				"category": "Paged Media"
 			},
 			{
-				"command": "pagedView.exportHtml",
+				"command": "pagedMedia.exportHtml",
 				"title": "Export in HTML Format (Debug)",
-				"category": "Paged View"
+				"category": "Paged Media"
 			}
 		],
 		"menus": {
 			"editor/title": [
 				{
 					"when": "resourceLangId == markdown",
-					"command": "pagedView.exportPdf",
+					"command": "pagedMedia.exportPdf",
 					"group": "z_commands"
 				},
 				{
 					"when": "resourceLangId == markdown",
-					"command": "pagedView.exportHtml",
+					"command": "pagedMedia.exportHtml",
 					"group": "z_commands"
 				}
 			]
