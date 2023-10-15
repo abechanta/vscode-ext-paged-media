@@ -1,4 +1,5 @@
 .vscode
 examples
+node_modules
 src
 .gitignore
