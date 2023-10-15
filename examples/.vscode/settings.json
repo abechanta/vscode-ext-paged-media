@@ -1,5 +1,6 @@
 {
     "markdown.styles": [
     ],
-    "markdown.preview.scrollEditorWithPreview": false
+    "markdown.preview.scrollEditorWithPreview": false,
+    "markdownPagedMedia.preset.preview.highlightPageMargin.enable": true
 }
