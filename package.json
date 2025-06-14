@@ -460,7 +460,7 @@
 	],
 	"devDependencies": {
 		"@types/vscode": "^1.80.0",
-		"esbuild": "^0.18.20"
+		"esbuild": "^0.25.0"
 	},
 	"dependencies": {
 		"markdown-it-anchor": "^8.6.7",
