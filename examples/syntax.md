@@ -111,44 +111,19 @@
 - サンプル出力
 
 	<pre>
-	&lt;p&gt;Here is a footnote reference,&lt;sup class="footnote-ref"&gt;&lt;a href="#fn1"
-	id="fnref1"&gt;[1]&lt;/a&gt;&lt;/sup&gt; and another.&lt;sup class="footnote-ref"&gt;&lt;a href="#fn2" id="fnref2"&gt;[2]&lt;/a&gt;&lt;/sup>&lt;/p&gt;
+	&lt;p&gt;Here is a footnote reference,&lt;sup class="footnote-ref"&gt;&lt;a href="#fn1" id="fnref1"&gt;[1]&lt;/a&gt;&lt;/sup&gt; and another.&lt;sup class="footnote-ref"&gt;&lt;a href="#fn2" id="fnref2"&gt;[2]&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+	&lt;section class="footnotes"&gt;
+	&lt;ol class="footnotes-list"&gt;
+	&lt;li value="1" id="fn1" class="footnote-item"&gt;&lt;p&gt;Here is the footnote.&lt;/p&gt;
+	&lt;/li&gt;
+	&lt;li value="2" id="fn2" class="footnote-item"&gt;&lt;p&gt;Here's one with multiple blocks.&lt;/p&gt;
+	&lt;p&gt;Subsequent paragraphs are indented to show that they
+	belong to the previous footnote.&lt;/p&gt;
+	&lt;/li&gt;
+	&lt;/ol&gt;
+	&lt;/section&gt;
 	&lt;p&gt;This paragraph won’t be part of the note, because it
 	isn’t indented.&lt;/p&gt;
-	&lt;div class="footnotes"&gt;
-	&lt;hr class="footnotes-sep"&gt;
-	&lt;ol class="footnotes-list"&gt;
-	&lt;li id="fn1"  class="footnote-item"&gt;&lt;p&gt;Here is the footnote. &lt;a href="#fnref1" class="footnote-backref"&gt;↩&lt;/a&gt;&lt;/p&gt;
-	&lt;/li&gt;
-	&lt;li id="fn2"  class="footnote-item"&gt;&lt;p&gt;Here’s one with multiple blocks.&lt;/p&gt;
-	&lt;p&gt;Subsequent paragraphs are indented to show that they
-	belong to the previous footnote. &lt;a href="#fnref2" class="footnote-backref"&gt;↩&lt;/a&gt;&lt;/p&gt;
-	&lt;/li&gt;
-	&lt;/ol&gt;
-	&lt;/div&gt;
-</pre>
-
-- サンプル入力: 脚注マーカーと注記をまとめて追加
-
-	<pre>
-	Here is an inline note.^[Inlines notes are easier to write, since
-	you don't have to pick an identifier and move down to type the
-	note.]
-</pre>
-
-- サンプル出力
-
-	<pre>
-	&lt;p&gt;Here is an inline note.&lt;sup class="footnote-ref"&gt;&lt;a href="#fn1" id="fnref1"&gt;[1]&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-	&lt;div class="footnotes"&gt;
-	&lt;hr class="footnotes-sep"&gt;
-	&lt;ol class="footnotes-list"&gt;
-	&lt;li id="fn1"  class="footnote-item"&gt;&lt;p&gt;Inlines notes are easier to write, since
-	you don’t have to pick an identifier and move down to type the
-	note. &lt;a href="#fnref1" class="footnote-backref"&gt;↩&lt;/a&gt;&lt;/p&gt;
-	&lt;/li&gt;
-	&lt;/ol&gt;
-	&lt;/div&gt;
 </pre>
 
 ## ハイパーリンク
