@@ -270,6 +270,20 @@
 						],
 						"description": "各ページのヘッダー（柱）"
 					},
+					"markdownPagedMedia.preset.pageLayout.footnote": {
+						"order": 280,
+						"type": "string",
+						"default": "normal",
+						"enum": [
+							"",
+							"normal"
+						],
+						"enumDescriptions": [
+							"注釈を指定しません。",
+							"注釈をページの脚注とします。"
+						],
+						"description": "各ページの注釈"
+					},
 					"markdownPagedMedia.preset.contentLayout.pageBreakChapters": {
 						"order": 300,
 						"type": "string",

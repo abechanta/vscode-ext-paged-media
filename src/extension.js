@@ -26,6 +26,7 @@ const presetStylesheets = [
 	["preset.pageLayout.pageNumber", v => `styles/page-layout/page-number/${v}.css`],
 	["preset.pageLayout.hiddenPageNumber", v => `styles/page-layout/hidden-page-number/${v}.css`],
 	["preset.pageLayout.runningHeader", v => `styles/page-layout/running-header/${v}.css`],
+	["preset.pageLayout.footnote", v => `styles/page-layout/footnote/${v}.css`],
 	["preset.contentLayout.pageBreakChapters", v => `styles/content-layout/page-break-chapters/${v}.css`],
 	["preset.contentLayout.pageBreakCaptions", v => `styles/content-layout/page-break-captions/${v}.css`],
 	["preset.contentLayout.widowsAndOrphans", v => `styles/content-layout/widows-and-orphans/${v}.css`],
