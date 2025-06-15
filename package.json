@@ -225,7 +225,7 @@
 					"markdownPagedMedia.preset.pageLayout.pageNumber": {
 						"order": 250,
 						"type": "string",
-						"default": "",
+						"default": "bottom-center",
 						"enum": [
 							"",
 							"bottom-center",
