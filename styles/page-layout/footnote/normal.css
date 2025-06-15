@@ -1,0 +1,20 @@
+.pagedjs_footnote_content:not(.pagedjs_footnote_empty) {
+	font-size: small;
+	border-top: 1px solid black;
+}
+.pagedjs_footnote_area .footnote-item > p {
+	display: inline;
+}
+.footnote-item {
+	float: footnote;
+	footnote-display: block;
+}
+.footnote-ref {
+    font-size: 80%;
+}
+.footnote-ref a::after {
+	content: none;
+}
+.footnotes {
+	display: none;
+}
