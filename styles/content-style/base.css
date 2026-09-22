@@ -16,3 +16,6 @@ h1:not(.unnumbered) {
 .pagedjs_page_content pre > code {
 	white-space: pre-wrap;
 }
+.katex-html[aria-hidden="true"] {
+	display: none;
+}

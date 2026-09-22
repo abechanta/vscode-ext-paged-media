@@ -368,11 +368,15 @@
 						"default": "",
 						"enum": [
 							"",
-							"dotted-with-2-levels"
+							"dotted-with-1-levels",
+							"dotted-with-2-levels",
+							"dotted-with-3-levels"
 						],
 						"enumDescriptions": [
 							"目次のフォーマットを細かく指定しません。",
-							"見出しレベル 2 までを目次に載せ、見出しとページ番号をドット線でを対応させます。"
+							"見出しレベル 1 のみを目次に載せ、見出しとページ番号をドット線で対応させます。",
+							"見出しレベル 2 までを目次に載せ、見出しとページ番号をドット線で対応させます。",
+							"見出しレベル 3 までを目次に載せ、見出しとページ番号をドット線で対応させます。"
 						],
 						"description": "目次のフォーマット"
 					},
@@ -450,8 +454,22 @@
 						],
 						"description": "キャプションの番号"
 					},
-					"markdownPagedMedia.preset.contentStyle.tagLinks": {
+					"markdownPagedMedia.preset.contentStyle.paragraphIndent": {
 						"order": 450,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"indent-enable"
+						],
+						"enumDescriptions": [
+							"段落の字下げを行いません。",
+							"段落の字下げを有効にします。"
+						],
+						"description": "段落の字下げ"
+					},
+					"markdownPagedMedia.preset.contentStyle.tagLinks": {
+						"order": 460,
 						"type": "string",
 						"default": "",
 						"enum": [

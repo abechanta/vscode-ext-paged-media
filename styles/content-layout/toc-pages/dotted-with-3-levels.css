@@ -17,7 +17,7 @@ nav.table-of-contents > ol ol {
 	margin-left: -2rem;
 }
 nav.table-of-contents > ol ol ol {
-	display: none;
+	font-size: 1rem;
 }
 nav.table-of-contents > ol a {
 	display: flex;
@@ -36,4 +36,8 @@ nav.table-of-contents > ol a::after {
 	align-self: flex-end;
 	flex: 0;
 	order: 2;
+}
+nav.table-of-contents > ol ol ol a::before,
+nav.table-of-contents > ol ol ol a::after {
+	display: none;
 }

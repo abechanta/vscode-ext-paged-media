@@ -1,0 +1,10 @@
+.pagedjs_page_content p.code-line {
+	text-indent: 1rem;
+}
+.titlepage p.code-line,
+.colophon p.code-line {
+	text-indent: 0rem;
+}
+p.code-line > img {
+	margin-left: -1rem;
+}
