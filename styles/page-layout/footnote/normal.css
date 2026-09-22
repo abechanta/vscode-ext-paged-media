@@ -8,6 +8,8 @@
 .footnote-item {
 	float: footnote;
 	footnote-display: block;
+	font-size: x-small;
+	line-height: 1.2rem;
 }
 .footnote-ref {
     font-size: 80%;
