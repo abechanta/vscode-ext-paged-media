@@ -5,18 +5,7 @@ nav.table-of-contents > ol {
 nav.table-of-contents > ol > li::marker {
 	content: var(--quote-open-chapter1) counter(list-item) var(--quote-close-chapter1);
 }
-/* nav.table-of-contents > ol > li:has(ol[data-split-from])::marker {
-	content: "";
-} */
-nav.table-of-contents > ol > li {
-	break-inside: avoid;
-}
 nav.table-of-contents > ol ol {
-	font-size: 1.2rem;
-	margin-right: 0.7rem;
-	margin-left: -2rem;
-}
-nav.table-of-contents > ol ol ol {
 	display: none;
 }
 nav.table-of-contents > ol a {
