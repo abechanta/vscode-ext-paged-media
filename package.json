@@ -454,8 +454,22 @@
 						],
 						"description": "キャプションの番号"
 					},
-					"markdownPagedMedia.preset.contentStyle.tagLinks": {
+					"markdownPagedMedia.preset.contentStyle.paragraphIndent": {
 						"order": 450,
+						"type": "string",
+						"default": "",
+						"enum": [
+							"",
+							"indent-enable"
+						],
+						"enumDescriptions": [
+							"段落の字下げを行いません。",
+							"段落の字下げを有効にします。"
+						],
+						"description": "段落の字下げ"
+					},
+					"markdownPagedMedia.preset.contentStyle.tagLinks": {
+						"order": 460,
 						"type": "string",
 						"default": "",
 						"enum": [

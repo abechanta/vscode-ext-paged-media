@@ -38,6 +38,7 @@ const presetStylesheets = [
 	["preset.contentStyle.chapterFontSize", v => `styles/content-style/chapter-font-size/${v}.css`],
 	["preset.contentStyle.numberingChapters", v => `styles/content-style/numbering-chapters/${v}.css`],
 	["preset.contentStyle.numberingCaptions", v => `styles/content-style/numbering-captions/${v}.css`],
+	["preset.contentStyle.paragraphIndent", v => `styles/content-style/paragraph-indent/${v}.css`],
 	["preset.contentStyle.tagLinks", v => `styles/content-style/tag-links/${v}.css`],
 ];
 
