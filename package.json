@@ -2,7 +2,7 @@
 	"name": "vscode-ext-paged-media",
 	"displayName": "Markdown Paged Media",
 	"description": "This is a vscode extension for writing printing books using markdown and css paged media.",
-	"version": "0.4.2",
+	"version": "0.4.4",
 	"preview": true,
 	"publisher": "abechanta",
 	"repository": {
@@ -12,7 +12,7 @@
 	"icon": "icon.png",
 	"license": "MIT",
 	"engines": {
-		"vscode": "^1.80.0"
+		"vscode": "^1.138.0"
 	},
 	"categories": [
 		"Other"
@@ -491,12 +491,12 @@
 		"vscode.markdown-language-features"
 	],
 	"devDependencies": {
-		"@types/vscode": "^1.80.0",
-		"esbuild": "^0.25.0"
+		"@types/vscode": "^1.138.0",
+		"esbuild": "^0.25.12"
 	},
 	"dependencies": {
 		"markdown-it-anchor": "^8.6.7",
-		"markdown-it-attrs": "^4.1.6",
+		"markdown-it-attrs": "^4.5.0",
 		"markdown-it-div": "^1.1.0",
 		"markdown-it-footnote-here": "^1.0.3",
 		"markdown-it-include": "github:abechanta/markdown-it-include#1.1.0-2",
@@ -504,15 +504,16 @@
 		"markdown-it-multimd-table": "^4.2.3",
 		"markdown-it-ruby": "^0.1.1",
 		"markdown-it-toc-done-right": "^4.2.0",
-		"node-html-parser": "^6.1.6",
+		"node-html-parser": "^6.1.13",
 		"pagedjs": "^0.4.3",
 		"pagedjs-cli": "^0.4.3"
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run esbuild-base -- --minify",
-		"esbuild-base": "esbuild ./src/extension.js ./src/previewer.js --bundle --outdir=dist --entry-names=[dir]/[name].bundle --external:vscode --format=cjs --platform=node",
-		"esbuild": "npm run esbuild-base -- --sourcemap",
-		"esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+		"vscode:prepublish": "npm run esbuild-minify",
+		"esbuild": "npm run esbuild-base",
+		"esbuild-base": "esbuild ./src/extension.js ./src/previewer.js --bundle --outdir=dist --entry-names=[dir]/[name].bundle --external:vscode --format=cjs --platform=node --sourcemap",
+		"esbuild-minify": "esbuild ./src/extension.js ./src/previewer.js --bundle --outdir=dist --entry-names=[dir]/[name].bundle --external:vscode --format=cjs --platform=node --minify",
+		"esbuild-watch": "npm run esbuild-base -- --watch",
 		"prepack": "copy .\\node_modules\\pagedjs-cli\\dist\\browser.js .\\dist"
 	}
 }
