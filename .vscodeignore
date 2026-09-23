@@ -1,5 +1,7 @@
+.vs
 .vscode
 examples
 node_modules
 src
 .gitignore
+dist/**/*.map
